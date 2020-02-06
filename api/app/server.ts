@@ -7,6 +7,8 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const bunyanMiddleware = require('bunyan-middleware');
 const { logger } = require('./logger');
+import {validateAuthToken} from './middleware'
+import { employeeRouter, adminRouter } from './routes';
 
 const app = express();
 
@@ -30,9 +32,12 @@ app.use(
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// app.use(validateAuthToken)
+// add user auth validation
+app.use(validateAuthToken);
 
-require('./routes/index')(app);
+// define route paths for employee and admin
+app.use('/employee', employeeRouter);
+app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.get('*', (_req: Request, res: Response) => {

@@ -10,41 +10,44 @@ declare global {
 }
 
 const noIDTokenMessage = `
-  No Firebase ID token was passed as a Bearer token in the Authorization header.,
-  Make sure you authorize your request by providing the following HTTP header:,
-  Authorization: Bearer <Firebase ID Token>,
-  or by passing a "__session" cookie.
+  No entry was passed as a Bearer token in the Authorization header.
+  Please ensure you authorize your request by providing the following HTTP header:
+  Authorization: Bearer <token>, or by passing a "__session" cookie.
 `
 
-// Express middleware that validates Firebase ID Tokens passed in the Authorization HTTP header.
-// The Firebase ID token needs to be passed as a Bearer token in the Authorization HTTP header like this:
-// `Authorization: Bearer <Firebase ID Token>`.
-// when decoded successfully, the ID Token content will be added as `req.user`.
+/** 
+ * Middleware to validate user Auth Tokens passed in the Authorization HTTP header.
+ * The auth token needs to be passed as a Bearer token in the Authorization HTTP header like this:
+ * `Authorization: Bearer <token>`.
+ * when decoded successfully, the token content will be added as `req.user`.
+ */
 const validateAuthToken = async (req: Request, res: Response, next: NextFunction) => {
   console.log(`${req.method} - ${req.originalUrl}`)
   console.log('Check if request is authorized with Firebase ID token')
 
-  if ((!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) &&
-      !(req.cookies && req.cookies.__session)) {
-    console.error(noIDTokenMessage)
-    res.status(403).send('Unauthorized')
-    return
-  }
+  // to enable token validation after setting up jwt
 
-  let idToken
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-    console.log('Found "Authorization" header')
-    // Read the ID Token from the Authorization header.
-    idToken = req.headers.authorization.split('Bearer ')[1]
-  } else if(req.cookies) {
-    console.log('Found "__session" cookie')
-    // Read the ID Token from cookie.
-    idToken = req.cookies.__session
-  } else {
-    // No cookie
-    res.status(403).send('Unauthorized')
-    return
-  }
+  // if ((!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) &&
+  //     !(req.cookies && req.cookies.__session)) {
+  //   console.error(noIDTokenMessage)
+  //   res.status(403).send('Unauthorized')
+  //   return
+  // }
+
+  // let idToken
+  // if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+  //   console.log('Found "Authorization" header')
+  //   // Read the ID Token from the Authorization header.
+  //   idToken = req.headers.authorization.split('Bearer ')[1]
+  // } else if(req.cookies) {
+  //   console.log('Found "__session" cookie')
+  //   // Read the ID Token from cookie.
+  //   idToken = req.cookies.__session
+  // } else {
+  //   // No cookie
+  //   res.status(403).send('Unauthorized')
+  //   return
+  // }
 
   try {
     // const checkRevoked = true;
