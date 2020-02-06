@@ -29,6 +29,7 @@ app.use(
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+// app.use(validateAuthToken)
 
 require('./app/routes/index')(app);
 
