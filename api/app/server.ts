@@ -9,6 +9,7 @@ const bunyanMiddleware = require('bunyan-middleware');
 const { logger } = require('./logger');
 import {validateAuthToken} from './middleware'
 import { employeeRouter, adminRouter } from './routes';
+import {DBModel} from './models'
 
 const app = express();
 
@@ -32,6 +33,12 @@ app.use(
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// sync database connection
+DBModel.sequelize.sync({ force: process.env.__DEV__ ? true: false })
+  .then(() => {
+    console.log("Drop and re-sync db.");
+  });
 // add user auth validation
 app.use(validateAuthToken);
 
