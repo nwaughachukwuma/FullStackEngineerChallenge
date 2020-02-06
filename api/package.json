@@ -16,11 +16,12 @@
     },
     "keywords": [
         "Node.js",
+        "Express",
         "REST API",
         "boilerplate"
     ],
-    "author": "Chris Lee <git@chrislee.kr>",
-    "license": "MIT",
+    "author": "Chukwuma Nwaugha <git@nwaughachukwuma>",
+    "license": "ISC",
     "bugs": {
         "url": "https://github.com/nwaughachukwuma/FullStackEngineerChallenge/issues"
     },
