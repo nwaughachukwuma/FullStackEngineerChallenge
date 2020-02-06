@@ -1,12 +1,13 @@
+import {Request, Response, Express} from 'express'
 const packageJson = require('../../package.json');
-const { 
+import { 
     checkSchema, 
     check, 
     validationResult 
-} = require('express-validator');
+} from 'express-validator';
 
-module.exports = app => {
-  app.route('/').get((_req, res) => {
+module.exports = (app: Express) => {
+  app.route('/').get((_req: Request, res: Response) => {
     return res.status(200).send({
       success: true,
       message: 'OK',
@@ -19,7 +20,7 @@ module.exports = app => {
 
   app
     .route('/me')
-    .get((_req, res) => {
+    .get((_req: Request, res: Response) => {
 
         return res.status(200).send({
             success: true,
@@ -37,10 +38,10 @@ module.exports = app => {
         .post([
             check('name').exists(),
             check('email').exists().isEmail(),
-            check('phone').exists().isMobilePhone(),
+            check('phone').exists().isMobilePhone('any'),
             check('gender').isString(),
             check('country').exists().trim()
-          ], async (req, res) => {
+          ], async (req: Request, res: Response) => {
 
              // Finds the validation errors in this request and wraps them in an object with handy functions
             const errors = validationResult(req);

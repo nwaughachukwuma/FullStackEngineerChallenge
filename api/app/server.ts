@@ -1,5 +1,6 @@
 require('dotenv').config();
-const express = require('express');
+import express from 'express';
+import {Request, Response} from 'express'
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
@@ -21,7 +22,7 @@ app.use(
     logName: 'reqId',
     obscureHeaders: ['authorization'],
     logger,
-    additionalRequestFinishData: (_req, _res) => {
+    additionalRequestFinishData: (_req: Request, _res: Response) => {
       return {};
     }
   })
@@ -31,10 +32,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // app.use(validateAuthToken)
 
-require('./app/routes/index')(app);
+require('./routes/index')(app);
 
 // catch 404 and forward to error handler
-app.get('*', (_req, res) => {
+app.get('*', (_req: Request, res: Response) => {
   res.status(404).send({ success: false, message: 'Page not found.', data: {} });
 });
 

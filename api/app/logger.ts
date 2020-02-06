@@ -1,5 +1,5 @@
 const bunyan = require('bunyan');
-const packageJson = require('./package.json');
+const packageJson = require('../package.json');
 
 const logger = bunyan.createLogger({
   name: 'api',
