@@ -1,8 +1,8 @@
-
-
-
-export const Tutorial = (sequelize, Sequelize) => {
+export const Tutorial = (sequelize: any, Sequelize: any) => {
     const Tutorial = sequelize.define("tutorial", {
+        author: {
+            type: Sequelize.STRING
+        },
         title: {
             type: Sequelize.STRING
         },

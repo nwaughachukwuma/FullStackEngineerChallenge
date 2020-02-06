@@ -35,7 +35,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // sync database connection
-DBModel.sequelize.sync({ force: process.env.__DEV__ ? true: false })
+DBModel.sequelize.sync({ force: process.env.__DEV__ ? false: false })
   .then(() => {
     console.log("Drop and re-sync db.");
   });
@@ -43,8 +43,8 @@ DBModel.sequelize.sync({ force: process.env.__DEV__ ? true: false })
 app.use(validateAuthToken);
 
 // define route paths for employee and admin
-app.use('/employee', employeeRouter);
-app.use('/admin', adminRouter);
+app.use('/api/employee', employeeRouter);
+app.use('/api/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.get('*', (_req: Request, res: Response) => {

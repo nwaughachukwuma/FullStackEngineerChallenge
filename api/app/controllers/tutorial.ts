@@ -1,24 +1,32 @@
 import { Request, Response } from 'express'
+import { validationResult } from 'express-validator'
 import { DBModel } from '../models';
 const Tutorial = DBModel.tutorials;
 const Op = DBModel.Sequelize.Op;
 
 // Create and Save a new Tutorial
-exports.create = (req: Request, res: Response) => {
+export const CreateTutorial = (req: Request, res: Response) => {
 
-    // Validate request
-    if (!req.body.title) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
+    // Finds the validation errors in this request and wraps them in an object with handy functions
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(422).json({ errors: errors.array() });
+        return
     }
+
+    const {
+        author,
+        title,
+        description,
+        published
+    } = req.body
 
     // Create a Tutorial
     const tutorial = {
-        title: req.body.title,
-        description: req.body.description,
-        published: req.body.published ? req.body.published : false
+        author: author,
+        title: title,
+        description: description,
+        published: published ? published : false
     };
 
     // Save Tutorial in the database
@@ -35,13 +43,13 @@ exports.create = (req: Request, res: Response) => {
 };
 
 // Retrieve all Tutorials from the database.
-exports.findAll = (req: Request, res: Response) => {
+export const FindAllTutorial = (req: Request, res: Response) => {
     const title = req.query.title;
     var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
     Tutorial.findAll({ where: condition })
         .then((data: any) => {
-            res.send(data);
+            return res.send({ data });
         })
         .catch((err: any) => {
             res.status(500).send({
@@ -52,7 +60,7 @@ exports.findAll = (req: Request, res: Response) => {
 };
 
 // Find a single Tutorial with an id
-exports.findOne = (req: Request, res: Response) => {
+export const FindOneTutorial = (req: Request, res: Response) => {
     const id = req.params.id;
 
     Tutorial.findByPk(id)
@@ -67,82 +75,90 @@ exports.findOne = (req: Request, res: Response) => {
 };
 
 // Update a Tutorial by the id in the request
-exports.update = (req: Request, res: Response) => {
+export const UpdateTutorial = (req: Request, res: Response) => {
+
+    // Validate params
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(422).json({ errors: errors.array() });
+        return
+    }
+
     const id = req.params.id;
 
-  Tutorial.update(req.body, {
-    where: { id: id }
-  })
-    .then((num: number) => {
-      if (num == 1) {
-        res.send({
-          message: "Tutorial was updated successfully."
-        });
-      } else {
-        res.send({
-          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
-        });
-      }
+    Tutorial.update(req.body, {
+        where: { id: id }
     })
-    .catch((err: any) => {
-      res.status(500).send({
-        message: "Error updating Tutorial with id=" + id
-      });
-    });
+        .then((num: number) => {
+            if (num == 1) {
+                res.send({
+                    message: "Tutorial was updated successfully."
+                });
+            } else {
+                res.send({
+                    message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
+                });
+            }
+        })
+        .catch((err: any) => {
+            res.status(500).send({
+                message: "Error updating Tutorial with id=" + id
+            });
+        });
 };
 
 // Delete a Tutorial with the specified id in the request
-exports.delete = (req: Request, res: Response) => {
+export const DeleteTutorial = (req: Request, res: Response) => {
     const id = req.params.id;
 
-  Tutorial.destroy({
-    where: { id: id }
-  })
-    .then((num: number) => {
-      if (num == 1) {
-        res.send({
-          message: "Tutorial was deleted successfully!"
-        });
-      } else {
-        res.send({
-          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
-        });
-      }
+    Tutorial.destroy({
+        where: { id: id }
     })
-    .catch((err: any) => {
-      res.status(500).send({
-        message: "Could not delete Tutorial with id=" + id
-      });
-    });
+        .then((num: number) => {
+            if (num == 1) {
+                res.send({
+                    message: "Tutorial was deleted successfully!"
+                });
+            } else {
+                res.send({
+                    message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
+                });
+            }
+        })
+        .catch((err: any) => {
+            res.status(500).send({
+                message: "Could not delete Tutorial with id=" + id
+            });
+        });
 };
 
 // Delete all Tutorials from the database.
-exports.deleteAll = (req: Request, res: Response) => {
+export const DeleteAllTutorial = (req: Request, res: Response) => {
     Tutorial.destroy({
         where: {},
         truncate: false
-      })
+    })
         .then((nums: number) => {
-          res.send({ message: `${nums} Tutorials were deleted successfully!` });
+            res.send({ message: `${nums} Tutorials were deleted successfully!` });
         })
         .catch((err: any) => {
-          res.status(500).send({
-            message:
-              err.message || "Some error occurred while removing all tutorials."
-          });
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while removing all tutorials."
+            });
         });
 };
 
 // Find all published Tutorials
-exports.findAllPublished = (req: Request, res: Response) => {
+export const FindAllPublishedTutorial = (req: Request, res: Response) => {
     Tutorial.findAll({ where: { published: true } })
-    .then((data: any) => {
-      res.send(data);
-    })
-    .catch((err: any) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials."
-      });
-    });
+        .then((data: any) => {
+            res.send(data);
+        })
+        .catch((err: any) => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving tutorials."
+            });
+        });
 };
