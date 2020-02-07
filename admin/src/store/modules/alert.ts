@@ -42,7 +42,7 @@ const getters = {
 
 const displayToast = ({ type, position, title, text }) => {
   Vue.swal({
-    toast: true,
+    toast: type === 'toast'? true: false,
     position,
     showConfirmButton: false,
     timer: 3000,

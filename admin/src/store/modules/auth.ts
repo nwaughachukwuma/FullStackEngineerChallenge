@@ -12,52 +12,52 @@ const state = {
 };
 
 const actions = {
-//   login({ dispatch, commit }, { username, password, router }) {
-//     dispatch('alert/clear', {}, { root: true });
-//     commit('startRequest');
+  login({ dispatch, commit }, { username, password, router }) {
+    dispatch('alert/clear', {}, { root: true });
+    commit('startRequest');
 
-//     authService
-//       .login(username, password)
-//       .then(response => {
-//         commit('loginSuccess', { authKey: response.data.auth_key });
-//         dispatch('alert/success', { showType: 'toast', title: response.message }, { root: true });
-//         router.push('/');
-//       })
-//       .catch(e => {
-//         commit('loginFailure');
+    authService
+      .login(username, password)
+      .then(response => {
+        commit('loginSuccess', { authKey: response.data.auth_key });
+        dispatch('alert/success', { showType: 'toast', title: response.message }, { root: true });
+        router.push('/');
+      })
+      .catch(e => {
+        commit('loginFailure');
 
-//         dispatch('common/handleServiceException', { e, router }, { root: true });
-//       });
-//   },
-//   logout({ dispatch, commit }, { router, silent = false }) {
-//     dispatch('alert/clear', {}, { root: true });
-//     commit('logout');
+        dispatch('common/handleServiceException', { e, router }, { root: true });
+      });
+  },
+  logout({ dispatch, commit }, { router, silent = false }) {
+    dispatch('alert/clear', {}, { root: true });
+    commit('logout');
 
-//     if (!silent) {
-//       dispatch('alert/success', { showType: 'toast', title: 'You are successfully logged out.' }, { root: true });
+    if (!silent) {
+      dispatch('alert/success', { showType: 'toast', title: 'You are successfully logged out.' }, { root: true });
 
-//       // https://github.com/vuejs/vue-router/issues/2881#issuecomment-520554378
-//       router.push('/').catch(_e => {});
-//     }
-//   },
-//   sessionExpired({ dispatch, commit }, { router }) {
-//     dispatch('alert/clear', {}, { root: true });
-//     commit('logout');
+      // https://github.com/vuejs/vue-router/issues/2881#issuecomment-520554378
+      router.push('/').catch(_e => {console.log(_e)});
+    }
+  },
+  sessionExpired({ dispatch, commit }, { router }) {
+    dispatch('alert/clear', {}, { root: true });
+    commit('logout');
 
-//     dispatch(
-//       'alert/error',
-//       { showType: 'toast', title: 'Session expired', text: 'Please login with your account.' },
-//       { root: true }
-//     );
+    dispatch(
+      'alert/error',
+      { showType: 'toast', title: 'Session expired', text: 'Please login with your account.' },
+      { root: true }
+    );
 
-//     router.push('/login');
-//   },
-//   handleAuthMessageKey({ _dispatch }, { messageKey }) {
-//     switch (messageKey) {
-//       default:
-//         break;
-//     }
-//   }
+    router.push('/login');
+  },
+  handleAuthMessageKey({ _dispatch }, { messageKey }) {
+    switch (messageKey) {
+      default:
+        break;
+    }
+  }
 };
 
 const getters = {

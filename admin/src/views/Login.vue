@@ -7,7 +7,7 @@
 
           <b-card-group deck class="mt-3">
             <b-card>
-              <h1>Admin View</h1>
+              <h1>Admin Login</h1>
               <p class="text-muted">Sign in to your account</p>
               <login-box />
             </b-card>

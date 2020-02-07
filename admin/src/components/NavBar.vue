@@ -21,7 +21,7 @@
 
         <!-- Right aligned nav items -->
 
-        <!-- <b-navbar-nav class="ml-auto" v-if="isLoggedIn() === false">
+        <b-navbar-nav class="ml-auto" v-if="isLoggedIn() === false">
           <b-nav-item :to="{ path: '/login' }" data-cy="nav-bar-login" link-classes="btn btn-info text-light mx-1"
             >Login</b-nav-item
           >
@@ -31,7 +31,7 @@
             link-classes="btn btn-primary mx-1 text-light"
             >Sign up</b-nav-item
           >
-        </b-navbar-nav> -->
+        </b-navbar-nav>
         <!-- <b-navbar-nav class="ml-auto" v-if="isLoggedIn() === true">
           <b-nav-item
             v-if="user"
@@ -53,12 +53,12 @@
 </template>
 
 <script>
-// import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 export default {
   name: 'NavBar',
   computed: {
     // ...mapState('auth', ['user']),
-    // ...mapGetters('auth', ['isLoggedIn'])
+    ...mapGetters('auth', ['isLoggedIn'])
   }
 };
 </script>

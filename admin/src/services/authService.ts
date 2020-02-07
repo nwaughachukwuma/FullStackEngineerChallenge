@@ -35,7 +35,9 @@ export default {
         username,
         email,
         password,
+        // eslint-disable-next-line
         first_name: firstName,
+        // eslint-disable-next-line
         last_name: lastName
       })
       .then(response => {
