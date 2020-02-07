@@ -6,6 +6,10 @@ import {
   validationResult
 } from 'express-validator';
 
+import {
+  CreatePerfReview
+} from '../controllers/perfreview'
+
 const router = express.Router({
   strict: true
 });
@@ -33,9 +37,6 @@ router.get('/me', (_req: Request, res: Response) => {
   })
 })
 
-// .get([isAuthenticated, checkSchema(me.meGet)], meController.getMe)
-// .post([isAuthenticated, checkSchema(me.mePatch)], meController.patchMe);
-
 router.post('/user-info', [
   check('name').exists(),
   check('email').exists().isEmail(),
@@ -61,5 +62,15 @@ router.post('/user-info', [
     }
   })
 });
+
+// create routes for performance review
+router.post('/perfreview', [
+  check('employeeId').isInt().toInt().withMessage('Provide Employee Id'),
+  check('month').exists().withMessage('Provide Performance review month'),
+  check('year').exists().withMessage('Provide performance review year'),
+  check('score').isInt().toInt().withMessage('Provide performance review score'),
+  check('remark').exists().withMessage('Provide performance review remark'),
+  check('isDone'),
+], CreatePerfReview)
 
 export default router

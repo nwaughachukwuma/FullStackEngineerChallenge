@@ -48,6 +48,7 @@ router.post('/user-info', [
   check('country').exists().trim()
 ], CreateUserController);
 
+// create routes for tutorial
 router.post('/tutorial', [
     check('author').exists().withMessage('Provide tutorial author'),
     check('title').exists().withMessage('Provide tutorial title'),
@@ -65,6 +66,8 @@ router.put('/tutorials/:id', [
     check('description').optional(),
     check('published').isBoolean().optional(),
     param('id').isInt().withMessage('Provide tutorial index'),
-], UpdateTutorial)
+], UpdateTutorial);
+
+
 
 export default router
