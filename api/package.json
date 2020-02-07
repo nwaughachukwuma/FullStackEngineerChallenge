@@ -13,23 +13,13 @@
         "lint": "eslint ./app --fix",
         "test": "cross-env NODE_ENV=test jest --coverage --detectOpenHandles"
     },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/nwaughachukwuma/FullStackEngineerChallenge.git"
-    },
     "keywords": [
         "Node.js",
         "Express",
         "REST API",
         "boilerplate"
     ],
-    "author": "Chukwuma Nwaugha <git@nwaughachukwuma>",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/nwaughachukwuma/FullStackEngineerChallenge/issues"
-    },
-    "homepage": "https://github.com/nwaughachukwuma/FullStackEngineerChallenge#readme",
-    "dependencies": {
+   "dependencies": {
         "@types/bluebird": "^3.5.29",
         "@types/cors": "^2.8.6",
         "@types/express": "^4.17.2",

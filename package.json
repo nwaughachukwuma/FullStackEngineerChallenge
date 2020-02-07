@@ -1,9 +1,18 @@
 {
   "name": "pay-baymax",
-  "author": "nwaughachukwuma",
   "version": "0.0.1",
   "private": false,
   "description": "A full stack REST application built with Express, Vue.js, Sequelize & MySQL",
+  "author": "Chukwuma Nwaugha <git@nwaughachukwuma>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nwaughachukwuma/FullStackEngineerChallenge/issues"
+  },
+  "homepage": "https://github.com/nwaughachukwuma/FullStackEngineerChallenge#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nwaughachukwuma/FullStackEngineerChallenge.git"
+  },
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
