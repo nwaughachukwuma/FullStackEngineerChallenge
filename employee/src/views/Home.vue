@@ -1,8 +1,8 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
+  <b-container class="home page-home text-center my-5">
+    <img alt="Bootstrap Vue logo" src="../assets/logo.png" width="150" />
     <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  </b-container>
 </template>
 
 <script>

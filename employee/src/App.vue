@@ -1,12 +1,38 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    </div> -->
+
+    <nav-bar />
+    <b-container fluid>
+      <router-view/>
+      <footer-bar />
+    </b-container>
   </div>
 </template>
+
+<script>
+import NavBar from '@/components/NavBar.vue';
+import FooterBar from '@/components/FooterBar.vue';
+import ConfigService from '@/services/configService';
+
+export default {
+  metaInfo: {
+    title: 'App',
+    titleTemplate: '%s | Frontend',
+    meta: []
+  },
+  components: {
+    NavBar,
+    FooterBar
+  },
+  beforeCreate() {
+    ConfigService.loadConfig();
+  }
+};
+</script>
 
 <style lang="scss">
 #app {
@@ -29,4 +55,6 @@
     }
   }
 }
+
+@import '../src/assets/css/custom.css';
 </style>
