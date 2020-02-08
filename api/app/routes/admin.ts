@@ -10,6 +10,10 @@ import {
   CreatePerfReview
 } from '../controllers/perfreview'
 
+import {
+  CreateUserController
+} from '../controllers/usercontroller'
+
 const router = express.Router({
   strict: true
 });
@@ -23,7 +27,25 @@ router.get('/', (_req: Request, res: Response) => {
       version: packageJson.version
     }
   });
-})
+});
+
+
+// create routes for performance review
+router.post('/create-employee', [
+  check('name').exists().withMessage('Provide Employee name'),
+  check('email').isEmail().withMessage('Provide Performance email'),
+  check('phone').isMobilePhone('any')
+    .withMessage('Provide employee phone number'),
+  check('gender')
+    .custom((value, { req }) => ['male', 'female'].includes(value))
+    .withMessage('Provide performance gender'),
+  check('role')
+    .custom((value, { req }) => ['admin', 'staff', 'user'].includes(value))
+    .withMessage('Provide performance employee role'),
+  check('level')
+    .custom((value, { req }) => ['junior', 'mid', 'senior', 'admin', 'executive'].includes(value))
+    .withMessage('Provide employee level'),
+], CreateUserController)
 
 router.get('/me', (_req: Request, res: Response) => {
 

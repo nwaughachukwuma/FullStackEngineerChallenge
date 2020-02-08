@@ -19,11 +19,13 @@
         "REST API",
         "boilerplate"
     ],
-   "dependencies": {
+    "dependencies": {
+        "@types/bcryptjs": "^2.4.2",
         "@types/bluebird": "^3.5.29",
         "@types/cors": "^2.8.6",
         "@types/express": "^4.17.2",
         "@types/node": "^13.7.0",
+        "@types/uuid": "^3.4.7",
         "@types/validator": "^12.0.1",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.19.0",

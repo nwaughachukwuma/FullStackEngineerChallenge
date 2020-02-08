@@ -42,7 +42,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // sync database connection
-DBModel.sequelize.sync({ force: process.env.__DEV__ ? false: false })
+DBModel.sequelize.sync({ force: process.env.__DEV__ ? true: false })
   .then(() => {
     console.log("Drop and re-sync db.");
   });

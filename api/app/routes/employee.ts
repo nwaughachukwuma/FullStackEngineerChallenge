@@ -19,6 +19,10 @@ import {
     UpdateTutorial
 } from '../controllers/tutorial'
 
+import {
+  CreateFeedback
+} from '../controllers/feedback'
+
 
 // initialize express router
 const router = express.Router({
@@ -67,6 +71,13 @@ router.put('/tutorials/:id', [
     check('published').isBoolean().optional(),
     param('id').isInt().withMessage('Provide tutorial index'),
 ], UpdateTutorial);
+
+// create routes for performance review
+router.post('/feedback', [
+  check('perfreviewId').isInt().toInt().withMessage('Provide performance review Id'),
+  check('feedbackEmployeeId').exists().withMessage('Provide the Id of the employee giving the feedback'),
+  check('feedback').exists().withMessage('Provide user feedback')
+], CreateFeedback)
 
 
 

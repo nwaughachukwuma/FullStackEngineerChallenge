@@ -3,6 +3,7 @@ import { Sequelize } from "sequelize";
 import { Tutorial } from './tutorial'
 import { PerfReview } from './perfreview'
 import { Feedback } from './feedback'
+import { User } from './user';
 
 
 const sequelize = new Sequelize(DBConfig.DB, DBConfig.USER, DBConfig.PASSWORD, {
@@ -22,7 +23,8 @@ const db = {
     sequelize,
     tutorials: Tutorial(sequelize, Sequelize),
     perfreviews: PerfReview(sequelize, Sequelize),
-    feedbacks: Feedback(sequelize, Sequelize)
+    feedbacks: Feedback(sequelize, Sequelize),
+    users: User(sequelize, Sequelize)
 };
 
 export default db;

@@ -23,7 +23,7 @@ const noIDTokenMessage = `
  */
 const validateAuthToken = async (req: Request, res: Response, next: NextFunction) => {
   console.log(`${req.method} - ${req.originalUrl}`)
-  console.log('Check if request is authorized with Firebase ID token')
+  console.log('Check if request is authorized with valid auth token')
 
   // to enable token validation after setting up jwt
 
