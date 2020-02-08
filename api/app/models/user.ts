@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
-import {makeId} from '../utils/helpers'
+import { omit } from 'lodash'
+import { makeId } from '../utils/helpers'
 
 export const User = (sequelize: any, Sequelize: any) => {
 
@@ -15,17 +16,18 @@ export const User = (sequelize: any, Sequelize: any) => {
             allowNull: false,
             unique: true,
             validate: {
-                isEmail: true, 
+                isEmail: true,
             }
         },
         password: {
             type: Sequelize.STRING, // password
             allowNull: false,
-            defaultValue: bcrypt.hashSync('123456', 
+            defaultValue: bcrypt.hashSync('123456',
                 bcrypt.genSaltSync(
                     +process.env.BCRYPT_SALTING_ROUND!
                 )
             ),
+            scopes: false // Don't EVER include
         },
         name: {
             type: Sequelize.STRING, // employee full name
@@ -69,6 +71,11 @@ export const User = (sequelize: any, Sequelize: any) => {
             }
         }
     });
+
+    // remove user password from the returned object
+    User.prototype.toJSON = function() {
+        return omit(this.dataValues, 'password');
+    }
 
     return User;
 };

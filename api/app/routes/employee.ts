@@ -8,7 +8,6 @@ import {
 } from 'express-validator';
 
 import {
-    CreateUserController,
     MeController
 } from '../controllers'
 
@@ -43,14 +42,6 @@ router.get('/', (_req: Request, res: Response) => {
 router.get('/me', MeController)
 // .get([isAuthenticated, checkSchema(me.meGet)], meController.getMe)
 // .post([isAuthenticated, checkSchema(me.mePatch)], meController.patchMe);
-
-router.post('/user-info', [
-  check('name').exists(),
-  check('email').exists().isEmail(),
-  check('phone').exists().isMobilePhone('any'),
-  check('gender').isString(),
-  check('country').exists().trim()
-], CreateUserController);
 
 // create routes for tutorial
 router.post('/tutorial', [

@@ -1,10 +1,13 @@
 import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
+import {Op as OpSymbol} from 'sequelize'
 import { DBModel } from '../models';
-const Feedback = DBModel.feedbacks;
-// const Op = DBModel.Sequelize.Op;
 
-// Create and Save a new Tutorial
+
+const Feedback = DBModel.feedbacks;
+const Op: typeof OpSymbol = DBModel.Sequelize.Op;
+
+// Create and Save a new Feedback
 export const CreateFeedback = (req: Request, res: Response) => {
 
     // Finds the validation errors in this request and wraps them in an object with handy functions
@@ -27,47 +30,53 @@ export const CreateFeedback = (req: Request, res: Response) => {
         feedback: employee_feedback
     };
 
-    // Save Tutorial in the database
+    // Save Feedback in the database
     Feedback.create(feedback)
         .then((data: any) => {
             res.send(data);
         })
         .catch((err: any) => {
             res.status(500).send({
+                error: err,
                 message:
                     err.message || "Some error occurred while creating the performance review."
             });
         });
 };
 
-// Retrieve all Tutorials from the database.
-// export const FindAllTutorial = (req: Request, res: Response) => {
-//     const title = req.query.title;
-//     var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+// Retrieve all performance review feedbacks.
+export const FindAllFeedbacks = (req: Request, res: Response) => {
+    const {perfreviewId, peerId} = req.query;
+    
+    let condition = Object.assign(
+        {}, 
+        peerId ? { peerId: { [Op.like]: `%${peerId}%` } } : null, 
+        perfreviewId ? { perfreviewId: { [Op.like]: `%${perfreviewId}%` } } : null
+    );
 
-//     Tutorial.findAll({ where: condition })
-//         .then((data: any) => {
-//             return res.send({ data });
-//         })
-//         .catch((err: any) => {
-//             res.status(500).send({
-//                 message:
-//                     err.message || "Some error occurred while retrieving tutorials."
-//             });
-//         });
-// };
+    Feedback.findAll({ where: condition })
+        .then((data: any) => {
+            return res.send({ data });
+        })
+        .catch((err: any) => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving feedbacks."
+            });
+        });
+};
 
-// // Find a single Tutorial with an id
-// export const FindOneTutorial = (req: Request, res: Response) => {
-//     const id = req.params.id;
+// Find a single Feedback with an id
+export const FindOneFeedback = (req: Request, res: Response) => {
+    const id = req.params.id;
 
-//     Tutorial.findByPk(id)
-//         .then((data: any) => {
-//             res.send(data);
-//         })
-//         .catch((err: any) => {
-//             res.status(500).send({
-//                 message: "Error retrieving Tutorial with id=" + id
-//             });
-//         });
-// };
+    Feedback.findByPk(id)
+        .then((data: any) => {
+            res.send({data});
+        })
+        .catch((err: any) => {
+            res.status(500).send({
+                message: "Error retrieving Feedback with id=" + id
+            });
+        });
+};

@@ -10,4 +10,4 @@ export const makeId = (Sequelize: any, customFields: any = {}) => ({
     unique: true,
     autoIncrement: false,
     ...customFields
-})
+});

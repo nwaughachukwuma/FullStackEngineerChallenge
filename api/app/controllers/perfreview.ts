@@ -1,10 +1,13 @@
 import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
+import {Op as OpSymbol} from 'sequelize'
 import { DBModel } from '../models';
-const PerfReview = DBModel.perfreviews;
-// const Op = DBModel.Sequelize.Op;
 
-// Create and Save a new Tutorial
+
+const PerfReview = DBModel.perfreviews;
+const Op: typeof OpSymbol = DBModel.Sequelize.Op;
+
+// Create and Save a new Performance review
 export const CreatePerfReview = (req: Request, res: Response) => {
 
     // Finds the validation errors in this request and wraps them in an object with handy functions
@@ -20,7 +23,7 @@ export const CreatePerfReview = (req: Request, res: Response) => {
         year,
         score,
         remark,
-        isDone
+        status
     } = req.body
 
     // Create a Performance review
@@ -30,7 +33,7 @@ export const CreatePerfReview = (req: Request, res: Response) => {
         year: year,
         score: score,
         remark: remark,
-        isDone: isDone ? isDone : false
+        status: status ? 'done' : 'not_done'
     };
 
     // Save Tutorial in the database
@@ -40,40 +43,49 @@ export const CreatePerfReview = (req: Request, res: Response) => {
         })
         .catch((err: any) => {
             res.status(500).send({
+                error: err.original,
                 message:
                     err.message || "Some error occurred while creating the performance review."
             });
         });
 };
 
-// Retrieve all Tutorials from the database.
-// export const FindAllTutorial = (req: Request, res: Response) => {
-//     const title = req.query.title;
-//     var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+// Retrieve all Performance reviews from the database.
+export const FindAllPerfReview = (req: Request, res: Response) => {
+    const {month, year, status} = req.query;
+    
+    let condition = Object.assign(
+        {}, 
+        status ? { status: { [Op.like]: `%${status}%` } } : null, 
+        month ? { month: { [Op.like]: `%${month}%` } } : null,
+        year ? { year: { [Op.like]: `%${year}%` } } : null,
+    );
 
-//     Tutorial.findAll({ where: condition })
-//         .then((data: any) => {
-//             return res.send({ data });
-//         })
-//         .catch((err: any) => {
-//             res.status(500).send({
-//                 message:
-//                     err.message || "Some error occurred while retrieving tutorials."
-//             });
-//         });
-// };
+    PerfReview.findAll({ where: condition })
+        .then((data: any) => {
+            return res.send({ data });
+        })
+        .catch((err: any) => {
+            res.status(500).send({
+                error: err.original,
+                message:
+                    err.message || "Some error occurred while retrieving performance reviews."
+            });
+        });
+};
 
-// // Find a single Tutorial with an id
-// export const FindOneTutorial = (req: Request, res: Response) => {
-//     const id = req.params.id;
+// Find single performance with :id
+export const FindOnePerfReview = (req: Request, res: Response) => {
+    const id = req.params.id;
 
-//     Tutorial.findByPk(id)
-//         .then((data: any) => {
-//             res.send(data);
-//         })
-//         .catch((err: any) => {
-//             res.status(500).send({
-//                 message: "Error retrieving Tutorial with id=" + id
-//             });
-//         });
-// };
+    PerfReview.findByPk(id)
+        .then((data: any) => {
+            res.send({data});
+        })
+        .catch((err: any) => {
+            res.status(500).send({
+                error: err.original,
+                message: "Error retrieving performance review with id=" + id
+            });
+        });
+};

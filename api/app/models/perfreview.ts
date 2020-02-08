@@ -37,8 +37,12 @@ export const PerfReview = (sequelize: any, Sequelize: Sequelize) => {
         remark: {
             type: DataTypes.STRING // perf review remark
         },
-        isDone: {
-            type: DataTypes.BOOLEAN,  // whether the employee has been reviewed
+        status: {
+            type: DataTypes.STRING,  // whether the employee has been reviewed
+            allowNull: false,
+            validation: {
+                isIn: [['done', 'not_done']]
+            }
         }
     });
 

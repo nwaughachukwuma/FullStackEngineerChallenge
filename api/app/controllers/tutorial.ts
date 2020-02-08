@@ -1,6 +1,8 @@
 import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 import { DBModel } from '../models';
+
+
 const Tutorial = DBModel.tutorials;
 const Op = DBModel.Sequelize.Op;
 
