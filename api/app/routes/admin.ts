@@ -29,24 +29,6 @@ router.get('/', (_req: Request, res: Response) => {
   });
 });
 
-
-// create routes for performance review
-router.post('/create-employee', [
-  check('name').exists().withMessage('Provide Employee name'),
-  check('email').isEmail().withMessage('Provide Performance email'),
-  check('phone').isMobilePhone('any')
-    .withMessage('Provide employee phone number'),
-  check('gender')
-    .custom((value, { req }) => ['male', 'female'].includes(value))
-    .withMessage('Provide performance gender'),
-  check('role')
-    .custom((value, { req }) => ['admin', 'staff', 'user'].includes(value))
-    .withMessage('Provide performance employee role'),
-  check('level')
-    .custom((value, { req }) => ['junior', 'mid', 'senior', 'admin', 'executive'].includes(value))
-    .withMessage('Provide employee level'),
-], CreateUserController)
-
 router.get('/me', (_req: Request, res: Response) => {
 
   return res.status(200).send({
@@ -86,8 +68,25 @@ router.post('/user-info', [
 });
 
 // create routes for performance review
-router.post('/perfreview', [
-  check('employeeId').isInt().toInt().withMessage('Provide Employee Id'),
+router.post('/create-employee', [
+  check('name').exists().withMessage('Provide Employee name'),
+  check('email').isEmail().withMessage('Provide Performance email'),
+  check('phone').isMobilePhone('any')
+    .withMessage('Provide employee phone number'),
+  check('gender')
+    .custom((value, { req }) => ['male', 'female'].includes(value))
+    .withMessage('Provide performance gender'),
+  check('role')
+    .custom((value, { req }) => ['admin', 'staff', 'user'].includes(value))
+    .withMessage('Provide performance employee role'),
+  check('level')
+    .custom((value, { req }) => ['junior', 'mid', 'senior', 'admin', 'executive'].includes(value))
+    .withMessage('Provide employee level'),
+], CreateUserController);
+
+// create routes for performance review
+router.post('/perf-review', [
+  check('employeeId').exists().isUUID('4').withMessage('Provide Employee Id'),
   check('month').exists().withMessage('Provide Performance review month'),
   check('year').exists().withMessage('Provide performance review year'),
   check('score').isInt().toInt().withMessage('Provide performance review score'),

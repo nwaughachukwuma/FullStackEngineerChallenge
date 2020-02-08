@@ -1,5 +1,5 @@
-import uuidv4 from 'uuid/v4'
 import bcrypt from 'bcryptjs'
+import {makeId} from '../utils/helpers'
 
 export const User = (sequelize: any, Sequelize: any) => {
 
@@ -9,16 +9,7 @@ export const User = (sequelize: any, Sequelize: any) => {
     }
 
     const User = sequelize.define("user", {
-        id: {
-            type: Sequelize.STRING,
-            primaryKey: true,
-            defaultValue: uuidv4(),
-            validate: {
-                isUUID: 4
-            },
-            unique: true,
-            autoIncrement: false,
-        },
+        id: makeId(Sequelize),
         email: {
             type: Sequelize.STRING, // perf_review year
             allowNull: false,

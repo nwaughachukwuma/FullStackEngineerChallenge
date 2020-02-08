@@ -16,14 +16,14 @@ export const CreateFeedback = (req: Request, res: Response) => {
 
     const {
         perfreviewId,
-        feedbackEmployeeId,
+        peerId,
         feedback : employee_feedback
     } = req.body
 
     // Create a Performance review
     const feedback = {
         perfreviewId: perfreviewId,
-        feedbackEmployeeId: feedbackEmployeeId,
+        peerId: peerId,
         feedback: employee_feedback
     };
 

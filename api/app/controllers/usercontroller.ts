@@ -44,6 +44,7 @@ export async function CreateUserController(req: Request, res: Response) {
         })
         .catch((err: any) => {
             res.status(500).send({
+                error: err,
                 message:
                     err.message || "Some error occurred while creating a new employee."
             });

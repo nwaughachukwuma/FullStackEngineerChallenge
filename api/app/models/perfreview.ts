@@ -1,30 +1,44 @@
 import User from './user'
+import {makeId} from '../utils/helpers'
+import {Sequelize, DataTypes} from 'sequelize'
 
-export const PerfReview = (sequelize: any, Sequelize: any) => {
+
+/**
+ * Define Model for performance review
+ * The approach is to ensure that only one instance of performance
+ * review exist per user per month for a single year.
+ * @param sequelize 
+ * @param Sequelize 
+ */
+export const PerfReview = (sequelize: any, Sequelize: Sequelize) => {
     const PerfReview = sequelize.define("perfreview", {
+        id: makeId(Sequelize),
         employeeId: {
-            type: Sequelize.STRING, // employeeId as f_key
+            type: DataTypes.STRING, // employeeId as foreign_key
             references: {
-                // This is a reference to another model
+                // References the user model
                 model: User(sequelize, Sequelize),
-                // This is the column name of the referenced model
+                // on the Id (uuid) column
                 key: 'id'
-            }
+            },
+            unique: 'compositeIndex' // use a composite index
         },
         month: {
-            type: Sequelize.STRING // perf_review month
+            type: DataTypes.STRING, // perf_review month
+            unique: 'compositeIndex', // use a composite index
         },
         year: {
-            type: Sequelize.STRING // perf_review year
+            type: DataTypes.STRING, // perf_review year
+            unique: 'compositeIndex' // use a composite index
         },
         score: {
-            type: Sequelize.INTEGER // peer_review score
+            type: DataTypes.INTEGER // peer_review score
         },
         remark: {
-            type: Sequelize.STRING // perf review remark
+            type: DataTypes.STRING // perf review remark
         },
         isDone: {
-            type: Sequelize.BOOLEAN,  // done|not_done
+            type: DataTypes.BOOLEAN,  // whether the employee has been reviewed
         }
     });
 

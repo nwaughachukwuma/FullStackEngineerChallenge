@@ -74,9 +74,12 @@ router.put('/tutorials/:id', [
 
 // create routes for performance review
 router.post('/feedback', [
-  check('perfreviewId').isInt().toInt().withMessage('Provide performance review Id'),
-  check('feedbackEmployeeId').exists().withMessage('Provide the Id of the employee giving the feedback'),
-  check('feedback').exists().withMessage('Provide user feedback')
+  check('perfreviewId').exists({checkNull: true}).isUUID('4')
+    .withMessage('Provide performance review Id'),
+  check('peerId').exists({checkNull: true})
+    .withMessage('Provide the Id of the employee giving the feedback'),
+  check('feedback').exists({checkNull: true})
+    .withMessage('Provide user feedback')
 ], CreateFeedback)
 
 
