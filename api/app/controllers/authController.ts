@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 import { Op as OpSymbol } from 'sequelize'
 import { DBModel } from '../models';
-import {RegisterUser, LoginUser} from '../models/auth'
+import {RegisterUser, LoginUser} from '../services/auth'
 
 const Employee = DBModel.employees;
 const Op: typeof OpSymbol = DBModel.Sequelize.Op;

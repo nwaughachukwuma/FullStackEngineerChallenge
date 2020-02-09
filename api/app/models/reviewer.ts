@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize'
 import PerfReview from "./perfreview";
 import {makeId} from '../utils/helpers'
-import User from "./employee";
+import Employee from "./employee";
 import {SequelizeType} from '../utils/types'
 
 /**
@@ -30,7 +30,7 @@ export const Reviewer = (sequelize: any, Sequelize: SequelizeType) => {
             allowNull: false,
             references: {
                 // References the user model
-                model: User(sequelize, Sequelize),
+                model: Employee(sequelize, Sequelize),
                 // on the id (uuid) column
                 key: 'id'
             },

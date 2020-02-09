@@ -3,6 +3,7 @@ import { Sequelize } from "sequelize";
 import { PerformanceReview } from './perfreview'
 import { Reviewer } from './reviewer'
 import { Employee } from './employee';
+import { Auth } from './auth';
 
 
 export const sequelize = new Sequelize(DBConfig.DB, DBConfig.USER, DBConfig.PASSWORD, {
@@ -21,6 +22,7 @@ export const sequelize = new Sequelize(DBConfig.DB, DBConfig.USER, DBConfig.PASS
 const ReviewerModel = Reviewer(sequelize, Sequelize);
 const PerformanceReviewModel = PerformanceReview(sequelize, Sequelize)
 const EmployeeModel = Employee(sequelize, Sequelize);
+const AuthModel = Auth(sequelize, Sequelize)
 
 // define associations
 // 1. user to performance reviews
@@ -33,12 +35,17 @@ PerformanceReviewModel.hasMany(ReviewerModel, {
 });
 ReviewerModel.belongsTo(PerformanceReviewModel);
 
+// 3. Employee to auth
+EmployeeModel.hasOne(AuthModel)
+AuthModel.belongsTo(EmployeeModel)
+
 const db = {
     Sequelize,
     sequelize,
     performance_reviews: PerformanceReviewModel,
     reviewers: ReviewerModel,
     employees: EmployeeModel,
+    auths: AuthModel
 };
 
 export default db;

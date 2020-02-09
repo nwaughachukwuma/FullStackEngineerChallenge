@@ -1,72 +1,34 @@
-import bcrypt from 'bcryptjs'
-import { DBModel } from '../models';
-import { LoginParams, UserCredentials } from '../utils/types'
+import { DataTypes } from 'sequelize'
+import { makeId } from '../utils/helpers'
+import {SequelizeType} from '../utils/types'
+import Employee from "./employee";
 
+export const Auth = (sequelize: any, Sequelize: SequelizeType) => {
 
-const Employee = DBModel.employees;
-
-export const LoginUser = async (userDetails: LoginParams) => {
-
-    const {
-        email,
-        password
-    } = userDetails
-
-    const userCredentials: UserCredentials = await Employee.findOne({where: {email: email}})
-        .then(async (data: any) => {
-            // Load hash from your password DB.
-            const result = await bcrypt.compare(password, data.password);
-            
-            if (!result) return { isValid: result }
-
-            const userData = { ...data.dataValues };
-            delete userData.password;
-            return  { ...userData, isValid: result };
-        });
-
-    if (!userCredentials.isValid) {
-        throw new Error('Wrong login credentials')
-    }
-
-    // if the user status is not yet active
-    if (userCredentials.status === 'pending') {
-        try {
-            return await Employee.update({status: 'active'}, {
-                where: { email: email }
-            });
-        } catch (error) {
-            throw new Error(error.message)
+    const Auth = sequelize.define("auth", {
+        id: makeId(Sequelize),
+        employeeId: {
+            type: DataTypes.STRING, // id of the employee that got authenticated
+            allowNull: false,
+            references: {
+                // References the user model
+                model: Employee(sequelize, Sequelize),
+                // on the id (uuid) column
+                key: 'id'
+            },
+            unique: 'compositeIndex', // use a composite index
+        },
+        accessToken: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        lastLoginAt: {
+            type: 'TIMESTAMP',
         }
-    }
+    });
 
-    // go to generating jwt with the user credentials
-
+    return Auth;
 };
 
-export const RegisterUser = async (userDetails: typeof Employee) => {
-
-    const {
-        name,
-        email,
-        password,
-        phone,
-        gender
-    } = userDetails;
-
-    const hashPass = bcrypt.hashSync(password,
-        bcrypt.genSaltSync(
-            +process.env.BCRYPT_SALTING_ROUND!
-        ));
-
-    const admin_data = {
-        name,
-        email,
-        password: hashPass,
-        phone,
-        gender
-    }
-
-    // Save a new User in the database
-    return await Employee.create(admin_data);
-};
+export default Auth
 
