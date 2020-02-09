@@ -1,6 +1,7 @@
-import User from './user'
+import User from './employee'
 import {makeId} from '../utils/helpers'
-import {Sequelize, DataTypes} from 'sequelize'
+import { DataTypes} from 'sequelize'
+import {SequelizeType} from '../utils/types'
 
 
 /**
@@ -10,8 +11,8 @@ import {Sequelize, DataTypes} from 'sequelize'
  * @param sequelize 
  * @param Sequelize 
  */
-export const PerfReview = (sequelize: any, Sequelize: Sequelize) => {
-    const PerfReview = sequelize.define("perfreview", {
+export const PerformanceReview = (sequelize: any, Sequelize: SequelizeType) => {
+    const PerformanceReview = sequelize.define("performance_review", {
         id: makeId(Sequelize),
         employeeId: {
             type: DataTypes.STRING, // employeeId as foreign_key
@@ -24,30 +25,27 @@ export const PerfReview = (sequelize: any, Sequelize: Sequelize) => {
             unique: 'compositeIndex' // use a composite index
         },
         month: {
-            type: DataTypes.STRING, // perf_review month
+            type: DataTypes.STRING, // performance_review month
             unique: 'compositeIndex', // use a composite index
         },
         year: {
-            type: DataTypes.STRING, // perf_review year
+            type: DataTypes.STRING, // performance_review year
             unique: 'compositeIndex' // use a composite index
         },
-        score: {
-            type: DataTypes.INTEGER // peer_review score
+        evaluation: {
+            type: DataTypes.INTEGER // performance_review evaluation
         },
         remark: {
-            type: DataTypes.STRING // perf review remark
+            type: DataTypes.STRING // performance_review remark by admin
         },
-        status: {
-            type: DataTypes.STRING,  // whether the employee has been reviewed
-            allowNull: false,
-            validation: {
-                isIn: [['done', 'not_done']]
-            }
+        is_reviewed: {
+            type: DataTypes.BOOLEAN,  // whether the employee has been reviewed
+            allowNull: false
         }
     });
 
-    return PerfReview;
+    return PerformanceReview;
 };
 
-export default PerfReview
+export default PerformanceReview
 

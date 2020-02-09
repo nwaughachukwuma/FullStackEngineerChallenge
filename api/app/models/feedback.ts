@@ -1,7 +1,8 @@
-import {Sequelize, DataTypes} from 'sequelize'
+import { DataTypes } from 'sequelize'
 import PerfReview from "./perfreview";
 import {makeId} from '../utils/helpers'
-import User from "./user";
+import User from "./employee";
+import {SequelizeType} from '../utils/types'
 
 /**
  * Model definition for employee feedback
@@ -10,10 +11,10 @@ import User from "./user";
  * @param sequelize 
  * @param Sequelize 
  */
-export const Feedback = (sequelize: any, Sequelize: Sequelize) => {
+export const Feedback = (sequelize: any, Sequelize: SequelizeType) => {
     const Feedback = sequelize.define("feedback", {
         id: makeId(Sequelize),
-        perfreviewId: {
+        performance_reviewId: {
             type: DataTypes.STRING,
             allowNull: false,
             references: {

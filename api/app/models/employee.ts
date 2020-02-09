@@ -2,14 +2,14 @@ import bcrypt from 'bcryptjs'
 import { omit } from 'lodash'
 import { makeId } from '../utils/helpers'
 
-export const User = (sequelize: any, Sequelize: any) => {
+export const Employee = (sequelize: any, Sequelize: any) => {
 
     if (!process.env.BCRYPT_SALTING_ROUND) {
         console.log('Add a hash salt to your .env file');
         throw new Error('Add a hash salt to your .env file')
     }
 
-    const User = sequelize.define("user", {
+    const Employee = sequelize.define("employee", {
         id: makeId(Sequelize),
         email: {
             type: Sequelize.STRING, // perf_review year
@@ -57,10 +57,11 @@ export const User = (sequelize: any, Sequelize: any) => {
                 isIn: [['admin', 'staff', 'user']]
             }
         },
-        level: {
+        rank: {
             type: Sequelize.STRING,  // done|not_done
+            allowNull: true,
             validate: {
-                isIn: [['junior', 'mid', 'senior', 'admin', 'executive']]
+                isIn: [['junior', 'mid', 'senior', 'executive']]
             }
         },
         status: {
@@ -72,13 +73,13 @@ export const User = (sequelize: any, Sequelize: any) => {
         }
     });
 
-    // remove user password from the returned object
-    User.prototype.toJSON = function() {
+    // remove employee password from the returned object
+    Employee.prototype.toJSON = function() {
         return omit(this.dataValues, 'password');
     }
 
-    return User;
+    return Employee;
 };
 
-export default User
+export default Employee
 

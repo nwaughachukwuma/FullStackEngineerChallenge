@@ -1,12 +1,11 @@
 import { DBConfig } from '../config'
 import { Sequelize } from "sequelize";
-import { Tutorial } from './tutorial'
-import { PerfReview } from './perfreview'
+import { PerformanceReview } from './perfreview'
 import { Feedback } from './feedback'
-import { User } from './user';
+import { Employee } from './employee';
 
 
-const sequelize = new Sequelize(DBConfig.DB, DBConfig.USER, DBConfig.PASSWORD, {
+export const sequelize = new Sequelize(DBConfig.DB, DBConfig.USER, DBConfig.PASSWORD, {
     host: DBConfig.HOST,
     dialect: DBConfig.dialect,
     //   operatorsAliases: false,
@@ -18,13 +17,26 @@ const sequelize = new Sequelize(DBConfig.DB, DBConfig.USER, DBConfig.PASSWORD, {
     }
 });
 
+// instantiate the models
+const FeedbackModel = Feedback(sequelize, Sequelize);
+const PerformanceReviewModel = PerformanceReview(sequelize, Sequelize)
+const EmployeeModel = Employee(sequelize, Sequelize);
+
+// define associations
+// 1. user to performance reviews
+EmployeeModel.hasMany(PerformanceReviewModel);
+PerformanceReviewModel.belongsTo(EmployeeModel);
+
+// 2. Performance reviews to feedback
+PerformanceReviewModel.hasMany(FeedbackModel);
+FeedbackModel.belongsTo(PerformanceReviewModel)
+
 const db = {
     Sequelize,
     sequelize,
-    tutorials: Tutorial(sequelize, Sequelize),
-    perfreviews: PerfReview(sequelize, Sequelize),
-    feedbacks: Feedback(sequelize, Sequelize),
-    users: User(sequelize, Sequelize)
+    performance_reviews: PerformanceReviewModel,
+    feedbacks: FeedbackModel,
+    employees: EmployeeModel
 };
 
 export default db;

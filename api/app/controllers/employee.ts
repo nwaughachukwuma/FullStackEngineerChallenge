@@ -4,7 +4,7 @@ import {Op as OpSymbol} from 'sequelize'
 import { DBModel } from '../models';
 
 
-const User = DBModel.users;
+const Employee = DBModel.employees;
 const Op: typeof OpSymbol = DBModel.Sequelize.Op;
 
 export async function CreateEmployee(req: Request, res: Response) {
@@ -23,23 +23,23 @@ export async function CreateEmployee(req: Request, res: Response) {
         phone,
         gender,
         role,
-        level,
+        rank,
         job_definition
     } = req.body;
 
     const user_data = {
-        name: name,
-        email: email,
-        phone: phone,
-        gender: gender,
-        role: role,
-        level: level,
+        name,
+        email,
+        phone,
+        gender,
+        role,
+        rank,
         job_definition: job_definition? job_definition: null
     }
 
     // Save a new User in the database
-    User.create(user_data)
-        .then((data: typeof User) => {
+    Employee.create(user_data)
+        .then((data: typeof Employee) => {
             res.send({data, message: 'New user created'});
         })
         .catch((err: any) => {
@@ -55,7 +55,7 @@ export async function FetchOneEmployee(req: Request, res: Response) {
 
     const id = req.params.id;
 
-    User.findByPk(id)
+    Employee.findByPk(id)
         .then((data: any) => {
             res.send({data});
         })
@@ -77,7 +77,7 @@ export async function FetchAllEmployees(req: Request, res: Response) {
         email ? { email: { [Op.like]: `%${email}%` } } : null
     );
 
-    User.findAll({ where: condition, omit: 'password' })
+    Employee.findAll({ where: condition })
         .then((data: any) => {
             return res.send({ data });
         })
