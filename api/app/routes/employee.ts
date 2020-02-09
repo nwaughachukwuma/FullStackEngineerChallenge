@@ -1,16 +1,12 @@
 import express, { Request, Response } from 'express'
 const packageJson = require('../../package.json');
-import {check, query, sanitizeQuery} from 'express-validator';
+import {check} from 'express-validator';
 
 import {
   GiveFeedback,
   FindAllAssignedPendingReviews,
   FindAllAssignedReviews
 } from '../controllers/reviewer'
-
-import {
-  FindAllPerformanceReviewsPendingFeedback
-} from '../controllers/perfreview'
 
 
 // initialize express router
@@ -44,7 +40,6 @@ router.put('/give-feedback/:prId', [
 /**
  * Routes for performance reviews requiring feedback
  */
-// router.get('/perf-reviews/pending-feedback', FindAllPerformanceReviewsPendingFeedback);
 router.get('/pending-reviews/:peerId', FindAllAssignedPendingReviews);
 router.get('/assigned-reviews', FindAllAssignedReviews);
 

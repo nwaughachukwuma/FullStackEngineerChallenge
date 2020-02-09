@@ -7,13 +7,15 @@ import {
   FindOnePerformanceReview,
   FindAllPerformanceReviews,
   CreateReviewer,
-  FindAllPerformanceReviewsPendingFeedback
+  UpdatePerformanceReview
 } from '../controllers/perfreview'
 
 import {
   CreateEmployee,
   FetchOneEmployee,
-  FetchAllEmployees
+  FetchAllEmployees,
+  UpdateEmployee,
+  DeleteEmployee
 } from '../controllers/employee'
 
 import {
@@ -42,15 +44,15 @@ router.get('/', (_req: Request, res: Response) => {
  */
 router.post('/create-employee', [
   check('name').exists().withMessage('Provide Employee name'),
-  check('email').isEmail().withMessage('Provide Performance email'),
+  check('email').isEmail().withMessage('Provide Employee email'),
   check('phone').isMobilePhone('any')
     .withMessage('Provide employee phone number'),
   check('gender')
     .custom((value, { req }) => ['male', 'female'].includes(value))
-    .withMessage('Provide performance gender'),
+    .withMessage('Provide Employee gender'),
   check('role')
     .isIn(['admin', 'staff', 'user'])
-    .withMessage('Provide performance employee role'),
+    .withMessage('Provide Employee employee role'),
   check('rank')
     .optional()
     .isIn(['junior', 'mid', 'senior', 'executive'])
@@ -58,6 +60,8 @@ router.post('/create-employee', [
 ], CreateEmployee);
 router.get('/employees/:id', FetchOneEmployee);
 router.get('/employees', FetchAllEmployees);
+router.put('/employees/:id', UpdateEmployee);
+router.delete('/employees/:id', DeleteEmployee)
 
 /**
  * create routes for performance review
@@ -72,6 +76,7 @@ router.post('/create-perf-review', [
 ], CreatePerformanceReview);
 router.get('/perf-reviews/:id', FindOnePerformanceReview);
 router.get('/perf-reviews', FindAllPerformanceReviews);
+router.put('/perf-reviews/:id', UpdatePerformanceReview);
 
 /**
  * admin routes for peer reviewers

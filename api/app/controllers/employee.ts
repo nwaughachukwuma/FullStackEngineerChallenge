@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
-import {Op as OpSymbol} from 'sequelize'
+import { Op as OpSymbol } from 'sequelize'
 import { DBModel } from '../models';
 
 
@@ -34,13 +34,13 @@ export async function CreateEmployee(req: Request, res: Response) {
         gender,
         role,
         rank,
-        jobDefinition: jobDefinition? jobDefinition: null
+        jobDefinition: jobDefinition ? jobDefinition : null
     }
 
     // Save a new User in the database
     Employee.create(user_data)
         .then((data: typeof Employee) => {
-            res.send({data, message: 'New user created'});
+            res.send({ data, message: 'New user created' });
         })
         .catch((err: any) => {
             res.status(500).send({
@@ -57,7 +57,7 @@ export async function FetchOneEmployee(req: Request, res: Response) {
 
     Employee.findByPk(id)
         .then((data: any) => {
-            res.send({data});
+            res.send({ data });
         })
         .catch((err: any) => {
             res.status(500).send({
@@ -69,11 +69,11 @@ export async function FetchOneEmployee(req: Request, res: Response) {
 
 export async function FetchAllEmployees(req: Request, res: Response) {
 
-    const {name, email} = req.query;
+    const { name, email } = req.query;
 
     let condition = Object.assign(
-        {}, 
-        name ? { name: { [Op.like]: `%${name}%` } } : null, 
+        {},
+        name ? { name: { [Op.like]: `%${name}%` } } : null,
         email ? { email: { [Op.like]: `%${email}%` } } : null
     );
 
@@ -89,3 +89,64 @@ export async function FetchAllEmployees(req: Request, res: Response) {
             });
         });
 }
+
+// Update employee by the id in the request
+export const UpdateEmployee = (req: Request, res: Response) => {
+
+    // Validate params
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(422).json({ errors: errors.array() });
+        return
+    }
+
+    const id = req.params.id;
+
+    Employee.update(req.body, {
+        where: { id: id }
+    })
+        .then(async (num: number) => {
+            if (num == 1) {
+                const newData = await Employee.findByPk(id)
+                res.send({
+                    data: newData,
+                    message: "Employee was updated successfully."
+                });
+            } else {
+                res.send({
+                    message: `Cannot update Employee with id=${id}. Maybe Employee was not found or req.body is empty!`
+                });
+            }
+        })
+        .catch((err: any) => {
+            res.status(500).send({
+                error: err.original,
+                message: "Error updating Employee with id=" + id
+            });
+        });
+};
+
+// Delete a Employee with the specified id in the request
+export const DeleteEmployee = (req: Request, res: Response) => {
+    const id = req.params.id;
+
+    Employee.destroy({
+        where: { id: id }
+    })
+        .then((num: number) => {
+            if (num == 1) {
+                res.send({
+                    message: "Employee was deleted successfully!"
+                });
+            } else {
+                res.send({
+                    message: `Cannot delete Employee with id=${id}. Maybe Employee was not found!`
+                });
+            }
+        })
+        .catch((err: any) => {
+            res.status(500).send({
+                message: "Could not delete Employee with id=" + id
+            });
+        });
+};

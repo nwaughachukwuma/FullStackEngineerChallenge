@@ -2,8 +2,6 @@ import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 import {Op as OpSymbol} from 'sequelize'
 import { DBModel } from '../models';
-import {isEmpty} from 'lodash'
-import {sequelize} from '../models'
 
 
 const PerformanceReview = DBModel.performance_reviews;
@@ -58,10 +56,11 @@ export const CreatePerformanceReview = (req: Request, res: Response) => {
  * with associated reviewers.
  */
 export const FindAllPerformanceReviews = (req: Request, res: Response) => {
-    const {month, year, isReviewed} = req.query;
+    const {employeeId, month, year, isReviewed} = req.query;
     
     let condition = Object.assign(
         {}, 
+        employeeId ? { employeeId: employeeId } : null, 
         isReviewed ? { isReviewed: isReviewed } : null, 
         month ? { month: { [Op.like]: `%${month}%` } } : null,
         year ? { year: { [Op.like]: `%${year}%` } } : null,
@@ -170,9 +169,6 @@ export const FindAllPerformanceReviewsPendingFeedback = async (req: Request, res
     //     }
     // )
 
-    // const feedy = Feedback.findOne();
-    // console.log((feedy.getPerfReview()).toJSON());
-
     const donePerfReviews = 
     await PerformanceReview.findAll({
         where: {isReviewed: false}, 
@@ -193,4 +189,40 @@ export const FindAllPerformanceReviewsPendingFeedback = async (req: Request, res
     //                 err.message || "Some error occurred while retrieving performance reviews."
     //         });
     //     });
+};
+
+// Update Performance review by the id in the request
+export const UpdatePerformanceReview = (req: Request, res: Response) => {
+
+    // Validate params
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(422).json({ errors: errors.array() });
+        return
+    }
+
+    const id = req.params.id;
+
+    PerformanceReview.update(req.body, {
+        where: { id: id }
+    })
+        .then(async (num: number) => {
+            if (num == 1) {
+                const newData = await PerformanceReview.findByPk(id)
+                res.send({
+                    data: newData,
+                    message: "PerformanceReview was updated successfully."
+                });
+            } else {
+                res.send({
+                    message: `Cannot update PerformanceReview with id=${id}. Maybe PerformanceReview was not found or req.body is empty!`
+                });
+            }
+        })
+        .catch((err: any) => {
+            res.status(500).send({
+                error: err.original,
+                message: "Error updating PerformanceReview with id=" + id
+            });
+        });
 };
