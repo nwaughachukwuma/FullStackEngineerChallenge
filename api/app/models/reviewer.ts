@@ -11,10 +11,10 @@ import {SequelizeType} from '../utils/types'
  * @param sequelize 
  * @param Sequelize 
  */
-export const Feedback = (sequelize: any, Sequelize: SequelizeType) => {
-    const Feedback = sequelize.define("feedback", {
+export const Reviewer = (sequelize: any, Sequelize: SequelizeType) => {
+    const Reviewer = sequelize.define("reviewer", {
         id: makeId(Sequelize),
-        performance_reviewId: {
+        performanceReviewId: {
             type: DataTypes.STRING,
             allowNull: false,
             references: {
@@ -37,13 +37,14 @@ export const Feedback = (sequelize: any, Sequelize: SequelizeType) => {
             unique: 'compositeIndex', // use a composite index
         },
         feedback: {
-            type: DataTypes.STRING, // peer_review score
-            allowNull: false
+            type: DataTypes.STRING, // peer_review feedback
+            allowNull: false,
+            defaultValue: ''
         }
     });
 
-    return Feedback;
+    return Reviewer;
 };
 
-export default Feedback
+export default Reviewer
 

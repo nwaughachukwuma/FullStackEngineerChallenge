@@ -1,13 +1,15 @@
 import express, { Request, Response } from 'express'
 const packageJson = require('../../package.json');
-import {check} from 'express-validator';
+import {check, query, sanitizeQuery} from 'express-validator';
 
 import {
-  CreateFeedback,
-} from '../controllers/feedback'
+  GiveFeedback,
+  FindAllAssignedPendingReviews,
+  FindAllAssignedReviews
+} from '../controllers/reviewer'
 
 import {
-  FindAllPerformanceReviewWithoutFeedback
+  FindAllPerformanceReviewsPendingFeedback
 } from '../controllers/perfreview'
 
 
@@ -30,20 +32,20 @@ router.get('/', (_req: Request, res: Response) => {
 /**
  * employee routes for performance review feedback
  */
-router.post('/feedback', [
-  check('performance_reviewId').exists({ checkNull: true }).isUUID('4')
+router.put('/give-feedback/:prId', [
+  check('performanceReviewId').exists({ checkNull: true }).isUUID('4')
     .withMessage('Provide performance review Id'),
   check('peerId').exists({ checkNull: true })
     .withMessage('Provide the Id of the employee giving the feedback'),
   check('feedback').exists({ checkNull: true })
     .withMessage('Provide user feedback')
-], CreateFeedback)
+], GiveFeedback);
 
 /**
  * Routes for performance reviews requiring feedback
  */
-router.get('/perf-reviews/no-feedback', FindAllPerformanceReviewWithoutFeedback);
-
-
+// router.get('/perf-reviews/pending-feedback', FindAllPerformanceReviewsPendingFeedback);
+router.get('/pending-reviews/:peerId', FindAllAssignedPendingReviews);
+router.get('/assigned-reviews', FindAllAssignedReviews);
 
 export default router

@@ -24,7 +24,7 @@ export async function CreateEmployee(req: Request, res: Response) {
         gender,
         role,
         rank,
-        job_definition
+        jobDefinition
     } = req.body;
 
     const user_data = {
@@ -34,7 +34,7 @@ export async function CreateEmployee(req: Request, res: Response) {
         gender,
         role,
         rank,
-        job_definition: job_definition? job_definition: null
+        jobDefinition: jobDefinition? jobDefinition: null
     }
 
     // Save a new User in the database
@@ -88,17 +88,4 @@ export async function FetchAllEmployees(req: Request, res: Response) {
                     err.message || "Some error occurred while retrieving employees."
             });
         });
-}
-
-
-export async function MeController(_req: Request, res: Response) {
-
-    return res.status(200).send({
-        success: true,
-        data: {
-            name: 'Chukwuma Nwaugha',
-            email: 'c.nwaugha@gmail.com',
-            github: 'https://github.com/nwaughachukwuma'
-        }
-    })
 }

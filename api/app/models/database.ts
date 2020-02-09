@@ -1,7 +1,7 @@
 import { DBConfig } from '../config'
 import { Sequelize } from "sequelize";
 import { PerformanceReview } from './perfreview'
-import { Feedback } from './feedback'
+import { Reviewer } from './reviewer'
 import { Employee } from './employee';
 
 
@@ -18,7 +18,7 @@ export const sequelize = new Sequelize(DBConfig.DB, DBConfig.USER, DBConfig.PASS
 });
 
 // instantiate the models
-const FeedbackModel = Feedback(sequelize, Sequelize);
+const ReviewerModel = Reviewer(sequelize, Sequelize);
 const PerformanceReviewModel = PerformanceReview(sequelize, Sequelize)
 const EmployeeModel = Employee(sequelize, Sequelize);
 
@@ -27,15 +27,17 @@ const EmployeeModel = Employee(sequelize, Sequelize);
 EmployeeModel.hasMany(PerformanceReviewModel);
 PerformanceReviewModel.belongsTo(EmployeeModel);
 
-// 2. Performance reviews to feedback
-PerformanceReviewModel.hasMany(FeedbackModel);
-FeedbackModel.belongsTo(PerformanceReviewModel)
+// 2. Performance reviews to Reviewer
+PerformanceReviewModel.hasMany(ReviewerModel, {
+    foreignKey: 'performanceReviewId'
+});
+ReviewerModel.belongsTo(PerformanceReviewModel)
 
 const db = {
     Sequelize,
     sequelize,
     performance_reviews: PerformanceReviewModel,
-    feedbacks: FeedbackModel,
+    reviewers: ReviewerModel,
     employees: EmployeeModel
 };
 

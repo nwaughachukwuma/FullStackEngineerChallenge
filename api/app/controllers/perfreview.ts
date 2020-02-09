@@ -7,7 +7,7 @@ import {sequelize} from '../models'
 
 
 const PerformanceReview = DBModel.performance_reviews;
-const Feedback = DBModel.feedbacks
+const Reviewer = DBModel.reviewers
 const Op: typeof OpSymbol = DBModel.Sequelize.Op;
 
 // Create and Save a new Performance review
@@ -26,7 +26,7 @@ export const CreatePerformanceReview = (req: Request, res: Response) => {
         year,
         evaluation,
         remark,
-        is_reviewed
+        isReviewed
     } = req.body
 
     // Create a Performance review
@@ -36,7 +36,7 @@ export const CreatePerformanceReview = (req: Request, res: Response) => {
         year,
         evaluation,
         remark,
-        is_reviewed: is_reviewed || false
+        isReviewed: isReviewed || evaluation? true: false
     };
 
     // Save Tutorial in the database
@@ -53,18 +53,21 @@ export const CreatePerformanceReview = (req: Request, res: Response) => {
         });
 };
 
-// Retrieve all Performance reviews from the database.
+/**
+ * Retrieve all Performance reviews from the database 
+ * with associated reviewers.
+ */
 export const FindAllPerformanceReviews = (req: Request, res: Response) => {
-    const {month, year, is_reviewed} = req.query;
+    const {month, year, isReviewed} = req.query;
     
     let condition = Object.assign(
         {}, 
-        is_reviewed ? { is_reviewed: is_reviewed } : null, 
+        isReviewed ? { isReviewed: isReviewed } : null, 
         month ? { month: { [Op.like]: `%${month}%` } } : null,
         year ? { year: { [Op.like]: `%${year}%` } } : null,
     );
 
-    PerformanceReview.findAll({ where: condition })
+    PerformanceReview.findAll({ where: condition, include: Reviewer })
         .then((data: any) => {
             return res.send({ data });
         })
@@ -81,7 +84,7 @@ export const FindAllPerformanceReviews = (req: Request, res: Response) => {
 export const FindOnePerformanceReview = (req: Request, res: Response) => {
     const id = req.params.id;
 
-    PerformanceReview.findByPk(id)
+    PerformanceReview.findOne({where: {id: id}, include: Reviewer})
         .then((data: any) => {
             res.send({data});
         })
@@ -93,13 +96,49 @@ export const FindOnePerformanceReview = (req: Request, res: Response) => {
         });
 };
 
+/**
+ * Create a reviewer to give feedback
+ */
+export const CreateReviewer = (req: Request, res: Response) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(422).json({ errors: errors.array() });
+        return
+    }
+
+    const {
+        performanceReviewId,
+        peerId
+    } = req.body;
+
+    // Create a Performance review
+    const reviewer = {
+        performanceReviewId,
+        peerId
+    };
+
+    // Save Reviewer in the database
+    Reviewer.create(reviewer)
+        .then((data: any) => {
+            res.send(data);
+        })
+        .catch((err: any) => {
+            res.status(500).send({
+                error: err.original,
+                message:
+                    err.message || "Some error occurred while creating the reviewer"
+            });
+        });
+}
+
 // Retrieve all Performance reviews from the database.
-export const FindAllPerformanceReviewWithoutFeedback = async (req: Request, res: Response) => {
-    const {month, year, is_reviewed} = req.query;
+export const FindAllPerformanceReviewsPendingFeedback = async (req: Request, res: Response) => {
+    const {month, year, isReviewed} = req.query;
     
     let condition = Object.assign(
         {}, 
-        is_reviewed ? { is_reviewed: is_reviewed } : null, 
+        isReviewed ? { isReviewed: isReviewed } : null, 
         month ? { month: { [Op.like]: `%${month}%` } } : null,
         year ? { year: { [Op.like]: `%${year}%` } } : null,
     );
@@ -134,7 +173,11 @@ export const FindAllPerformanceReviewWithoutFeedback = async (req: Request, res:
     // const feedy = Feedback.findOne();
     // console.log((feedy.getPerfReview()).toJSON());
 
-    const donePerfReviews = await PerformanceReview.findAll({where: {status: 'not_done'}, include: Feedback})
+    const donePerfReviews = 
+    await PerformanceReview.findAll({
+        where: {isReviewed: false}, 
+        include: Reviewer
+    })
 
     // const temp = await donePerfReviews.getFeedback();
     return res.send({data: donePerfReviews});

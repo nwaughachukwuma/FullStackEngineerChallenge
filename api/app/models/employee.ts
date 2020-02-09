@@ -46,7 +46,7 @@ export const Employee = (sequelize: any, Sequelize: any) => {
                 len: [10, 15]
             }
         },
-        job_definition: {
+        jobDefinition: {
             type: Sequelize.STRING, // employee position: e.g. software developer or HR
             allowNull: true,
         },

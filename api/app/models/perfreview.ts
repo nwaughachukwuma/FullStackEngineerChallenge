@@ -43,11 +43,15 @@ export const PerformanceReview = (sequelize: any, Sequelize: SequelizeType) => {
         remark: {
             type: DataTypes.STRING // performance_review remark by admin
         },
-        is_reviewed: {
+        isReviewed: {
             type: DataTypes.BOOLEAN,  // whether the employee has been reviewed
             allowNull: false
         }
     });
+
+    // PerformanceReview.prototype.toJSON = function() {
+    //     return {...this.dataValues, reviewer_object: this.getReviewer()}
+    // }
 
     return PerformanceReview;
 };

@@ -5,7 +5,9 @@ import {check} from 'express-validator';
 import {
   CreatePerformanceReview,
   FindOnePerformanceReview,
-  FindAllPerformanceReviews
+  FindAllPerformanceReviews,
+  CreateReviewer,
+  FindAllPerformanceReviewsPendingFeedback
 } from '../controllers/perfreview'
 
 import {
@@ -15,9 +17,10 @@ import {
 } from '../controllers/employee'
 
 import {
-  FindOneFeedback,
-  FindAllFeedbacks,
-} from '../controllers/feedback'
+  // FindOneReviewer,
+  FindAllAssignedReviews,
+  FindAllAssignedPendingReviews,
+} from '../controllers/reviewer'
 
 const router = express.Router({
   strict: true
@@ -65,15 +68,28 @@ router.post('/create-perf-review', [
   check('year').exists().withMessage('Provide performance review year'),
   check('evaluation').isInt().toInt().withMessage('Provide performance review evaluation'),
   check('remark').exists().withMessage('Provide performance review remark'),
-  check('is_reviewd').optional(),
+  check('isReviewd').optional(),
 ], CreatePerformanceReview);
 router.get('/perf-reviews/:id', FindOnePerformanceReview);
 router.get('/perf-reviews', FindAllPerformanceReviews);
 
 /**
- * admin routes for peer feedbacks
+ * admin routes for peer reviewers
  */
-router.get('/feedbacks/:id', FindOneFeedback);
-router.get('/feedbacks', FindAllFeedbacks);
+/**
+ * employee routes for performance review feedback
+ */
+router.post('/create-reviewer', [
+  check('performanceReviewId').exists({ checkNull: true }).isUUID('4')
+    .withMessage('Provide performance review Id'),
+  check('peerId').exists({ checkNull: true })
+    .withMessage('Provide the Id of the employee giving the feedback'),
+  check('feedback').not().exists()
+    .withMessage('Feedback should be provided by the reviewer'),
+], CreateReviewer);
+
+// router.get('/feedbacks/:id', FindOneReviewer);
+router.get('/reviewers', FindAllAssignedReviews);
+router.get('/pending-reviews', FindAllAssignedPendingReviews);
 
 export default router
