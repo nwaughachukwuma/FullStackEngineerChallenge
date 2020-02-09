@@ -15,11 +15,12 @@ export const generateToken = (data: EmployeeType) => {
   });
 };
 
-// export const verifyToken = async (jwtToken: any) => {
-//   try {
-//     return await jwt.verify(jwtToken, secretKey, { algorithm: 'HS256' });
-//   } catch (e) {
-//     moduleLogger.error({ e });
-//     return null;
-//   }
-// };
+export const verifyToken = async (jwtToken: any) => {
+  try {
+    // @ts-ignore
+    return await jwt.verify(jwtToken, secretKey, { algorithm: 'HS256' }); 
+  } catch (e) {
+    moduleLogger.error({ e });
+    return null;
+  }
+};

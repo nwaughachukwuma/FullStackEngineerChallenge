@@ -1,13 +1,13 @@
 import bcrypt from 'bcryptjs'
-import {isEmpty} from 'lodash'
+import { isEmpty } from 'lodash'
 import dayjs from 'dayjs'
 import { DBModel } from '../models';
-import { 
-    LoginParams, 
-    UserCredentials, 
-    EmployeeType 
+import {
+    LoginParams,
+    UserCredentials,
+    EmployeeType
 } from '../utils/types'
-import {generateToken} from '../utils/helpers'
+import { generateToken } from '../utils/helpers'
 
 
 const Employee = DBModel.employees;
@@ -37,7 +37,8 @@ export const RegisterUser = async (userDetails: typeof Employee) => {
         email,
         password: hashPass,
         phone,
-        gender
+        gender,
+        role: 'admin'
     }
 
     // Save a new User in the database
@@ -55,7 +56,7 @@ export const LoginUser = async (userDetails: LoginParams) => {
         password
     } = userDetails
 
-    const userCredentials: UserCredentials = await Employee.findOne({where: {email: email}})
+    const userCredentials: UserCredentials = await Employee.findOne({ where: { email: email } })
         .then(async (data: any) => {
             // Load hash from your password DB.
             const result = await bcrypt.compare(password, data.password);
@@ -64,7 +65,7 @@ export const LoginUser = async (userDetails: LoginParams) => {
 
             const userData = { ...data.dataValues };
             delete userData.password;
-            return  { ...userData, isValid: result };
+            return { ...userData, isValid: result };
         });
 
     if (!userCredentials.isValid) {
@@ -74,14 +75,18 @@ export const LoginUser = async (userDetails: LoginParams) => {
     // if the user status is not yet active
     if (userCredentials.status === 'pending') {
         try {
-            return await Employee.update({status: 'active'}, {
-                where: { email: email }
+            await Employee.update({ status: 'active' }, {
+                where: { id: userCredentials.id }
             });
         } catch (error) {
             throw new Error(error.message)
         }
     }
 
+    return await finalizeLogin(userCredentials)
+};
+
+const finalizeLogin = async (userCredentials: UserCredentials) => {
     try {
         // generate jwt with the user credentials
         const jwtToken = tokenGenerator(userCredentials);
@@ -91,14 +96,18 @@ export const LoginUser = async (userDetails: LoginParams) => {
             lastLoginAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         }
 
-        const existingAuth = await Auth.findOne({where: {
-            employeeId: newAuth.employeeId}
+        const existingAuth = await Auth.findOne({
+            where: {
+                employeeId: newAuth.employeeId
+            }
         });
 
         if (!isEmpty(existingAuth)) {
             delete newAuth.employeeId
-            await Auth.update(newAuth, {where: 
-                {employeeId: userCredentials.id}
+            // update the user's auth object
+            await Auth.update(newAuth, {
+                where:
+                    { employeeId: userCredentials.id }
             })
         } else {
             // create new auth object
@@ -108,8 +117,7 @@ export const LoginUser = async (userDetails: LoginParams) => {
     } catch (error) {
         throw new Error(error.message)
     }
-
-};
+}
 
 /**
  * Generate jwt
@@ -121,7 +129,7 @@ const tokenGenerator = (userData: EmployeeType) => {
         name: userData.name,
         email: userData.email,
         role: userData.role
-      };
-    
-      return generateToken(data);
+    };
+
+    return generateToken(data);
 }

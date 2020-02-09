@@ -8,6 +8,10 @@ import {
   FindAllAssignedReviews
 } from '../controllers/reviewer'
 
+import { 
+  Login
+} from '../controllers/authController';
+
 
 // initialize express router
 const router = express.Router({
@@ -42,5 +46,10 @@ router.put('/give-feedback/:prId', [
  */
 router.get('/pending-reviews/:peerId', FindAllAssignedPendingReviews);
 router.get('/assigned-reviews', FindAllAssignedReviews);
+
+router.post('/login', [
+  check('email').isEmail().withMessage('Enter your email'),
+  check('password').exists().withMessage('Enter your password'),
+], Login)
 
 export default router

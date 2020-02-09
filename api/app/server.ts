@@ -1,15 +1,15 @@
 require('dotenv').config();
 import express from 'express';
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const bodyParser = require('body-parser');
 const bunyanMiddleware = require('bunyan-middleware');
 const { logger } = require('./logger');
-import {validateAuthToken} from './middleware'
+import { validateAuthToken, escapeRoute } from './middleware'
 import { employeeRouter, adminRouter } from './routes';
-import {DBModel} from './models'
+import { DBModel } from './models'
 
 const app = express();
 
@@ -42,12 +42,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // sync database connection
-DBModel.sequelize.sync({ force: process.env.__DEV__ ? false: false })
+DBModel.sequelize.sync({ force: process.env.__DEV__ ? false : false })
   .then(() => {
     console.log("Drop and re-sync db.");
   });
-// add user auth validation
-app.use(validateAuthToken);
+
+// add user auth validation with array of routes 
+// to escape from validation check
+app.use(escapeRoute([
+  '/api/employee/login', 
+  '/api/admin/register',
+  '/api/admin/login'
+], validateAuthToken));
 
 // define route paths for employee and admin
 app.use('/api/employee', employeeRouter);

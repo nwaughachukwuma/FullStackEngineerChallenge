@@ -3,8 +3,10 @@ import { validationResult } from 'express-validator'
 import { Op as OpSymbol } from 'sequelize'
 import { DBModel } from '../models';
 import {RegisterUser, LoginUser} from '../services/auth'
+import { EmployeeType } from '../utils/types';
 
 const Employee = DBModel.employees;
+const Auth = DBModel.auths
 const Op: typeof OpSymbol = DBModel.Sequelize.Op;
 
 /**
@@ -52,8 +54,13 @@ export const Login = async (req: Request, res: Response) => {
     try {
         // Save a new User in the database
         LoginUser(req.body)
-            .then((data: typeof Employee) => {
-                res.send({ data, message: 'User login successful' });
+            .then(async (data: string) => {
+                const userCredentials = await Employee.findOne({
+                    where: {
+                        email: req.body.email}, 
+                    include: Auth
+                })
+                res.send({ data: userCredentials});
             })
             .catch((err: any) => {
                 res.status(500).send({
