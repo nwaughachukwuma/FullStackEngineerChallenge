@@ -3,7 +3,6 @@ import { validationResult } from 'express-validator'
 import { Op as OpSymbol } from 'sequelize'
 import { DBModel } from '../models';
 import {RegisterUser, LoginUser} from '../services/auth'
-import { EmployeeType } from '../utils/types';
 
 const Employee = DBModel.employees;
 const Auth = DBModel.auths
@@ -69,6 +68,30 @@ export const Login = async (req: Request, res: Response) => {
                         err.message || "Some error occurred while attempting to login."
                 });
             });
+    } catch (e) {
+        res.status(500).send({ error: e });
+    }
+};
+
+/**
+ * User logout
+ */
+export const Logout = async (req: Request, res: Response) => {
+
+    // Finds the validation errors in this request and wraps them in an object with handy functions
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(422).json({ errors: errors.array() });
+        return;
+    }
+
+    try {
+        await Auth.update({ accessToken: '' }, {
+            where: { employeeId: req.user!.id }
+        });
+        req.user = null;
+        res.send({ message: 'User has logged out' });
+        return
     } catch (e) {
         res.status(500).send({ error: e });
     }

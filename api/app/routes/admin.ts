@@ -26,7 +26,8 @@ import {
 
 import { 
   Register,
-  Login
+  Login,
+  Logout
 } from '../controllers/authController';
 
 const router = express.Router({
@@ -122,5 +123,7 @@ router.post('/login', [
   check('email').isEmail().withMessage('Enter your email'),
   check('password').exists().withMessage('Enter your password'),
 ], Login)
+
+router.post('/logout', Logout)
 
 export default router

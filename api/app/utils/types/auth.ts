@@ -9,3 +9,13 @@ export type LoginParams = {
 export interface UserCredentials extends EmployeeType  {
     isValid: boolean
 }
+export interface userAuth {
+    decodedToken: {
+        id: string
+        name: string
+        email: string
+        role: string
+        iat: number
+        exp: number
+    }
+}

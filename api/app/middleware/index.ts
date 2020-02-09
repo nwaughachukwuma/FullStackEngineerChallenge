@@ -1,11 +1,13 @@
 import { NextFunction, Request, Response } from 'express'
 import {verifyToken} from '../utils/helpers'
+import {userAuth} from '../utils/types'
+import {DBModel} from '../models'
 
 // add user property to the Request class
 declare global {
   namespace Express {
     interface Request {
-      user: 'employee.auth.accessToken'
+      user: userAuth["decodedToken"] | null
     }
   }
 }
@@ -17,6 +19,7 @@ const noIDTokenMessage = `
 `
 
 const unAuthorizedMessage = 'Unauthorized access is not allowed'
+const Auth = DBModel.auths;
 
 /** 
  * Middleware to validate user Auth Tokens passed in the Authorization HTTP header.
@@ -56,14 +59,19 @@ const validateAuthToken = async (req: Request, res: Response, next: NextFunction
     const decodedToken = await verifyToken(accessToken)
     if (!decodedToken) throw new Error('Invalid access token')
    
+    const userAuth = await Auth.findOne({where: {accessToken: accessToken}});
+
+    console.log('Checking if token has correct referenced >>>', userAuth)
+    if (!userAuth) throw new Error('Invalid access token, login again')
+
     console.log('ID Token correctly decoded', decodedToken)
     //  add the decoded token to the request object
     req.user = decodedToken
     next()
     return
   } catch (error) {
-    console.error('Error while verifying users auth token:', error)
-    res.status(403).send({error: unAuthorizedMessage})
+    console.error('Error while verifying users auth token:', error.message)
+    res.status(403).send({error: unAuthorizedMessage, message: error.message})
     return
   }
 }
