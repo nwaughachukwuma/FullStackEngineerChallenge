@@ -132,64 +132,34 @@ export const CreateReviewer = (req: Request, res: Response) => {
 }
 
 // Retrieve all Performance reviews from the database.
-export const FindAllPerformanceReviewsPendingFeedback = async (req: Request, res: Response) => {
-    const {month, year, isReviewed} = req.query;
-    
-    let condition = Object.assign(
-        {}, 
-        isReviewed ? { isReviewed: isReviewed } : null, 
-        month ? { month: { [Op.like]: `%${month}%` } } : null,
-        year ? { year: { [Op.like]: `%${year}%` } } : null,
-    );
-
-    // PerformanceReview.findAll({
-    //     attributes: {
-    //         include: [
-    //             [
-    //                 // Note the wrapping parentheses in the call below!
-    //                 sequelize.literal(`(
-    //                     SELECT COUNT(*)
-    //                     FROM feedbacks AS feedback
-    //                     WHERE
-    //                         feedback.performance_reviewId = performance_review.id
-    //                         AND
-    //                         performance_review.status = "not_done"
-    //                 )`),
-    //                 'PerformanceReviewWithoutFeedback'
-    //             ]
-    //         ]
-    //     },
-    //     // where: {perfReviewWithoutFeedback: {[Op.gt]: 0}}
-    // }).then((data: any) => {
-    //     return res.send({data})
-    // }).catch((err: any) => {
-    //         res.status(500).send({
-    //             error: err
-    //         })
-    //     }
-    // )
-
-    const donePerfReviews = 
-    await PerformanceReview.findAll({
-        where: {isReviewed: false}, 
-        include: Reviewer
-    })
-
-    // const temp = await donePerfReviews.getFeedback();
-    return res.send({data: donePerfReviews});
-
-    // PerformanceReview.findAll({ where: condition, include: Feedback })
-    //     .then((data: any) => {
-    //         return res.send({ data });
-    //     })
-    //     .catch((err: any) => {
-    //         res.status(500).send({
-    //             error: err.original,
-    //             message:
-    //                 err.message || "Some error occurred while retrieving performance reviews."
-    //         });
-    //     });
-};
+// export const FindAllPerformanceReviewsPendingFeedback = async (req: Request, res: Response) => {
+//     PerformanceReview.findAll({
+//         attributes: {
+//             include: [
+//                 [
+//                     // Note the wrapping parentheses in the call below!
+//                     sequelize.literal(`(
+//                         SELECT COUNT(*)
+//                         FROM feedbacks AS feedback
+//                         WHERE
+//                             feedback.performance_reviewId = performance_review.id
+//                             AND
+//                             performance_review.status = "not_done"
+//                     )`),
+//                     'PerformanceReviewWithoutFeedback'
+//                 ]
+//             ]
+//         },
+//         // where: {perfReviewWithoutFeedback: {[Op.gt]: 0}}
+//     }).then((data: any) => {
+//         return res.send({data})
+//     }).catch((err: any) => {
+//             res.status(500).send({
+//                 error: err
+//             })
+//         }
+//     )
+// };
 
 // Update Performance review by the id in the request
 export const UpdatePerformanceReview = (req: Request, res: Response) => {

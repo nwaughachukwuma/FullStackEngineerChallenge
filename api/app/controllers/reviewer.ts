@@ -85,28 +85,6 @@ export const FindAllAssignedReviews = (req: Request, res: Response) => {
         });
 };
 
-// /**
-//  * Find all the assignees to performance reviews
-//  */
-// export const FindAllAssignedReviews = (req: Request, res: Response) => {
-//     const {id, peerId} = req.params;
-
-//     const condition = Object.assign(
-//         {},
-//         peerId? {peerId: peerId}: null
-//     )
-
-//     Reviewer.findAll({where: condition, include: PerformanceReview})
-//         .then((data: any) => {
-//             res.send({data});
-//         })
-//         .catch((err: any) => {
-//             res.status(500).send({
-//                 message: "Error retrieving Reviewer with id=" + id
-//             });
-//         });
-// };
-
 /**
  *  get all assigned and pending peer reviews
  * i.e. where feedback is blank
@@ -130,18 +108,3 @@ export const FindAllAssignedPendingReviews = (req: Request, res: Response) => {
             });
         });
 };
-
-// // Find a single Reviewer with an id
-// export const FindOneFeedback = (req: Request, res: Response) => {
-//     const id = req.params.id;
-
-//     Reviewer.findByPk(id)
-//         .then((data: any) => {
-//             res.send({data});
-//         })
-//         .catch((err: any) => {
-//             res.status(500).send({
-//                 message: "Error retrieving Reviewer with id=" + id
-//             });
-//         });
-// };
