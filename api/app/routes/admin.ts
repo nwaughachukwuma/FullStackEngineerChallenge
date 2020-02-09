@@ -8,7 +8,7 @@ import {
   FindAllPerformanceReviews,
   CreateReviewer,
   UpdatePerformanceReview
-} from '../controllers/perfreview'
+} from '../controllers/perfReview'
 
 import {
   CreateEmployee,
@@ -23,6 +23,11 @@ import {
   FindAllAssignedReviews,
   FindAllAssignedPendingReviews,
 } from '../controllers/reviewer'
+
+import { 
+  Register,
+  Login
+} from '../controllers/authController';
 
 const router = express.Router({
   strict: true
@@ -79,10 +84,7 @@ router.get('/perf-reviews', FindAllPerformanceReviews);
 router.put('/perf-reviews/:id', UpdatePerformanceReview);
 
 /**
- * admin routes for peer reviewers
- */
-/**
- * employee routes for performance review feedback
+ * admin routes for employee performance review feedbacks
  */
 router.post('/create-reviewer', [
   check('performanceReviewId').exists({ checkNull: true }).isUUID('4')
@@ -92,9 +94,33 @@ router.post('/create-reviewer', [
   check('feedback').not().exists()
     .withMessage('Feedback should be provided by the reviewer'),
 ], CreateReviewer);
-
-// router.get('/feedbacks/:id', FindOneReviewer);
 router.get('/reviewers', FindAllAssignedReviews);
 router.get('/pending-reviews', FindAllAssignedPendingReviews);
+
+
+/**
+ * auth routes for admin users
+ */
+
+router.post('/register', [
+  check('name').exists().withMessage('Provide Employee name'),
+  check('email').isEmail().withMessage('Provide Employee email'),
+  check('password').exists().withMessage('Provide Employee password'),
+  check('confirmPassword', 'Provide Confirm password')
+    .exists()
+    .custom((value, { req }) => value === req.body.password)
+    .withMessage('Confirm password must match password'),
+  check('phone').optional().isMobilePhone('any')
+    .withMessage('Provide employee phone number'),
+  check('gender')
+    .optional()
+    .isIn(['male', 'female'])
+    .withMessage('Provide Employee gender'),
+], Register);
+
+router.post('/login', [
+  check('email').isEmail().withMessage('Enter your email'),
+  check('password').exists().withMessage('Enter your password'),
+], Login)
 
 export default router

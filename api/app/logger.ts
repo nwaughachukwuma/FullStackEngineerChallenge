@@ -8,4 +8,4 @@ const logger = bunyan.createLogger({
 });
 logger.info({ NODE_ENV: process.env.NODE_ENV }, 'API logger loaded');
 
-module.exports = { bunyan, logger };
+export { bunyan, logger };

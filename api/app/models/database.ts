@@ -31,14 +31,14 @@ PerformanceReviewModel.belongsTo(EmployeeModel);
 PerformanceReviewModel.hasMany(ReviewerModel, {
     foreignKey: 'performanceReviewId'
 });
-ReviewerModel.belongsTo(PerformanceReviewModel)
+ReviewerModel.belongsTo(PerformanceReviewModel);
 
 const db = {
     Sequelize,
     sequelize,
     performance_reviews: PerformanceReviewModel,
     reviewers: ReviewerModel,
-    employees: EmployeeModel
+    employees: EmployeeModel,
 };
 
 export default db;
