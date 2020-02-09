@@ -33,7 +33,12 @@ export const PerformanceReview = (sequelize: any, Sequelize: SequelizeType) => {
             unique: 'compositeIndex' // use a composite index
         },
         evaluation: {
-            type: DataTypes.INTEGER // performance_review evaluation
+            type: DataTypes.INTEGER, // performance_review evaluation
+            validate: {
+                isNumeric: true,
+                min: 40, // no score < 40
+                max: 100
+            }
         },
         remark: {
             type: DataTypes.STRING // performance_review remark by admin

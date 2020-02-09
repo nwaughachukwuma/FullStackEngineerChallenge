@@ -31,7 +31,7 @@ router.get('/', (_req: Request, res: Response) => {
  * employee routes for performance review feedback
  */
 router.post('/feedback', [
-  check('perfreviewId').exists({ checkNull: true }).isUUID('4')
+  check('performance_reviewId').exists({ checkNull: true }).isUUID('4')
     .withMessage('Provide performance review Id'),
   check('peerId').exists({ checkNull: true })
     .withMessage('Provide the Id of the employee giving the feedback'),

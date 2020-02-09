@@ -18,15 +18,15 @@ export const CreateFeedback = (req: Request, res: Response) => {
     }
 
     const {
-        perfreviewId,
+        performance_reviewId,
         peerId,
         feedback : employee_feedback
     } = req.body
 
     // Create a Performance review
     const feedback = {
-        perfreviewId: perfreviewId,
-        peerId: peerId,
+        performance_reviewId,
+        peerId,
         feedback: employee_feedback
     };
 
@@ -46,12 +46,12 @@ export const CreateFeedback = (req: Request, res: Response) => {
 
 // Retrieve all performance review feedbacks.
 export const FindAllFeedbacks = (req: Request, res: Response) => {
-    const {perfreviewId, peerId} = req.query;
+    const {performance_reviewId, peerId} = req.query;
     
     let condition = Object.assign(
         {}, 
         peerId ? { peerId: { [Op.like]: `%${peerId}%` } } : null, 
-        perfreviewId ? { perfreviewId: { [Op.like]: `%${perfreviewId}%` } } : null
+        performance_reviewId ? { performance_reviewId: { [Op.like]: `%${performance_reviewId}%` } } : null
     );
 
     Feedback.findAll({ where: condition })

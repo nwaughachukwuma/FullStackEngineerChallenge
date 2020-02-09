@@ -63,7 +63,7 @@ router.post('/create-perf-review', [
   check('employeeId').exists().isUUID('4').withMessage('Provide Employee Id'),
   check('month').exists().withMessage('Provide Performance review month'),
   check('year').exists().withMessage('Provide performance review year'),
-  check('score').isInt().toInt().withMessage('Provide performance review score'),
+  check('evaluation').isInt().toInt().withMessage('Provide performance review evaluation'),
   check('remark').exists().withMessage('Provide performance review remark'),
   check('is_reviewd').optional(),
 ], CreatePerformanceReview);
