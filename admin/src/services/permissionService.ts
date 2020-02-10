@@ -22,7 +22,8 @@ export default {
   },
   userRoles: {
     'super-admin': 99,
-    administrator: 90,
-    staff: 1,
+    admin: 90,
+    staff: 50,
+    user: 1
   }
 };

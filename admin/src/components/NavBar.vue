@@ -3,7 +3,7 @@
     <b-navbar toggleable="md" type="dark" variant="dark" fixed="top">
       <b-navbar-brand :to="{ path: '/' }">
         <img src="../assets/logo.png" width="25" />
-        PayPay-Clone
+        App
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -17,18 +17,18 @@
             <font-awesome-icon :icon="['fas', 'list-alt']" class="mr-1" />Todo
           </b-nav-item>
           <b-nav-item
-            :to="{ path: '/user' }"
+            :to="{ path: '/employees' }"
             v-if="showNavigation('manageUser')"
             data-cy="nav-bar-user"
           >
-            <font-awesome-icon :icon="['fas', 'portrait']" class="mr-1" />Users
+            <font-awesome-icon :icon="['fas', 'portrait']" class="mr-1" />Staff
           </b-nav-item>
           <b-nav-item
             :to="{ path: '/staff' }"
             v-if="showNavigation('manageStaff')"
             data-cy="nav-bar-staff"
           >
-            <font-awesome-icon :icon="['fas', 'user']" class="mr-1" />Staffs
+            <font-awesome-icon :icon="['fas', 'user']" class="mr-1" />Admin
           </b-nav-item>
           <b-nav-item-dropdown
             right
@@ -88,11 +88,14 @@ export default {
   methods: {
     showNavigation(permissionKey) {
       if (!this.user) return false;
-
-      if (this.user.role === permissionService.userRoles.administrator) {
-        return true;
+      switch (this.user.role) {
+        case 'superadmin':
+          return true;
+        case 'admin':
+          return true;
+        default:
+          return _.includes(this.user.permission_keys, permissionKey)
       }
-      return _.includes(this.user.permission_keys, permissionKey);
     }
   }
 };

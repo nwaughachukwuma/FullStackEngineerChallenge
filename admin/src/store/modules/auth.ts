@@ -82,7 +82,7 @@ const getters = {
 
     const exp = get(decoded, 'exp', undefined)
     if (!!exp && exp && moment.unix(exp).isAfter()) {
-      axios.defaults.headers.common.Authorization = state.authKey;
+      axios.defaults.headers.common.Authorization = `Bearer ${state.authKey}`;
       return true;
     }
 
@@ -102,7 +102,7 @@ const mutations = {
     state.user = jwtDecode(authKey);
     localStorage.setItem('auth-key', authKey);
     localStorage.setItem('accessToken', authKey);
-    axios.defaults.headers.common.Authorization = authKey;
+    axios.defaults.headers.common.Authorization = `Bearer ${authKey}`;
   },
   loginFailure(state) {
     state.loading = false;

@@ -51,6 +51,15 @@ const routes = [
       layout: 'simple-layout'
     }
   },
+  {
+    path: '/employees',
+    name: 'Employees',
+    component: () => import(/* webpackChunkName: "employees" */ '../views/Employee/EmployeeList.vue'),
+    meta: {
+      layout: 'backend-layout',
+      requiresAuth: true
+    }
+  },
 ]
 
 const router = new VueRouter({

@@ -5,17 +5,15 @@ const state = {};
 const actions = {
   handleServiceException({ dispatch, commit }, { e, router = null }) {
     if (e.response) {
-      const { data, status } = e.response.data;
+      const { data, status } = e.response;
 
-      let errorMessages = [];
-      if (status === 422) {
-        errorMessages = reduce(
-          data,
-          (errorMessages, tmpData) => {
-            errorMessages.push(tmpData.msg);
-            return errorMessages;
+      let errorMessages: (string|number)[] = [];
+      if ([422, 500].includes(status)) {
+        errorMessages = reduce(data, (localError, value, key) => {
+            localError.push(value);
+            return localError;
           },
-          []
+          errorMessages
         );
 
         commit('alert/setMessage', { type: 'error', message: join(errorMessages, '\r\n') }, { root: true });
