@@ -19,5 +19,10 @@ export default {
       .catch(e => {
         throw e;
       });
+  },
+  userRoles: {
+    'super-admin': 99,
+    administrator: 90,
+    staff: 1,
   }
 };

@@ -55,7 +55,7 @@ const actions = {
 
     router.push('/login');
   },
-  handleAuthMessageKey({ dispatch }, { messageKey }) {
+  handleAuthMessageKey({ dispatch: _ }, { messageKey }) {
     switch (messageKey) {
       default:
         break;

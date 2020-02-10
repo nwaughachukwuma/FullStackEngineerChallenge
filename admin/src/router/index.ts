@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import store from '@/store';
 
 Vue.use(VueRouter)
 
@@ -8,17 +9,28 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      layout: 'backend-layout',
+      requiresAuth: true
+    }
   },
   {
     path: '/login',
-    name: 'login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
+    meta: {
+      layout: 'simple-layout',
+    }
   },
   {
     path: '/register',
-    name: 'register',
-    component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue')
+    name: 'Register',
+    // component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue'),
+    component: () => import(/* webpackChunkName: "staff" */ '../views/Admin/AdminForm.vue'),
+    meta: {
+      layout: 'backend-layout',
+    }
   },
   {
     path: '/about',
@@ -26,22 +38,46 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/todo',
     name: 'Todo',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Todo.vue')
-  }
+    component: () => import(/* webpackChunkName: "about" */ '../views/Todo.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/logout',
+    name: 'Logout',
+
+    component: () => import(/* webpackChunkName: "login" */ '../views/Logout.vue'),
+    meta: {
+      layout: 'simple-layout'
+    }
+  },
 ]
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
+
+router.beforeEach((to, _from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters['auth/isLoggedIn']()) {
+      next();
+    } else {
+      next('/login');
+    }
+  } else {
+    next();
+  }
+});
 
 export default router

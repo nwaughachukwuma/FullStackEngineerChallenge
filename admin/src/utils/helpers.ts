@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {isEmpty} from 'lodash';
 import moment from 'moment';
 
 export const toQueryStrings = params => {
@@ -8,7 +8,7 @@ export const toQueryStrings = params => {
 };
 
 export const validateDateTime = async value => {
-  if (_.isEmpty(value)) {
+  if (isEmpty(value)) {
     return true;
   }
 

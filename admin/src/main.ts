@@ -6,6 +6,27 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Vuelidate from 'vuelidate'
 import VueSweetalert2 from 'vue-sweetalert2';
 import '@sweetalert2/theme-bootstrap-4/bootstrap-4.scss';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faPortrait,
+  faTrash,
+  faPlus,
+  faCheckSquare,
+  faSquare,
+  faUser,
+  faTachometerAlt,
+  faCog,
+  faUserCircle,
+  faSignOutAlt,
+  faEdit,
+  faTrashAlt,
+  faLongArrowAltLeft,
+  faSave,
+  faListAlt
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { Datetime } from 'vue-datetime';
+import 'vue-datetime/dist/vue-datetime.css';
 
 
 import App from './App.vue'
@@ -23,6 +44,26 @@ Vue.use(VueMeta, {
 Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
 Vue.use(VueSweetalert2, {});
+
+Vue.component('datetime', Datetime);
+library.add(
+  faPortrait,
+  faTrash,
+  faTrashAlt,
+  faPlus,
+  faCheckSquare,
+  faSquare,
+  faUser,
+  faTachometerAlt,
+  faCog,
+  faUserCircle,
+  faSignOutAlt,
+  faEdit,
+  faLongArrowAltLeft,
+  faSave,
+  faListAlt
+);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 new Vue({
   router,

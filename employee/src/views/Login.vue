@@ -1,31 +1,23 @@
 <template>
-  <b-container class="page-login my-5">
-    <b-row>
-      <b-col class="text-center">
-        <img src="../assets/logo.png" width="100" />
-      </b-col>
-    </b-row>
+  <div class="page-class page-login">
+    <b-container class="my-5">
+      <b-row align-v="center" align-h="center" align-content="center">
+        <b-col class="text-center" sm="10" md="8" lg="5">
+          <img src="../assets/logo.png" width="100" />
 
-    <b-card-group deck class="mt-3">
-      <b-card>
-        <h1>Login</h1>
-        <p class="text-muted">Sign in to your account</p>
-        <login-box />
-      </b-card>
-
-      <b-card class="text-white bg-primary">
-        <b-card-text>
-          <h2>Sign up</h2>
+          <b-card-group deck class="mt-3">
+            <b-card>
+              <h1>Admin Login</h1>
+              <p class="text-muted">Sign in to your account</p>
+              <login-box />
+            </b-card>
+          </b-card-group>
           <br />
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua.
-          </p>
-          <b-link :to="{ path: '/register' }" class="btn btn-primary active mt-1">Register Now!</b-link>
-        </b-card-text>
-      </b-card>
-    </b-card-group>
-  </b-container>
+          &copy; {{ thisYear }}
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
 </template>
 
 <script>
@@ -39,7 +31,7 @@ export default {
     meta: [
       {
         name: 'description',
-        content: 'Login with your account.'
+        content: 'Login backend with your account.'
       }
     ]
   },
@@ -50,6 +42,11 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['handleAuthMessageKey'])
+  },
+  computed: {
+    thisYear() {
+      return new Date().getFullYear();
+    }
   }
 };
 </script>
