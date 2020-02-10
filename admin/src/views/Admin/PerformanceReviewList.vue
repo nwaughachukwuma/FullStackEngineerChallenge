@@ -4,13 +4,13 @@
 
     <table-box
       :fields="fields"
-      :items="users"
+      :items="performance_reviews"
       :loading="loading"
       :pagination="pagination"
       :baseUrl="baseUrl"
-      emptyText="No employee record found. Please add new employee."
+      emptyText="No performance review found. Please create one."
       :showAdd="true"
-      addText="Create new employee"
+      addText="Create performance review"
       @add="onAdd"
       @edit="onEdit"
       @delete="onDelete"
@@ -21,11 +21,11 @@
 <script>
 import Vue from "vue";
 import { mapState, mapActions } from "vuex";
-import TableBox from "@/components/TableBox.vue";
+import TableBox from "@/components/PRTableBox.vue";
 import router from "@/router";
 
 export default {
-  name: "EmployeeList",
+  name: "PerformanceReviewList",
   components: {
     TableBox
   },
@@ -41,31 +41,33 @@ export default {
     };
   },
   mounted() {
-    this.list({ type: "employees", query: this.$route.query });
+    this.list({ type: "perf-reviews", query: this.$route.query });
   },
   data() {
     return {
       title: "Performance Reviews",
       fields: [
         { key: "rowNum", label: "#" },
-        { key: "name", label: "Full name" },
-        "email",
-        { key: "enabledName", label: "Status" },
-        "role",
+        { key: "name", label: "Staff name" },
+        // { key: "email", label: "Staff email" },
+        "period",
+        { key: "evaluation", label: "Evaluation" },
+        "remark",
+        { key: "isReviewed", label: "Reviewed?" },
         "actions"
       ]
     };
   },
   computed: {
-    ...mapState("user", ["loading", "baseUrl", "users", "pagination"])
+    ...mapState("performance_review", ["loading", "baseUrl", "performance_reviews", "pagination"])
   },
   methods: {
-    ...mapActions("user", ["list", "deleteOne"]),
+    ...mapActions("performance_review", ["list", "deleteOne"]),
     onAdd() {
-      router.push("/employee/new");
+      router.push("/performance-review/new");
     },
     onEdit({ row }) {
-      router.push(`/employee/${row.item.id}`);
+      router.push(`/performance-review/${row.item.id}`);
     },
     onDelete({ row }) {
       Vue.swal({
@@ -77,7 +79,7 @@ export default {
         confirmButtonText: "Yes, delete it!",
         preConfirm: () => {
           this.deleteOne({
-            type: "employees",
+            type: "perf-reviews",
             userId: row.item.id
           });
         }

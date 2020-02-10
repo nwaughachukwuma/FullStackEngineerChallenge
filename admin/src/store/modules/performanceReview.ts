@@ -1,5 +1,5 @@
-import {map} from 'lodash';
-import employeeService from '@/services/employeeService';
+import {map, get} from 'lodash';
+import perfReviewService from '@/services/perfReviewService'
 
 const state = {
   baseUrl: '/perf-reviews',
@@ -10,13 +10,13 @@ const state = {
 };
 
 const actions = {
-  list({ dispatch, commit, state }, { type = 'employees', query = {}, router }) {
+  list({ dispatch, commit, state }, { type = 'pref-reviews', query = {}, router }) {
     dispatch('alert/clear', {}, { root: true });
     commit('startRequest');
 
     commit('setPerformanceReviews', { performance_reviews: [], pagination: {} });
 
-    employeeService
+    perfReviewService
       .list({ type, query })
       .then(response => {
         const pagination = {total_rows: response.data.length, page_size: 5, first_row_no: 1};
@@ -27,14 +27,14 @@ const actions = {
         dispatch('common/handleServiceException', { e, router }, { root: true });
       });
   },
-  getOne({ dispatch, commit }, { type = 'employees', userId, router }) {
+  getOne({ dispatch, commit }, { type = 'perf-reviews', prId, router }) {
     dispatch('alert/clear', {}, { root: true });
     commit('startRequest');
 
     commit('setPerformanceReview', { performance_review: {} });
 
-    employeeService
-      .getOne({ type, userId })
+    perfReviewService
+      .getOne({ type, prId })
       .then(response => {
         commit('setPerformanceReview', { performance_review: response.data });
       })
@@ -43,12 +43,12 @@ const actions = {
         dispatch('common/handleServiceException', { e, router }, { root: true });
       });
   },
-  postOne({ dispatch, commit }, { type = 'create-employee', user, router, redirectUrl = '' }) {
+  postOne({ dispatch, commit }, { type = 'create-perf-review', performance_review, router, redirectUrl = '' }) {
     dispatch('alert/clear', {}, { root: true });
     commit('startRequest');
 
-    employeeService
-      .postOne({ type, user })
+    perfReviewService
+      .postOne({ type, performance_review })
       .then(() => {
         // response
         dispatch(
@@ -57,7 +57,7 @@ const actions = {
             showType: 'toast',
             position: 'bottom-end',
             title: '',
-            text: 'New employee has been added.'
+            text: 'New Performance review has been added.'
           },
           { root: true }
         );
@@ -71,12 +71,12 @@ const actions = {
         dispatch('common/handleServiceException', { e, router }, { root: true });
       });
   },
-  patchOne({ dispatch, commit }, { type = 'employees', userId, user, router, redirectUrl = '' }) {
+  patchOne({ dispatch, commit }, { type = 'perf-reviews', prId, performance_review, router, redirectUrl = '' }) {
     dispatch('alert/clear', {}, { root: true });
     commit('startRequest');
 
-    employeeService
-      .patchOne({ type, userId, newUser: user })
+    perfReviewService
+      .patchOne({ type, prId, newPR: performance_review })
       .then(_response => {
         _response;
         dispatch(
@@ -85,7 +85,7 @@ const actions = {
             showType: 'toast',
             position: 'bottom-end',
             title: '',
-            text: type === 'user' ? 'User has been updated.' : 'Staff has been updated.'
+            text: 'Performance review has been updated.'
           },
           { root: true }
         );
@@ -99,12 +99,12 @@ const actions = {
         dispatch('common/handleServiceException', { e, router }, { root: true });
       });
   },
-  deleteOne({ dispatch, commit }, { type = 'employees', userId, router }) {
+  deleteOne({ dispatch, commit }, { type = 'perf-reviews', prId, router }) {
     dispatch('alert/clear', {}, { root: true });
     commit('startRequest');
 
-    employeeService
-      .deleteOne({ type, userId })
+    perfReviewService
+      .deleteOne({ type, prId })
       .then(() => {
         // _response;
         dispatch('list', { type });
@@ -114,7 +114,7 @@ const actions = {
             showType: 'toast',
             position: 'bottom-end',
             title: '',
-            text: 'Staff has been deleted.'
+            text: 'Performance review has been deleted.'
           },
           { root: true }
         );
@@ -141,16 +141,13 @@ const mutations = {
       const newPerformanceReview = {
         rowNum,
         id: performance_review.id,
-        name: performance_review.name,
-        email: performance_review.email,
-        jobDefinition: performance_review.jobDefinition,
-        rank: performance_review.rank,
-        lastLoginAt: Date.now(), //performance_review.auth.lastLoginAt,
-        role: performance_review.role,
-        roleName: performance_review.role,
-        permissions: performance_review.permissions,
-        enabled: performance_review.status === 'active',
-        enabledName: performance_review.status
+        name: get(performance_review, 'employee.name', null),
+        email: get(performance_review, 'employee.email', null),
+        remark: performance_review.remark,
+        evaluation: performance_review.evaluation,
+        month: performance_review.month,
+        year: performance_review.year,
+        isReviewed: performance_review.isReviewed,
       };
 
       rowNum += 1;
@@ -163,16 +160,13 @@ const mutations = {
   setPerformanceReview(state, { performance_review }) {
     state.performance_review = {
       id: performance_review.id,
-      name: performance_review.name,
-      email: performance_review.email,
-      role: performance_review.role,
-      roleName: performance_review.role,
-      jobDefinition: performance_review.jobDefinition,
-      gender: performance_review.gender,
-      rank: performance_review.rank,
-      permissions: performance_review.permissions,
-      enabled: performance_review.status === 'active',
-      enabledName: performance_review.status
+      name: get(performance_review, 'employee.name', null),
+      email: get(performance_review, 'employee.email', null),
+      remark: performance_review.remark,
+      evaluation: performance_review.evaluation,
+      month: performance_review.month,
+      year: performance_review.year,
+      isReviewed: performance_review.isReviewed,
     };
 
     state.loading = false;

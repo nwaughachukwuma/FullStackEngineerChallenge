@@ -86,7 +86,7 @@ const actions = {
             showType: 'toast',
             position: 'bottom-end',
             title: '',
-            text: type === 'user' ? 'User has been updated.' : 'Staff has been updated.'
+            text: 'Staff has been updated.'
           },
           { root: true }
         );

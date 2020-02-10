@@ -18,7 +18,7 @@ export default new Vuex.Store({
     alert,
     user,
     permission,
-    performanceReview,
+    performance_review: performanceReview,
     // setting,
   },
   strict: true
