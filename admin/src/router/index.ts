@@ -24,15 +24,6 @@ const routes = [
     }
   },
   {
-    path: '/register',
-    name: 'Register',
-    // component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue'),
-    component: () => import(/* webpackChunkName: "staff" */ '../views/Admin/AdminForm.vue'),
-    meta: {
-      layout: 'backend-layout',
-    }
-  },
-  {
     path: '/about',
     name: 'About',
     // route level code-splitting

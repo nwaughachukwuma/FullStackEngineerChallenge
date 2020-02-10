@@ -68,6 +68,9 @@
           Login
         </b-button>
       </b-col>
+      <b-col class="text-right">
+        <b-link :to="{ path: '/find-password' }">Forgot password?</b-link>
+      </b-col>
     </b-row>
   </b-form>
 </template>

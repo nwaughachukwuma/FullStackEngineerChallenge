@@ -54,12 +54,6 @@
             link-classes="btn btn-info text-light mx-1"
             >Login</b-nav-item
           >
-          <b-nav-item
-            :to="{ path: '/register' }"
-            data-cy="nav-bar-register"
-            link-classes="btn btn-primary mx-1 text-light"
-            >Sign up</b-nav-item
-          >
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto" v-if="isLoggedIn() === true">
           <b-nav-item

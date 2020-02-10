@@ -67,6 +67,7 @@ router.post('/create-employee', [
 router.get('/employees/:id', FetchOneEmployee);
 router.get('/employees', FetchAllEmployees);
 router.put('/employees/:id', UpdateEmployee);
+// router.options('/employees/:id');
 router.delete('/employees/:id', DeleteEmployee)
 
 /**

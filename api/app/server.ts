@@ -25,8 +25,8 @@ const whitelistUrls = [
 ];
 
 const corsOptions = {
-  origin: function(origin, callback) {
-    if (whitelistUrls.includes(origin)) {
+  origin: function(origin: string, callback: Function) {
+    if (whitelistUrls.includes(origin) || !origin) {
       callback(null, true)
     } else {
       callback(new Error('Not allowed by CORS'))
@@ -39,6 +39,7 @@ const corsOptions = {
 //   admin: "http://localhost:3002",
 // };
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)) // enable pre-flight request for DELETE request
 
 app.use(compression());
 app.use(
