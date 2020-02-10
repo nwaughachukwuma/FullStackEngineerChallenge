@@ -55,7 +55,7 @@ export const Employee = (sequelize: any, Sequelize: SequelizeType) => {
             type: DataTypes.STRING, // employee role
             defaultValue: 'staff',
             validate: {
-                isIn: [['admin', 'staff', 'user']]
+                isIn: [['superadmin', 'admin', 'staff', 'user']]
             }
         },
         rank: {

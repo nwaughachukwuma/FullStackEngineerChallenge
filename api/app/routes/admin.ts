@@ -104,21 +104,21 @@ router.get('/pending-reviews', FindAllAssignedPendingReviews);
  * auth routes for admin users
  */
 
-router.post('/register', [
-  check('name').exists().withMessage('Provide Employee name'),
-  check('email').isEmail().withMessage('Provide Employee email'),
-  check('password').exists().withMessage('Provide Employee password'),
-  check('confirmPassword', 'Provide Confirm password')
-    .exists()
-    .custom((value, { req }) => value === req.body.password)
-    .withMessage('Confirm password must match password'),
-  check('phone').optional().isMobilePhone('any')
-    .withMessage('Provide employee phone number'),
-  check('gender')
-    .optional()
-    .isIn(['male', 'female'])
-    .withMessage('Provide Employee gender'),
-], Register);
+// router.post('/register', [
+//   check('name').exists().withMessage('Provide Employee name'),
+//   check('email').isEmail().withMessage('Provide Employee email'),
+//   check('password').exists().withMessage('Provide Employee password'),
+//   check('confirmPassword', 'Provide Confirm password')
+//     .exists()
+//     .custom((value, { req }) => value === req.body.password)
+//     .withMessage('Confirm password must match password'),
+//   check('phone').optional().isMobilePhone('any')
+//     .withMessage('Provide employee phone number'),
+//   check('gender')
+//     .optional()
+//     .isIn(['male', 'female'])
+//     .withMessage('Provide Employee gender'),
+// ], Register);
 
 router.post('/login', [
   check('email').isEmail().withMessage('Enter your email'),

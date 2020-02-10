@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs'
-import { isEmpty } from 'lodash'
+import { get, isEmpty } from 'lodash'
 import dayjs from 'dayjs'
 import { DBModel } from '../models';
 import {
@@ -59,7 +59,7 @@ export const LoginUser = async (userDetails: LoginParams) => {
     const userCredentials: UserCredentials = await Employee.findOne({ where: { email: email } })
         .then(async (data: any) => {
             // Load hash from your password DB.
-            const result = await bcrypt.compare(password, data.password);
+            const result = await bcrypt.compare(password, get(data, 'password', '') );
 
             if (!result) return { isValid: result }
 

@@ -1,6 +1,7 @@
-import jwt, {Secret} from 'jsonwebtoken'
+import jwt, { Secret } from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
 import { logger } from '../../logger';
-import {EmployeeType} from '../types'
+import { EmployeeType } from '../types'
 
 
 const moduleLogger = logger.child({ module: 'authentication' });
@@ -18,9 +19,15 @@ export const generateToken = (data: EmployeeType) => {
 export const verifyToken = async (jwtToken: any) => {
   try {
     // @ts-ignore
-    return await jwt.verify(jwtToken, secretKey, { algorithm: 'HS256' }); 
+    return await jwt.verify(jwtToken, secretKey, { algorithm: 'HS256' });
   } catch (e) {
     moduleLogger.error({ e });
     return null;
   }
 };
+
+export const hashPassword = (password: string) => bcrypt.hashSync(
+  password,
+  bcrypt.genSaltSync(
+    +process.env.BCRYPT_SALTING_ROUND!
+  ));

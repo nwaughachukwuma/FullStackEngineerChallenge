@@ -10,6 +10,7 @@ const { logger } = require('./logger');
 import { validateAuthToken, escapeRoute } from './middleware'
 import { employeeRouter, adminRouter } from './routes';
 import { DBModel } from './models'
+import { hashPassword } from './utils/helpers'
 
 const app = express();
 
@@ -62,6 +63,13 @@ app.use(bodyParser.json());
 DBModel.sequelize.sync({ force: process.env.__DEV__ ? false : false })
   .then(() => {
     console.log("Drop and re-sync db.");
+    DBModel.employees.create({
+      name: 'Super Admin',
+      email: 'super@admin.com',
+      password: hashPassword('supersecret'),
+      role: 'superadmin',
+      rank: 'senior'
+    })
   });
 
 // add user auth validation with array of routes 
