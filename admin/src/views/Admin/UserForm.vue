@@ -3,7 +3,6 @@
     <h1 class="page-title">{{ title }}</h1>
     <user-form-box
       list-url="/employees"
-      user-type="staff"
       :form-type="formType"
       :user-id="userId"
       :permissions="permissions"
@@ -30,9 +29,9 @@ export default {
       this.userId = null;
     } else {
       this.formType = 'update';
-      this.userId = parseInt(this.$route.params.id, 10);
+      this.userId = this.$route.params.id;
       await this.getOne({
-        type: 'staff',
+        type: 'employees',
         userId: this.userId,
         router
       });
@@ -66,7 +65,7 @@ export default {
     },
     onEdit({ user }) {
       this.patchOne({
-        type: 'staff',
+        type: 'employees',
         userId: this.userId,
         user,
         router,

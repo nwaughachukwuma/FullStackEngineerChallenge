@@ -148,7 +148,7 @@ const mutations = {
         rank: user.rank,
         lastLoginAt: Date.now(), //user.auth.lastLoginAt,
         role: user.role,
-        roleName: user.role_name,
+        roleName: user.role,
         permissions: user.permissions,
         enabled: user.status === 'active',
         enabledName: user.status
@@ -164,20 +164,16 @@ const mutations = {
   setUser(state, { user }) {
     state.user = {
       id: user.id,
-      username: user.username,
-      firstName: user.first_name,
-      lastName: user.last_name,
+      name: user.name,
       email: user.email,
-      confirmedAt: user.confirmed_at,
-      registrationIp: user.registration_ip,
-      lastLoginAt: user.last_login_at,
-      lastLoginIp: user.last_login_ip,
-      blockedAt: user.blocked_at,
       role: user.role,
-      roleName: user.role_name,
+      roleName: user.role,
+      jobDefinition: user.jobDefinition,
+      gender: user.gender,
+      rank: user.rank,
       permissions: user.permissions,
-      enabled: user.enabled,
-      enabledName: user.enabled_name
+      enabled: user.status === 'active',
+      enabledName: user.status
     };
 
     state.loading = false;

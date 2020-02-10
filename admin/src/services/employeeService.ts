@@ -45,7 +45,7 @@ export default {
 
   async patchOne({ type = 'employees', userId, newUser }) {
     return axios
-      .patch(`${configService.get('apiUrl')}/${type}/${userId}`, newUser)
+      .put(`${configService.get('apiUrl')}/${type}/${userId}`, newUser)
       .then(response => {
         return response.data;
       })

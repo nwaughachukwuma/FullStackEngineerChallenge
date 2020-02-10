@@ -65,7 +65,7 @@ export default {
       router.push("/employee/new");
     },
     onEdit({ row }) {
-      router.push(`/employee/${row.id}`);
+      router.push(`/employee/${row.item.id}`);
     },
     onDelete({ row }) {
       Vue.swal({

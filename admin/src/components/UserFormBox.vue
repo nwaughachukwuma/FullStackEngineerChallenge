@@ -6,7 +6,7 @@
     <div v-if="!loading && formLoaded">
       <b-card-group deck class="mt-3 mx-5">
         <b-card class="px-5">
-          <h1>Create Employee</h1>
+          <h1>{{formType === "new"? 'Create Employee': 'Update Employee'}}</h1>
           <p class="text-muted">Add a new staff</p>
 
            <!-- Employee Name -->
@@ -38,6 +38,7 @@
                 id="input-email"
                 v-model="form.email"
                 type="email"
+                :disabled="formType !== 'new'"
                 placeholder="Email address"
                 :state="$v.form.email.$dirty ? !$v.form.email.$error : null"
               ></b-form-input>
@@ -50,30 +51,30 @@
             </b-form-group>
 
             <!-- Job Definition -->
-            <b-form-group id="group-job" label-for="input-job">
+            <b-form-group id="group-jobDefinition" label-for="input-jobDefinition">
               <template v-slot:label>
                 Job Definition
                 <span class="text-danger">*</span>
               </template>
               <b-form-input
-                id="input-job"
-                v-model="form.job"
+                id="input-jobDefinition"
+                v-model="form.jobDefinition"
                 type="text"
                 placeholder="Job name/type"
-                :state="$v.form.job.$dirty ? !$v.form.job.$error : null"
+                :state="$v.form.jobDefinition.$dirty ? !$v.form.jobDefinition.$error : null"
               ></b-form-input>
 
               <b-form-text
-                id="input-job-help"
+                id="input-jobDefinition-help"
               >Job description of the employee i.e. Software Developer/Accountant</b-form-text>
 
-              <b-form-invalid-feedback id="input-job-invalid">
+              <b-form-invalid-feedback id="input-jobDefinition-invalid">
                   Please enter valid job definition
                 </b-form-invalid-feedback>
             </b-form-group>
 
             <!-- Employee Role -->
-            <b-form-group id="group-role" label-for="input-role" v-if="userType === 'staff'">
+            <b-form-group id="group-role" label-for="input-role">
               <template v-slot:label>
                 Role
                 <span class="text-danger">*</span>
@@ -169,7 +170,12 @@ import {
   maxLength
 } from "vuelidate/lib/validators";
 import { mapGetters, mapState } from "vuex";
-import _ from "lodash";
+import _, {
+    reduce,
+    pick,
+    capitalize,
+    some
+} from "lodash";
 import moment from "moment";
 import permissionService from "@/services/permissionService";
 import { validateDateTime } from "@/utils/helpers";
@@ -179,10 +185,9 @@ export default {
   name: "UserFormBox",
   props: {
     listUrl: String,
-    userType: String,
     formType: String,
     userId: {
-      type: Number,
+      type: [String, Number],
       required: false
     },
     permissions: {
@@ -192,6 +197,7 @@ export default {
   },
   metaInfo() {
     return {
+      title: "Employees",
       meta: [
         {
           name: "description",
@@ -208,21 +214,29 @@ export default {
         email: null,
         name: null,
         role: null,
-        gender: 'Female',
-        rank: 'Mid',
-        job: null
+        gender: null,
+        rank: null,
+        jobDefinition: null
       },
       dateTimeFormat: configService.get("format").pickerDateTime,
-      staffRoles: _.reduce(
-        _.pick(permissionService.userRoles, ["superadmin", "admin", "staff"]),
+      staffRoles: reduce(
+        pick(permissionService.userRoles, ["superadmin", "admin", "staff"]),
         (result, value, key) => {
-          result.push({ value, text: _.capitalize(key) });
+          result.push({ value, text: capitalize(key) });
           return result;
         },
         []
       ),
-      userGender: ['Male', 'Female'],
-      userRank:  ['Junior', 'Mid', 'Senior', 'Executive']
+      userGender: [
+          {value: 'male', text: 'Male'}, 
+          {value: 'female', text: 'Female'}
+        ],
+      userRank:  [
+          {value: 'junior', text: 'Junior'}, 
+          {value: 'mid', text: 'Mid'},
+          {value: 'senior', text: 'Senior'}, 
+          {value: 'executive', text: 'Executive'},
+        ]
     };
   },
   validations() {
@@ -249,10 +263,7 @@ export default {
       permissions: {},
       role: {
         validateRole: value => {
-          if (this.userType === "user") {
-            return true;
-          }
-          return _.some(permissionService.userRoles, role => value === role);
+          return some(permissionService.userRoles, role => value === role);
         }
       },
       gender: {
@@ -261,7 +272,7 @@ export default {
       rank: {
           required
       },
-      job: {
+      jobDefinition: {
           required
       }
     };
@@ -271,9 +282,9 @@ export default {
     this.$nextTick(async () => {
       // Code that will run only after the entire view has been re-rendered
       if (this.formType === "new") {
-        if (this.userType === "staff") {
-          this.form.role = permissionService.userRoles.staff;
-        }
+        this.form.role = permissionService.userRoles.staff;
+        this.form.gender = 'female',
+        this.form.rank = 'mid',
         this.formLoaded = true;
         this.$v.$touch(); // Set initial validation
         this.$v.$reset(); // Reset $dirty
@@ -286,12 +297,6 @@ export default {
     },
     ...mapGetters("alert", ["errorMessages"]),
     ...mapState("user", ["loading", "user"]),
-    showPermissions() {
-      return (
-        this.userType === "staff" &&
-        this.form.role === permissionService.userRoles.staff
-      );
-    }
   },
   methods: {
     onSubmit() {
@@ -302,9 +307,9 @@ export default {
       const user = {
         name: this.form.name,
         email: this.form.email,
-        jobDefinition: this.form.job,
-        gender: this.form.gender.toLowerCase(),
-        rank: this.form.rank.toLowerCase(),
+        jobDefinition: this.form.jobDefinition,
+        gender: this.form.gender,
+        rank: this.form.rank,
         role: this.form.role ? this.form.role : permissionService.userRole.user,
       };
       if (this.formType === "new") {
@@ -316,17 +321,18 @@ export default {
     }
   },
   watch: {
-    user(_newValue, _oldValue) {
-      if (!this.user.id) {
+    user(newValue, _oldValue) {
+      if (!newValue.id) {
         return;
       }
+
       // Loaded user, assign to form
-      this.form.name = this.user.name;
-      this.form.email = this.user.email;
-      this.form.job = this.user.job;
-      this.form.role = this.user.role;
-      this.form.gender = this.user.gender;
-      this.form.rank = this.user.rank;
+      this.form.name = newValue.name;
+      this.form.email = newValue.email;
+      this.form.jobDefinition = newValue.jobDefinition;
+      this.form.role = newValue.role;
+      this.form.gender = newValue.gender;
+      this.form.rank = newValue.rank;
 
       this.formLoaded = true;
       this.$v.$touch(); // Set initial validation

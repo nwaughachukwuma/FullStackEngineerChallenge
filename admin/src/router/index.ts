@@ -69,6 +69,15 @@ const routes = [
       requiresAuth: true
     }
   },
+  {
+    path: '/employee/:id',
+    name: 'employee-edit',
+    component: () => import(/* webpackChunkName: "user" */ '../views/Admin/UserForm.vue'),
+    meta: {
+      layout: 'backend-layout',
+      requiresAuth: true
+    }
+  },
 ]
 
 const router = new VueRouter({
