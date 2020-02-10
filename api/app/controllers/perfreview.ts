@@ -84,7 +84,7 @@ export const FindAllPerformanceReviews = (req: Request, res: Response) => {
 export const FindOnePerformanceReview = (req: Request, res: Response) => {
     const id = req.params.id;
 
-    PerformanceReview.findOne({where: {id: id}, include: Reviewer})
+    PerformanceReview.findOne({where: {id: id}, include: [Reviewer, Employee]})
         .then((data: any) => {
             res.send({data});
         })
