@@ -44,21 +44,21 @@ const actions = {
         dispatch('common/handleServiceException', { e, router }, { root: true });
       });
   },
-  postOne({ dispatch, commit }, { type = 'user', user, router, redirectUrl = '' }) {
+  postOne({ dispatch, commit }, { type = 'create-employee', user, router, redirectUrl = '' }) {
     dispatch('alert/clear', {}, { root: true });
     commit('startRequest');
 
     employeeService
       .postOne({ type, user })
-      .then(_response => {
-        _response;
+      .then(() => {
+        // response
         dispatch(
           'alert/success',
           {
             showType: 'toast',
             position: 'bottom-end',
             title: '',
-            text: type === 'user' ? 'New user has been added.' : 'New staff has been added.'
+            text: 'New employee has been added.'
           },
           { root: true }
         );
@@ -162,23 +162,23 @@ const mutations = {
     state.loading = false;
   },
   setUser(state, { user }) {
-    // state.user = new User({
-    //   id: user.id,
-    //   username: user.username,
-    //   firstName: user.first_name,
-    //   lastName: user.last_name,
-    //   email: user.email,
-    //   confirmedAt: user.confirmed_at,
-    //   registrationIp: user.registration_ip,
-    //   lastLoginAt: user.last_login_at,
-    //   lastLoginIp: user.last_login_ip,
-    //   blockedAt: user.blocked_at,
-    //   role: user.role,
-    //   roleName: user.role_name,
-    //   permissions: user.permissions,
-    //   enabled: user.enabled,
-    //   enabledName: user.enabled_name
-    // });
+    state.user = {
+      id: user.id,
+      username: user.username,
+      firstName: user.first_name,
+      lastName: user.last_name,
+      email: user.email,
+      confirmedAt: user.confirmed_at,
+      registrationIp: user.registration_ip,
+      lastLoginAt: user.last_login_at,
+      lastLoginIp: user.last_login_ip,
+      blockedAt: user.blocked_at,
+      role: user.role,
+      roleName: user.role_name,
+      permissions: user.permissions,
+      enabled: user.enabled,
+      enabledName: user.enabled_name
+    };
 
     state.loading = false;
   }

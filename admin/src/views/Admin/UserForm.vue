@@ -2,7 +2,7 @@
   <div class="page-class page-staff-form">
     <h1 class="page-title">{{ title }}</h1>
     <user-form-box
-      list-url="/staff"
+      list-url="/employees"
       user-type="staff"
       :form-type="formType"
       :user-id="userId"
@@ -19,13 +19,13 @@ import UserFormBox from '@/components/UserFormBox.vue';
 import router from '@/router';
 
 export default {
-  name: 'StaffForm',
+  name: 'EmployeeForm',
   components: {
     UserFormBox
   },
   async mounted() {
     this.permissionList({ router });
-    if (this.$route.name === 'staff-new') {
+    if (['employee-new', 'staff-new'].includes(this.$route.name)) {
       this.formType = 'new';
       this.userId = null;
     } else {
@@ -58,10 +58,10 @@ export default {
     }),
     onAdd({ user }) {
       this.postOne({
-        type: 'staff',
+        type: 'create-employee',
         user,
         router,
-        redirectUrl: '/staff'
+        redirectUrl: '/employees'
       });
     },
     onEdit({ user }) {
@@ -70,7 +70,7 @@ export default {
         userId: this.userId,
         user,
         router,
-        redirectUrl: '/staff'
+        redirectUrl: '/employees'
       });
     }
   }

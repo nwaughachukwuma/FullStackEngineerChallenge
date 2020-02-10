@@ -10,15 +10,17 @@ const actions = {
     dispatch('alert/clear', {}, { root: true });
     commit('startRequest');
 
-    permissionService
-      .list({ router })
-      .then(response => {
-        commit('setPermissions', { permissions: response.data });
-      })
-      .catch(e => {
-        commit('requestFailed');
-        dispatch('common/handleServiceException', { e, router }, { root: true });
-      });
+    commit('setPermissions', { permissions: []});
+
+    // permissionService
+    //   .list({ router })
+    //   .then(response => {
+    //     commit('setPermissions', { permissions: response.data });
+    //   })
+    //   .catch(e => {
+    //     commit('requestFailed');
+    //     dispatch('common/handleServiceException', { e, router }, { root: true });
+    //   });
   }
 };
 

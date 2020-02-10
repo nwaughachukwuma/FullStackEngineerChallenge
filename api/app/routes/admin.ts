@@ -51,7 +51,7 @@ router.get('/', (_req: Request, res: Response) => {
 router.post('/create-employee', [
   check('name').exists().withMessage('Provide Employee name'),
   check('email').isEmail().withMessage('Provide Employee email'),
-  check('phone').isMobilePhone('any')
+  check('phone').optional().isMobilePhone('any')
     .withMessage('Provide employee phone number'),
   check('gender')
     .custom((value, { req }) => ['male', 'female'].includes(value))

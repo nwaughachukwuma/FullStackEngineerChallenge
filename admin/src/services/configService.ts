@@ -1,13 +1,13 @@
 import axios from 'axios';
-import {VueConfig} from '../../vue.config';
+import { VueConfig } from '../../vue.config';
 
 type ConfigType = {
-  [key: string]: string|number|boolean;
+  [key: string]: string | number | boolean;
 }
 
 class ConfigService {
   private config: ConfigType;
-  
+
   constructor() {
     this.config = {};
   }
@@ -18,7 +18,7 @@ class ConfigService {
     });
   }
 
-  set(key: string, value: string|number|boolean) {
+  set(key: string, value: string | number | boolean) {
     this.config[key] = value;
   }
 

@@ -56,7 +56,6 @@ export default {
         password
       })
       .then(response => {
-        console.log('user login data >>>', response.data)
         return response.data;
       })
       .catch(e => {

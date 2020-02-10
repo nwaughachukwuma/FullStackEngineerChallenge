@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home,
     meta: {
       layout: 'backend-layout',
@@ -17,7 +17,7 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'Login',
+    name: 'login',
     component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
     meta: {
       layout: 'simple-layout',
@@ -25,7 +25,7 @@ const routes = [
   },
   {
     path: '/about',
-    name: 'About',
+    name: 'about',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -36,7 +36,7 @@ const routes = [
   },
   {
     path: '/todo',
-    name: 'Todo',
+    name: 'todo',
     component: () => import(/* webpackChunkName: "about" */ '../views/Todo.vue'),
     meta: {
       requiresAuth: true
@@ -44,7 +44,7 @@ const routes = [
   },
   {
     path: '/logout',
-    name: 'Logout',
+    name: 'logout',
 
     component: () => import(/* webpackChunkName: "login" */ '../views/Logout.vue'),
     meta: {
@@ -53,8 +53,17 @@ const routes = [
   },
   {
     path: '/employees',
-    name: 'Employees',
-    component: () => import(/* webpackChunkName: "employees" */ '../views/Employee/EmployeeList.vue'),
+    name: 'employees',
+    component: () => import(/* webpackChunkName: "employees" */ '../views/Admin/EmployeeList.vue'),
+    meta: {
+      layout: 'backend-layout',
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/employee/new',
+    name: 'employee-new',
+    component: () => import(/* webpackChunkName: "employees-new" */ '../views/Admin/UserForm.vue'),
     meta: {
       layout: 'backend-layout',
       requiresAuth: true

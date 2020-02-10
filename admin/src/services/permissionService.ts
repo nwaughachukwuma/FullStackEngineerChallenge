@@ -21,9 +21,13 @@ export default {
       });
   },
   userRoles: {
-    'super-admin': 99,
-    admin: 90,
-    staff: 50,
-    user: 1
+    'super-admin': 'super-admin',
+    admin: 'admin',
+    staff: 'staff',
+    user: 'user'
+  },
+  userEnabled : {
+    active: 1,
+    disabled: 0
   }
 };
