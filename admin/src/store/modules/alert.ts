@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Swal from 'sweetalert2'
 
 const state = {
   type: null,
@@ -41,14 +41,22 @@ const getters = {
 };
 
 const displayToast = ({ type, position, title, text }) => {
-  Vue.swal({
-    toast: type === 'toast'? true: false,
-    position,
+
+  Swal.mixin({
+    toast: true,
+    position: position || 'top-end', 
     showConfirmButton: false,
     timer: 3000,
-    // type,
+    timerProgressBar: true,
+    onOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  }).fire({
+    icon: type,
     title,
-    text
+    text,
+    background: '#000',
   });
 };
 

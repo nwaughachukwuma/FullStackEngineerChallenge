@@ -6,7 +6,7 @@
         v-model="form.username"
         type="text"
         required
-        placeholder="Enter username"
+        placeholder="Enter email"
         :state="$v.form.username.$dirty ? !$v.form.username.$error : null"
         data-cy="login-username"
         class="from-input input-username"

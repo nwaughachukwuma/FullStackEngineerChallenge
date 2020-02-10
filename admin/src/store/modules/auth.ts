@@ -4,23 +4,26 @@ import moment from 'moment';
 import jwtDecode from 'jwt-decode';
 import authService from '@/services/authService';
 
+const authKey = window.localStorage.getItem('auth-key') || '';
+
 const state = {
-  authKey: localStorage.getItem('auth-key') || '',
+  authKey: authKey,
   loading: false,
   isLoggedIn: false,
-  user: localStorage.getItem('auth-key') ? jwtDecode(localStorage.getItem('auth-key') || '') : null
+  user: authKey ? jwtDecode(authKey) : null
 };
 
 const actions = {
   login({ dispatch, commit }, { username, password, router }) {
-    dispatch('alert/clear', {}, { root: true });
+    dispatch('alert/clear', null, { root: true });
     commit('startRequest');
 
     authService
       .login(username, password)
       .then(response => {
-        commit('loginSuccess', { authKey: response.data.auth_key });
-        dispatch('alert/success', { showType: 'toast', title: response.message }, { root: true });
+        console.log('login response >>', response.data)
+        commit('loginSuccess', { authKey: get(response, 'data.auth.accessToken', null) });
+        dispatch('alert/success', { showType: 'toast', title: 'You have logged in' }, { root: true });
         router.push('/');
       })
       .catch(e => {
@@ -52,7 +55,7 @@ const actions = {
 
     router.push('/login');
   },
-  handleAuthMessageKey({ _dispatch }, { messageKey }) {
+  handleAuthMessageKey({ dispatch }, { messageKey }) {
     switch (messageKey) {
       default:
         break;
@@ -98,6 +101,7 @@ const mutations = {
     state.authKey = authKey;
     state.user = jwtDecode(authKey);
     localStorage.setItem('auth-key', authKey);
+    localStorage.setItem('accessToken', authKey);
     axios.defaults.headers.common.Authorization = authKey;
   },
   loginFailure(state) {

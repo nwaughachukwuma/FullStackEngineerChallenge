@@ -31,7 +31,7 @@ export default {
 
   async register({ username, email, password, firstName, lastName }) {
     return axios
-      .post(`${configService.get('apiUrl')}/user/register`, {
+      .post(`${configService.get('apiUrl')}/register`, {
         username,
         email,
         password,
@@ -49,12 +49,14 @@ export default {
   },
 
   async login(username, password) {
+    console.log('api endpoint >>>', configService.get('apiUrl'))
     return axios
-      .post(`${configService.get('apiUrl')}/user/login`, {
-        username,
+      .post(`${configService.get('apiUrl')}/login`, {
+        email: username,
         password
       })
       .then(response => {
+        console.log('user login data >>>', response.data)
         return response.data;
       })
       .catch(e => {

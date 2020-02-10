@@ -9,7 +9,8 @@ import {
 } from '../controllers/reviewer'
 
 import { 
-  Login
+  Login,
+  Logout
 } from '../controllers/authController';
 
 
@@ -51,5 +52,7 @@ router.post('/login', [
   check('email').isEmail().withMessage('Enter your email'),
   check('password').exists().withMessage('Enter your password'),
 ], Login)
+
+router.post('/logout', Logout)
 
 export default router

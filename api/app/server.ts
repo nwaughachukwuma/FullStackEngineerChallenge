@@ -17,11 +17,27 @@ const port = process.env.PORT || 3000;
 app.set('trust proxy', true);
 app.use(helmet());
 
-var corsOptions = {
-  origin: "http://localhost:8081",
-  employee: "http://localhost:3001",
-  admin: "http://localhost:3002",
-};
+
+const whitelistUrls = [
+  'http://localhost:8081',
+  'http://localhost:3001', 
+  'http://localhost:3002'
+];
+
+const corsOptions = {
+  origin: function(origin, callback) {
+    if (whitelistUrls.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+// var corsOptions = {
+//   origin: "http://localhost:8081",
+//   employee: "http://localhost:3001",
+//   admin: "http://localhost:3002",
+// };
 app.use(cors(corsOptions));
 
 app.use(compression());
