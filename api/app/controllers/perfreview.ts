@@ -6,6 +6,7 @@ import { DBModel } from '../models';
 
 const PerformanceReview = DBModel.performance_reviews;
 const Reviewer = DBModel.reviewers
+const Employee = DBModel.employees;
 const Op: typeof OpSymbol = DBModel.Sequelize.Op;
 
 // Create and Save a new Performance review
@@ -66,7 +67,7 @@ export const FindAllPerformanceReviews = (req: Request, res: Response) => {
         year ? { year: { [Op.like]: `%${year}%` } } : null,
     );
 
-    PerformanceReview.findAll({ where: condition, include: Reviewer })
+    PerformanceReview.findAll({ where: condition, include: [Reviewer, Employee] })
         .then((data: any) => {
             return res.send({ data });
         })
