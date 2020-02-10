@@ -6,7 +6,8 @@ import auth from './modules/auth';
 import alert from './modules/alert';
 import user from './modules/user';
 import permission from './modules/permission';
-import setting from './modules/setting';
+// import setting from './modules/setting';
+import performanceReview from './modules/performanceReview'
 
 Vue.use(Vuex);
 
@@ -17,7 +18,8 @@ export default new Vuex.Store({
     alert,
     user,
     permission,
-    setting
+    performanceReview,
+    // setting,
   },
   strict: true
 });

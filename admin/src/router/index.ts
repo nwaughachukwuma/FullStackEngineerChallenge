@@ -51,6 +51,7 @@ const routes = [
       layout: 'simple-layout'
     }
   },
+  // employee routes
   {
     path: '/employees',
     name: 'employees',
@@ -78,6 +79,35 @@ const routes = [
       requiresAuth: true
     }
   },
+  // performance review route
+  {
+    path: '/performance-reviews',
+    name: 'performance-reviews',
+    component: () => import(/* webpackChunkName: "employees" */ '../views/Admin/PerformanceReviewList.vue'),
+    meta: {
+      layout: 'backend-layout',
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/performance-review/new',
+    name: 'performance-review-new',
+    component: () => import(/* webpackChunkName: "employees-new" */ '../views/Admin/PerformanceReviewForm.vue'),
+    meta: {
+      layout: 'backend-layout',
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/performance-reviews/:id',
+    name: 'performance-review-edit',
+    component: () => import(/* webpackChunkName: "user" */ '../views/Admin/PerformanceReviewForm.vue'),
+    meta: {
+      layout: 'backend-layout',
+      requiresAuth: true
+    }
+  },
+
 ]
 
 const router = new VueRouter({

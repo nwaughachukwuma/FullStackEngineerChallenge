@@ -4,7 +4,7 @@ import configService from '@/services/configService';
 import {toQueryStrings} from '@/utils/helpers';
 
 export default {
-  async list({ type = 'employees', query = {} } = {}) {
+  async list({ type = 'perf-reviews', query = {} } = {}) {
     const pickedQuery = pick(query, ['page', 'page_size', 'q']);
     let url = `${configService.get('apiUrl')}/${type}`;
     if (pickedQuery.length) {
@@ -21,9 +21,9 @@ export default {
       });
   },
 
-  async getOne({ type = 'employees', userId }) {
+  async getOne({ type = 'perf-reviews', prId }) {
     return axios
-      .get(`${configService.get('apiUrl')}/${type}/${userId}`, {})
+      .get(`${configService.get('apiUrl')}/${type}/${prId}`, {})
       .then(response => {
         return response.data;
       })
@@ -32,9 +32,9 @@ export default {
       });
   },
 
-  async postOne({ type = 'create-employee', user = {} } = {}) {
+  async postOne({ type = 'create-perf-review', performance_review = {} } = {}) {
     return axios
-      .post(`${configService.get('apiUrl')}/${type}`, user)
+      .post(`${configService.get('apiUrl')}/${type}`, performance_review)
       .then(response => {
         return response.data;
       })
@@ -43,9 +43,9 @@ export default {
       });
   },
 
-  async patchOne({ type = 'employees', userId, newUser }) {
+  async patchOne({ type = 'perf-reviews', prId, newPR }) {
     return axios
-      .put(`${configService.get('apiUrl')}/${type}/${userId}`, newUser)
+      .put(`${configService.get('apiUrl')}/${type}/${prId}`, newPR)
       .then(response => {
         return response.data;
       })
@@ -54,9 +54,9 @@ export default {
       });
   },
 
-  async deleteOne({ type = 'employees', userId }) {
+  async deleteOne({ type = 'perf-reviews', prId }) {
     return axios
-      .delete(`${configService.get('apiUrl')}/${type}/${userId}`)
+      .delete(`${configService.get('apiUrl')}/${type}/${prId}`)
       .then(response => {
         return response.data;
       })

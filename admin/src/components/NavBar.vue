@@ -24,14 +24,14 @@
             <font-awesome-icon :icon="['fas', 'portrait']" class="mr-1" />Staff
           </b-nav-item>
           <b-nav-item
-            :to="{ path: '/staff' }"
-            v-if="showNavigation('manageStaff')"
+            :to="{ path: '/performance-reviews' }"
+            v-if="showNavigation('manageReviews')"
             data-cy="nav-bar-staff"
           >
-            <font-awesome-icon :icon="['fas', 'user']" class="mr-1" />
+            <font-awesome-icon :icon="['fas', 'clipboard-list']" class="mr-1" />
             Performance Reviews
           </b-nav-item>
-          <b-nav-item-dropdown
+          <!-- <b-nav-item-dropdown
             right
             v-if="showNavigation('manageSetting')"
             data-cy="nav-bar-manage-setting"
@@ -44,7 +44,7 @@
               v-if="showNavigation('manageSetting')"
               data-cy="nav-bar-general-settings"
             >General Settings</b-dropdown-item>
-          </b-nav-item-dropdown>
+          </b-nav-item-dropdown> -->
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
