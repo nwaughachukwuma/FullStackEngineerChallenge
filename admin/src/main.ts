@@ -22,7 +22,9 @@ import {
   faTrashAlt,
   faLongArrowAltLeft,
   faSave,
-  faListAlt
+  faListAlt,
+  faExternalLinkAlt,
+  faExternalLinkSquareAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Datetime } from 'vue-datetime';
@@ -61,7 +63,9 @@ library.add(
   faEdit,
   faLongArrowAltLeft,
   faSave,
-  faListAlt
+  faListAlt,
+  faExternalLinkAlt,
+  faExternalLinkSquareAlt
 );
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

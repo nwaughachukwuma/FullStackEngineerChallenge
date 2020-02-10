@@ -20,7 +20,7 @@ const actions = {
     employeeService
       .list({ type, query })
       .then(response => {
-        const pagination = {total_rows: 10, page_size: 20, first_row_no: 1};
+        const pagination = {total_rows: response.data.length, page_size: 5, first_row_no: 1};
         commit('setUsers', { users: response.data, pagination/*response.data.pagination*/ });
       })
       .catch(e => {
