@@ -77,8 +77,8 @@ export default {
         confirmButtonText: "Yes, delete it!",
         preConfirm: () => {
           this.deleteOne({
-            type: "user",
-            userId: row.id
+            type: "employees",
+            userId: row.item.id
           });
         }
       });

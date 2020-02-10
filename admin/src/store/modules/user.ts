@@ -72,7 +72,7 @@ const actions = {
         dispatch('common/handleServiceException', { e, router }, { root: true });
       });
   },
-  patchOne({ dispatch, commit }, { type = 'user', userId, user, router, redirectUrl = '' }) {
+  patchOne({ dispatch, commit }, { type = 'employees', userId, user, router, redirectUrl = '' }) {
     dispatch('alert/clear', {}, { root: true });
     commit('startRequest');
 
@@ -100,14 +100,14 @@ const actions = {
         dispatch('common/handleServiceException', { e, router }, { root: true });
       });
   },
-  deleteOne({ dispatch, commit }, { type = 'user', userId, router }) {
+  deleteOne({ dispatch, commit }, { type = 'employees', userId, router }) {
     dispatch('alert/clear', {}, { root: true });
     commit('startRequest');
 
     employeeService
       .deleteOne({ type, userId })
-      .then(_response => {
-        _response;
+      .then(() => {
+        // _response;
         dispatch('list', { type });
         dispatch(
           'alert/success',
@@ -115,7 +115,7 @@ const actions = {
             showType: 'toast',
             position: 'bottom-end',
             title: '',
-            text: type === 'user' ? 'User has been deleted.' : 'Staff has been deleted.'
+            text: 'Staff has been deleted.'
           },
           { root: true }
         );

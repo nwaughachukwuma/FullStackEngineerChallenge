@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 import { Op as OpSymbol } from 'sequelize'
 import { DBModel } from '../models';
+import { isEmpty } from 'lodash'
 
 
 const Employee = DBModel.employees;
@@ -127,8 +128,19 @@ export const UpdateEmployee = (req: Request, res: Response) => {
 };
 
 // Delete a Employee with the specified id in the request
-export const DeleteEmployee = (req: Request, res: Response) => {
+export const DeleteEmployee = async (req: Request, res: Response) => {
     const id = req.params.id;
+
+    const whatEmployee = await Employee.findOne({where: {id: id}});
+    if (!isEmpty(whatEmployee)) {
+        // prevent deletion of super user
+        if (whatEmployee.dataValues.email === 'super@admin.com') {
+            res.status(500).send({
+                message: "Not allowed to delete this user"
+            });
+            return
+        }
+    }
 
     Employee.destroy({
         where: { id: id }

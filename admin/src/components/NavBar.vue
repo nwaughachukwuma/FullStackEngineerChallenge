@@ -28,7 +28,8 @@
             v-if="showNavigation('manageStaff')"
             data-cy="nav-bar-staff"
           >
-            <font-awesome-icon :icon="['fas', 'user']" class="mr-1" />Admin
+            <font-awesome-icon :icon="['fas', 'user']" class="mr-1" />
+            Performance Reviews
           </b-nav-item>
           <b-nav-item-dropdown
             right
