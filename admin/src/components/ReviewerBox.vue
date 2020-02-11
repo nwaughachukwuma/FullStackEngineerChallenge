@@ -24,7 +24,9 @@
                 :state="$v.form.employee.$dirty ? !$v.form.employee.$error : null"
               ></b-form-select>
 
-              <b-form-invalid-feedback id="input-employee-invalid">Please enter select a valid employee.</b-form-invalid-feedback>
+              <b-form-invalid-feedback
+                id="input-employee-invalid"
+              >Please enter select a valid employee.</b-form-invalid-feedback>
             </b-form-group>
 
             <template v-if="errorMessages">
@@ -105,7 +107,7 @@ export default {
         isUnique: value => {
           return value !== null;
         }
-      },
+      }
     };
     return { form: formValidation };
   },
@@ -162,6 +164,23 @@ export default {
       this.formLoaded = true;
       this.$v.$touch(); // Set initial validation
       this.$v.$reset(); // Reset $dirty
+    },
+    users(newVal) {
+        if (newVal) {
+            this.employees = reduce(
+                newVal,
+                (result, value) => {
+                    result.push({ value: value.id, text: capitalize(value.name) });
+                    return result;
+                },
+                []
+            );
+            this.employees.unshift({
+                value: null,
+                text: "Please select an employee"
+            });
+            this.form.employee = null;
+        }
     }
   }
 };

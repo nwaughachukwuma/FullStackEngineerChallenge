@@ -145,6 +145,8 @@ const actions = {
 
         if (redirectUrl !== '') {
           router.push(redirectUrl);
+        } else {
+          window.location.reload()
         }
       })
       .catch(e => {
@@ -154,7 +156,21 @@ const actions = {
   },
 };
 
-const getters = {};
+const getters = {
+  reviewers: (state, getters, rootState) => {
+    if (!state.performance_review) return [];
+    const enrichedReviewers = state.performance_review.reviewers
+      .map(reviewer => {
+        if (rootState.user.users) {
+          const reviewerAsUser = rootState.user.users
+            .find(user => user.id === reviewer.peerId)
+          return Object.assign({}, reviewer, reviewerAsUser)
+        }
+        return reviewer;
+      })
+    return enrichedReviewers;
+  },
+};
 
 const mutations = {
   startRequest(state) {
@@ -171,6 +187,7 @@ const mutations = {
         id: performance_review.id,
         name: get(performance_review, 'employee.name', null),
         email: get(performance_review, 'employee.email', null),
+        reviewers: get(performance_review, 'reviewers', []),
         remark: performance_review.remark,
         evaluation: performance_review.evaluation,
         month: performance_review.month,
@@ -190,6 +207,7 @@ const mutations = {
       id: performance_review.id,
       name: get(performance_review, 'employee.name', null),
       email: get(performance_review, 'employee.email', null),
+      reviewers: get(performance_review, 'reviewers', []),
       remark: performance_review.remark,
       evaluation: performance_review.evaluation,
       month: performance_review.month,

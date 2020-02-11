@@ -7,6 +7,21 @@
             <label>{{ data.item.month }}, {{ data.item.year }}</label>
         </template>
     </b-table>
+    <b-row class="justify-content-md-center">
+        <b-col class="item-center" sm="4" v-for="(reviewer, key) in reviewers" :key="key">
+            <b-card 
+                :title="'Review - ' + (key+1)" 
+                :sub-title="reviewer.name">
+                <b-card-text>
+                    {{reviewer.jobDefinition}}
+                </b-card-text>
+
+                <b-card-text>{{reviewer.feedback || 'No feedback given'}}</b-card-text>
+
+                <pre class="text-primary">{{reviewer.rank}} Staff</pre>
+            </b-card>
+        </b-col>
+    </b-row>
     <reviewer-box
       list-url="/performance-reviews"
       :pr-id="prId"
@@ -16,7 +31,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import ReviewerBox from '@/components/ReviewerBox.vue';
 import router from '@/router';
 
@@ -26,13 +41,13 @@ export default {
     ReviewerBox
   },
   async mounted() {
-    this.permissionList({ router });
     this.prId = this.$route.params.id;
     await this.getOne({
         type: 'perf-reviews',
         prId: this.prId,
         router
     });
+    await this.userList({ type: "employees", query: this.$route.query });
   },
   data() {
     return {
@@ -52,13 +67,12 @@ export default {
       return 'Performance review details';
     },
     ...mapState('performance_review', ['loading', 'performance_review']),
-    ...mapState('permission', ['permissions'])
+    ...mapState('user', ['users']),
+    ...mapGetters('performance_review', ['reviewers']),
   },
   methods: {
     ...mapActions('performance_review', ['getOne', 'postOneReviewer']),
-    ...mapActions('permission', {
-      permissionList: 'list'
-    }),
+    ...mapActions("user", {userList: 'list'}),
     onAdd({ reviewer }) {
       this.postOneReviewer({
         type: 'create-reviewer',
@@ -74,12 +88,16 @@ export default {
               if (newVal) {
                 this.prData.pop()
                 this.prData.push(newVal);
-
                 this.employeeData = newVal
               }
           },
           immediate: false
-      }
+      },
+      users(newVal) {
+          if (newVal) {
+              console.log('users >>>', newVal)
+          }
+      },
   }
 };
 </script>
