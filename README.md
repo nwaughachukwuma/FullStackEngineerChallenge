@@ -12,8 +12,8 @@ This is Vue.js application utilizing Vuex as store, Vue-router for navigation an
 
 ### End result 
 The end result looks as shown in the image below. To see more about the client API, go to the readme file in the client folder.
-![DarkMode](https://s2.aconvert.com/convert/p3r68-cdx67/tb7ph-pcar4.png?dl=0=250x250)
-![DarkMode](https://s2.aconvert.com/convert/p3r68-cdx67/t6yhi-9rhbd.png?dl=0=250x250)
+![DarkMode](https://s2.aconvert.com/convert/p3r68-cdx67/tb7ph-pcar4.png?=250x250)
+![DarkMode](https://s2.aconvert.com/convert/p3r68-cdx67/t6yhi-9rhbd.png?=250x250)
 
 ## Specified Requirements
 Below are the specified requirements and in parenthesis are the ones I have duely attempted
@@ -69,7 +69,7 @@ Below are the specified requirements and in parenthesis are the ones I have duel
     8. Assignees are only to provide feedback on the evaluated performance review
    ```
 ## Abstract Diagram
-![DarkMode](https://s2.aconvert.com/convert/p3r68-cdx67/tgo1j-6wjaq.png?dl=0=250x250)
+![DarkMode](https://s2.aconvert.com/convert/p3r68-cdx67/tgo1j-6wjaq.png?=250x250)
 
 ## Test Code
 Not done
