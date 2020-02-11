@@ -26,12 +26,13 @@
                 <!-- <b-button size="sm" @click="row.toggleDetails" class="mr-2">
                     {{ row.detailsShowing ? 'Hide' : 'Show'}} Details
                 </b-button> -->
-                <b-button-group size="sm">
+                <b-button-group size="sm" v-if="row.item.role !== 'superadmin'">
                     <b-button size="sm" variant="secondary" @click="clickEdit(row)">
                         <font-awesome-icon :icon="['fas', 'edit']" class="mr-1" />Edit
                     </b-button>
                     <b-button size="sm" variant="warning" @click="clickDelete(row)">
-                        <font-awesome-icon :icon="['fas', 'trash-alt']" class="mr-1" />Delete
+                        <font-awesome-icon :icon="['fas', 'trash-alt']" class="mr-1" />
+                        Delete
                     </b-button>
                 </b-button-group>
             </template>
@@ -69,6 +70,7 @@
 
 
 <script>
+import {mapState} from 'vuex'
 export default {
     props: {
         fields: Array,
@@ -82,6 +84,7 @@ export default {
     },
     name: 'TableBox',
     computed: {
+        ...mapState("auth", {authUser: 'user'}),
         totalNumberOfPage() {
             if (this.pagination.total_rows && this.pagination.page_size) {
                 return Math.ceil(this.pagination.total_rows / this.pagination.page_size);

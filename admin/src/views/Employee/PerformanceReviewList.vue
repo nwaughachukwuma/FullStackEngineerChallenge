@@ -5,16 +5,15 @@
 
     <table-box
       :fields="fields"
-      :items="performance_reviews"
+      :items="pending_reviews"
       :loading="loading"
       :pagination="pagination"
       :baseUrl="baseUrl"
-      emptyText="No review with pending feedback."
+      emptyText="No reviews with pending feedback."
       :showAdd="false"
       addText=""
       @add="onAdd"
       @edit="onEdit"
-      @delete="onDelete"
     />
   </div>
 </template>
@@ -44,6 +43,7 @@ export default {
   mounted() {
     this.list({ type: "perf-reviews", query: this.$route.query });
     this.userList({ type: "employees", query: this.$route.query });
+    this.pendingList({ type: "pending-reviews", employeeId: this.user.id, query: this.$route.query})
   },
   data() {
     return {
@@ -55,38 +55,30 @@ export default {
         "period",
         { key: "evaluation", label: "Evaluation" },
         "remark",
-        { key: "isReviewed", label: "Reviewed?" },
+        { key: "feedback", label: "My Feeback" },
         "actions"
       ]
     };
   },
   computed: {
-    ...mapState("performance_review", ["loading", "baseUrl", "performance_reviews", "pagination"])
+    ...mapState("performance_review", ["loading", "baseUrl", "performance_reviews", "pagination"]),
+    ...mapState("pr_feedback", ['pending_reviews']),
+    ...mapState("auth", ['user'])
   },
   methods: {
     ...mapActions("performance_review", ["list", "deleteOne"]),
     ...mapActions("user", {userList:"list"}),
+    ...mapActions("pr_feedback", {pendingList:"getPending"}),
     onAdd() {
       router.push("/performance-review/new");
     },
     onEdit({ row }) {
       router.push(`/performance-review/${row.item.id}`);
     },
-    onDelete({ row }) {
-      Vue.swal({
-        title: "Are you sure?",
-        text: "You won't be able to revert this.",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-        preConfirm: () => {
-          this.deleteOne({
-            type: "perf-reviews",
-            userId: row.item.id
-          });
-        }
-      });
+  },
+  watch: {
+    pending_reviews(newVal) {
+      console.log('pending feedback', newVal)
     }
   }
 };

@@ -22,18 +22,32 @@
                 <label>{{ data.value }}</label>
             </template>
 
+            <template v-slot:cell(name)="data">
+                <label>{{ getStaffName(data.item.performance_review.employeeId) || "None" }}</label>
+            </template>
+
+            <template v-slot:cell(feedback)="data">
+                <label>{{ data.value || "None" }}</label>
+            </template>
+
+            <template v-slot:cell(remark)="data">
+                <label>{{ data.item.performance_review.remark }}</label>
+            </template>
+
+            <template v-slot:cell(evaluation)="data">
+                <label>{{ data.item.performance_review.evaluation }}</label>
+            </template>
+
             <template v-slot:cell(period)="data">
-                <label>{{ data.item.month }}, {{ data.item.year }}</label>
+                <label>{{ data.item.performance_review.month }}, {{ data.item.performance_review.year }}</label>
             </template>
 
             <template v-slot:cell(actions)="row">
                 <b-button-group size="sm">
                     <b-button size="sm" variant="secondary" @click="clickEdit(row)">
-                        <font-awesome-icon :icon="['fas', 'edit']" class="mr-1" />Edit
+                        <font-awesome-icon :icon="['fas', 'edit']" class="mr-1" />
+                        Give Feedback
                     </b-button>
-                    <!-- <b-button size="sm" variant="warning" @click="clickDelete(row)">
-                        <font-awesome-icon :icon="['fas', 'trash-alt']" class="mr-1" />Delete
-                    </b-button> -->
                 </b-button-group>
             </template>
             
@@ -70,6 +84,9 @@
 
 
 <script>
+
+import {mapState} from 'vuex'
+
 export default {
     props: {
         fields: Array,
@@ -83,6 +100,7 @@ export default {
     },
     name: 'TableBox',
     computed: {
+        ...mapState("user", ['users']),
         totalNumberOfPage() {
             if (this.pagination.total_rows && this.pagination.page_size) {
                 return Math.ceil(this.pagination.total_rows / this.pagination.page_size);
@@ -97,16 +115,28 @@ export default {
         linkGen(pageNum) {
             return { path: this.baseUrl, query: { page: pageNum } };
         },
+        getStaffName(employeeId) {
+            return this.users.find(el => el.id === employeeId).name
+        },
         clickAdd() {
             this.$emit('add', {});
         },
         clickEdit(row) {
-            this.$emit('edit', { row });
+            this.$swal({
+                toast: true,
+                title: 'Not implemented yet',
+                position: 'bottom-left',
+                background: '#000',
+                timer: 3000,
+                 timerProgressBar: true,
+            })
+            return;
+            // this.$emit('edit', { row });
         },
         clickDelete(row) {
             this.$emit('delete', { row });
         }
-    },
+    }
 }
 </script>
 

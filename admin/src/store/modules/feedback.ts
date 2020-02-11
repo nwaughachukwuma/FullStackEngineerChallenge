@@ -28,7 +28,7 @@ const actions = {
                 dispatch('common/handleServiceException', { e, router }, { root: true });
             });
     },
-    getPending({ dispatch, commit }, { type = 'pending-reviews', employeeId, router }) {
+    getPending({ dispatch, commit }, { type = 'pending-reviews', query={}, employeeId, router }) {
         dispatch('alert/clear', {}, { root: true });
         commit('startRequest');
 
