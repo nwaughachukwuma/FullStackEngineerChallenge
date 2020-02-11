@@ -27,6 +27,7 @@ import {
   faExternalLinkSquareAlt,
   faClipboardList,
   faClipboardCheck,
+  faPaperPlane
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Datetime } from 'vue-datetime';
@@ -69,7 +70,8 @@ library.add(
   faExternalLinkAlt,
   faExternalLinkSquareAlt,
   faClipboardList,
-  faClipboardCheck
+  faClipboardCheck,
+  faPaperPlane
 );
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

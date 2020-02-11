@@ -2,7 +2,7 @@ import { map, get } from 'lodash';
 import feedbackService from '@/services/feedbackService'
 
 const state = {
-    baseUrl: '/perf-reviews',
+    baseUrl: '/performance-review/feedback',
     all_reviews: [],
     pending_reviews: [],
     pagination: {},

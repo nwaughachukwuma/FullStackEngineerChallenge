@@ -122,16 +122,7 @@ export default {
             this.$emit('add', {});
         },
         clickEdit(row) {
-            this.$swal({
-                toast: true,
-                title: 'Not implemented yet',
-                position: 'bottom-left',
-                background: '#000',
-                timer: 3000,
-                 timerProgressBar: true,
-            })
-            return;
-            // this.$emit('edit', { row });
+            this.$emit('feedback', { row });
         },
         clickDelete(row) {
             this.$emit('delete', { row });
