@@ -48,7 +48,7 @@
             </div>
         </b-row>
         <b-row class="table-bottom-wrapper mt-2 mx-0">
-            <b-col :cols="6" class="px-0">
+            <b-col :cols="6" class="px-0" v-if="showAdd">
                 <b-button size="sm" variant="success" @click="clickAdd">
                     <font-awesome-icon :icon="['fas', 'plus']" class="mr-1" />
                     {{ addText }}

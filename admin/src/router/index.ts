@@ -119,7 +119,7 @@ const routes = [
   {
     path: '/performance-review/feedback/pending',
     name: 'performance-review-feedback-pending',
-    component: () => import(/* webpackChunkName: "performance-review-feedback-pending" */ '../views/Admin/PerformanceReviewList.vue'),
+    component: () => import(/* webpackChunkName: "performance-review-feedback-pending" */ '../views/Employee/PerformanceReviewList.vue'),
     meta: {
       layout: 'backend-layout',
       requiresAuth: true

@@ -1,6 +1,7 @@
 <template>
   <div class="page-class page-user-list my-5">
     <h1 class="page-title">{{ title }}</h1>
+    <h1 class="page-subtitle">With pending feedback</h1>
 
     <table-box
       :fields="fields"
@@ -8,9 +9,9 @@
       :loading="loading"
       :pagination="pagination"
       :baseUrl="baseUrl"
-      emptyText="No performance review found. Please create one."
-      :showAdd="true"
-      addText="Create performance review"
+      emptyText="No review with pending feedback."
+      :showAdd="false"
+      addText=""
       @add="onAdd"
       @edit="onEdit"
       @delete="onDelete"
@@ -21,21 +22,21 @@
 <script>
 import Vue from "vue";
 import { mapState, mapActions } from "vuex";
-import TableBox from "@/components/PRTableBox.vue";
+import TableBox from "@/components/FeedbackTableBox.vue";
 import router from "@/router";
 
 export default {
-  name: "PerformanceReviewList",
+  name: "PendingFeedbackList",
   components: {
     TableBox
   },
   metaInfo() {
     return {
-      title: "Performance Reviews",
+      title: "Pending Feedback",
       meta: [
         {
-          name: "List of performance reviews",
-          content: `Manage employee performance reviews`
+          name: "List of performance reviews feedback",
+          content: `Manage employee performance reviews feedback`
         }
       ]
     };
@@ -46,7 +47,7 @@ export default {
   },
   data() {
     return {
-      title: "Performance Reviews",
+      title: "Reviews",
       fields: [
         { key: "rowNum", label: "#" },
         { key: "name", label: "Staff name" },

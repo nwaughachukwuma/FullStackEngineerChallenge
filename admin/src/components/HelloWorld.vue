@@ -5,7 +5,8 @@
       This is our performance review application.<br/> 
       Help another employee today by leaving some valid feedback in their performance review  🙏🏻 👍🏻 
     </p>
-    <b-link :to="{ path: '/performance-review/feedback/pending' }" >Browse a list of performance reviews to assigned to you</b-link>
+    <b-link :to="{ path: '/performance-review/feedback/pending' }" >
+      Browse a list of performance reviews assigned to you</b-link>
   </div>
 </template>
 

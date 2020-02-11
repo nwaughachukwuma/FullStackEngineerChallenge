@@ -13,8 +13,9 @@
           <b-nav-item :to="{ path: '/' }" data-cy="nav-bar-dashboard">
             <font-awesome-icon :icon="['fas', 'tachometer-alt']" class="mr-1" />Dashboard
           </b-nav-item>
-          <b-nav-item :to="{ path: '/todo' }" data-cy="nav-bar-todo">
-            <font-awesome-icon :icon="['fas', 'list-alt']" class="mr-1" />Todo
+          <b-nav-item :to="{ path: '/performance-review/feedback/pending' }" data-cy="nav-bar-todo">
+            <font-awesome-icon :icon="['fas', 'list-alt']" class="mr-1" />
+            Reviews Feedback
           </b-nav-item>
           <b-nav-item
             :to="{ path: '/employees' }"
