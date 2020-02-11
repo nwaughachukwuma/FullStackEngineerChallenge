@@ -1,4 +1,4 @@
-# admin
+# Client
 
 ## Project setup
 ```
