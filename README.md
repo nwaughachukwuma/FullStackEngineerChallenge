@@ -19,20 +19,20 @@ The end result looks as shown in the image below. To see more about the client A
 ## Specified Requirements
 Below are the specified requirements and in parenthesis are the ones I have duely attempted
 ### Admin view
-[x] Admin Add/remove/update/view employees
-[x] Add/update/view performance reviews 
-[x] Assign employees to participate in another employee's performance review
+- [x] Admin Add/remove/update/view employees
+- [x] Add/update/view performance reviews 
+- [x] Assign employees to participate in another employee's performance review
 
 ### Employee view
-[x] List of performance reviews requiring feedback
-[ ] Submit feedback
+- [x] List of performance reviews requiring feedback
+- [ ] Submit feedback
 
 ## Challenge Scope
 * High level description of design and technologies used
 
 * Server side API (using a programming language and/or framework of your choice)
   * Implementation of at least 3 API calls
-    [x] About 13 API calls implemented
+    - [x] About 13 API calls implemented
 
     BaseURL :3000/api
     1. Admin Login: `[POST] /admin/login`
@@ -51,12 +51,12 @@ Below are the specified requirements and in parenthesis are the ones I have duel
     14. Get all assigned reviews `[GET] /employee/assigned-reviews`
     
   * Most full stack web developers at PayPay currently use Java, Ruby on Rails, or Node.js on the server(with MySQL for the database), but feel free to use other tech if you prefer
-    [x] Implemented with Node.js and Express.js Framework with Sequelize ORM for database connection
+    - [x] Implemented with Node.js and Express.js Framework with Sequelize ORM for database connection
 * Web app
   * Implementation of 2-5 web pages using a modern web framework (e.g. React or Angular) that talks to server side
-     [x] Vue.js has been used as the web framework with about 9 pages
+     - [x] Vue.js has been used as the web framework with about 9 pages
     * This should integrate with your API, but it's fine to use static responses for some of it 
-       [x] The pages integrates well with API on port 3000
+       - [x] The pages integrates well with API on port 3000
 * Document all assumptions made
    ```
     Assumptions
