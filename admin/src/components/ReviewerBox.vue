@@ -6,7 +6,7 @@
     <div v-if="!loading && formLoaded">
       <b-card-group deck class="mt-3 mx-5">
         <b-card class="px-5">
-          <h1>Add Reviewer</h1>
+          <h1>Add a Reviewer</h1>
           <p class="text-muted">to provide feedback</p>
 
           <!-- Employee -->

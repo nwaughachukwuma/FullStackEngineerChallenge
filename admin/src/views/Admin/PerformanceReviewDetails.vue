@@ -7,13 +7,13 @@
             <label>{{ data.item.month }}, {{ data.item.year }}</label>
         </template>
     </b-table>
-    <b-row class="justify-content-md-center">
-        <b-col class="item-center" sm="4" v-for="(reviewer, key) in reviewers" :key="key">
+    <b-row class="justify-content-center">
+        <b-col xs="12" sm="6" md="4" lg="4" v-for="(reviewer, key) in reviewers" :key="key">
             <b-card 
                 :title="'Review - ' + (key+1)" 
                 :sub-title="reviewer.name">
                 <b-card-text>
-                    {{reviewer.jobDefinition}}
+                    {{reviewer.jobDefinition || 'No Job Definition'}}
                 </b-card-text>
 
                 <b-card-text>{{reviewer.feedback || 'No feedback given'}}</b-card-text>
