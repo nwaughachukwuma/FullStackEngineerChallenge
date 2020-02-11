@@ -42,6 +42,7 @@ export default {
   },
   mounted() {
     this.list({ type: "perf-reviews", query: this.$route.query });
+    this.userList({ type: "employees", query: this.$route.query });
   },
   data() {
     return {
@@ -63,6 +64,7 @@ export default {
   },
   methods: {
     ...mapActions("performance_review", ["list", "deleteOne"]),
+    ...mapActions("user", {userList:"list"}),
     onAdd() {
       router.push("/performance-review/new");
     },

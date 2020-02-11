@@ -14,8 +14,9 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    // "camelcase": ["error", { "properties": "never" }],
-    "@typescript-eslint/camelcase": ["error", { "properties": "always" }],
+    "@typescript-eslint/camelcase": ["error", { "properties": "never" }],
+    "@typescript-eslint/camelcase": "off",
+    "camelcase": ["error", { "properties": "never" }],
     "camelcase": "off",
   },
   overrides: [

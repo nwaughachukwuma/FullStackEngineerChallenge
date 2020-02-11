@@ -103,7 +103,10 @@ export const UpdateEmployee = (req: Request, res: Response) => {
 
     const id = req.params.id;
 
-    Employee.update(req.body, {
+    const updateData = {...req.body};
+    delete updateData.id;
+
+    Employee.update(updateData, {
         where: { id: id }
     })
         .then(async (num: number) => {

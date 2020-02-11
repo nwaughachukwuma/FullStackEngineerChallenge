@@ -3,6 +3,7 @@
   "format": {
     "timeZone": "Africa/Lagos",
     "dateTime": "YYYY-MM-DD HH:mm:ss",
-    "pickerDateTime": "yyyy-MM-dd HH:mm"
+    "pickerDateTime": "yyyy-MM-dd HH:mm",
+    "pickerYearMonth": "MMMM-yyyy"
   }
 }

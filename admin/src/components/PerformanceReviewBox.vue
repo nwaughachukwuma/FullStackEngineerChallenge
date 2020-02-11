@@ -1,260 +1,203 @@
 <template>
-  <div>
+  <b-container class="page-login my-3 px-auto">
     <div v-if="loading || !formLoaded">
       <span class="spinner"></span>
     </div>
     <div v-if="!loading && formLoaded">
-      <b-form @submit.stop.prevent="onSubmit">
-        <b-form-group id="group-email" label-for="input-email">
-          <template v-slot:label>
-            Email address
-            <span class="text-danger">*</span>
-          </template>
-          <b-form-input
-            id="input-email"
-            v-model="form.email"
-            type="email"
-            placeholder="Enter email address"
-            :state="$v.form.email.$dirty ? !$v.form.email.$error : null"
-          ></b-form-input>
+      <b-card-group deck class="mt-3 mx-5">
+        <b-card class="px-5">
+          <h1>{{formType === "new"? 'Create': 'Update'}}</h1>
+          <p class="text-muted">Performance review</p>
 
-          <b-form-text id="input-email-help">Email must be valid email address. i.e. sample@username.com.</b-form-text>
+           <!-- Employee -->
+          <b-form @submit.stop.prevent="onSubmit">
+            <b-form-group id="group-employee" label-for="input-employee" v-if="formType === 'new'">
+              <template v-slot:label>
+                Select Employee
+                <span class="text-danger">*</span>
+              </template>
 
-          <b-form-invalid-feedback id="input-email-invalid">Please enter valid email address.</b-form-invalid-feedback>
-        </b-form-group>
+              <b-form-select
+                id="input-employee"
+                v-model="form.employee"
+                :options="employees"
+                :state="$v.form.employee.$dirty ? !$v.form.employee.$error : null"
+              ></b-form-select>
 
-        <b-form-group id="group-password" label-for="input-password">
-          <template v-slot:label>
-            Password
-            <span class="text-danger" v-if="formType === 'new'">*</span>
-          </template>
+              <b-form-invalid-feedback id="input-employee-invalid">Please enter your first name.</b-form-invalid-feedback>
+            </b-form-group>
 
-          <b-form-input
-            id="input-password"
-            type="password"
-            v-model="form.password"
-            :state="$v.form.password.$dirty ? !$v.form.password.$error : null"
-            placeholder="Enter password"
-          ></b-form-input>
+            <b-form-group id="group-employee" label-for="input-employee" v-else>
+              <template v-slot:label>
+                Select Employee
+                <span class="text-danger">*</span>
+              </template>
 
-          <b-form-text id="input-password-help">Password must be more than 6 characters.</b-form-text>
+              <b-form-input
+                id="input-employee"
+                v-model="form.employeeName"
+                :disabled="true"
+                type="text"
+              ></b-form-input>
+            </b-form-group>
 
-          <b-form-invalid-feedback id="input-password-invalid">Please enter valid password.</b-form-invalid-feedback>
-        </b-form-group>
+            <!-- Period -->
+            <b-form-group id="group-period" label-for="input-period" v-if="formType==='new'">
+              <template v-slot:label>
+                Review Period (Y-M-D)
+              </template>
 
-        <b-form-group id="group-first-name" label-for="input-first-name">
-          <template v-slot:label>
-            Full name
-            <span class="text-danger">*</span>
-          </template>
+              <datetime
+                type="date"
+                v-model="form.period"
+                input-id="input-period"
+                :input-class="{
+                  'form-control': true,
+                  'is-invalid': $v.form.period.$dirty ? $v.form.period.$error : null,
+                  'is-valid': $v.form.period.$dirty ? !$v.form.period.$error : null
+                }"
+                class="input-group"
+                placeholder="Select review period"
+                :format="dateTimeFormat"
+                :phrases="{ ok: 'OK', cancel: 'Cancel' }"
+                :week-start="7"
+                :use12-hour="false"
+                auto
+              >
+                <template slot="after">
+                  <div class="input-group-append">
+                    <b-button size="sm" variant="secondary" @click="form.period = ''">Clear</b-button>
+                  </div>
+                </template>
+              </datetime>
 
-          <b-form-input
-            id="input-first-name"
-            type="text"
-            v-model="form.firstName"
-            :state="$v.form.firstName.$dirty ? !$v.form.firstName.$error : null"
-            placeholder="Enter first name"
-          ></b-form-input>
+              <b-form-text id="input-period-help">
+                The period for which the employee is being reviewed. The value must be valid format - Month-Year. i.e. January-2020
+              </b-form-text>
 
-          <b-form-invalid-feedback id="input-first-name-invalid">Please enter your first name.</b-form-invalid-feedback>
-        </b-form-group>
+              <div
+                class="invalid-feedback"
+                id="input-period-invalid"
+                v-if="$v.form.period.$dirty ? $v.form.period.$error : false"
+                >Please select valid date.</div
+              >
+            </b-form-group>
 
-        <b-form-group id="group-confirmed-at" label-for="input-confirmed-at">
-          <template v-slot:label>
-            Confirmed At (Y-M-D H:M)
-          </template>
+            <b-form-group id="group-period" label-for="input-period" v-else>
+              <template v-slot:label>
+                Review Period (Y-M-D)
+                <span class="text-danger">*</span>
+              </template>
 
-          <datetime
-            type="datetime"
-            v-model="form.confirmedAt"
-            input-id="input-confirmed-at"
-            :input-class="{
-              'form-control': true,
-              'is-invalid': $v.form.confirmedAt.$dirty ? $v.form.confirmedAt.$error : null,
-              'is-valid': $v.form.confirmedAt.$dirty ? !$v.form.confirmedAt.$error : null
-            }"
-            class="input-group"
-            placeholder="Select confirmed date/time"
-            :format="dateTimeFormat"
-            :phrases="{ ok: 'OK', cancel: 'Cancel' }"
-            :hour-step="1"
-            :minute-step="1"
-            :week-start="7"
-            :use12-hour="false"
-            auto
-          >
-            <template slot="after">
-              <div class="input-group-append">
-                <b-button size="sm" variant="secondary" @click="form.confirmedAt = ''">Clear</b-button>
-              </div>
+              <b-form-input
+                id="input-period"
+                v-model="form.period"
+                :disabled="true"
+                type="text"
+              ></b-form-input>
+            </b-form-group>
+
+            <!-- Evaluation -->
+            <b-form-group id="group-evaluation" label-for="input-evaluation">
+              <template v-slot:label>
+                Evaluation
+                <span class="text-danger">*</span>
+              </template>
+              <b-form-input
+                id="input-evaluation"
+                v-model="form.evaluation"
+                type="number"
+                max="100"
+                min="40"
+                placeholder="Performance score"
+                :state="$v.form.evaluation.$dirty ? !$v.form.evaluation.$error : null"
+              ></b-form-input>
+
+              <b-form-text
+                id="input-evaluation-help"
+              >Score to indicate how well/poor the employee performed</b-form-text>
+
+              <b-form-invalid-feedback id="input-evaluation-invalid">
+                  Please enter valid number within range 40-100
+                </b-form-invalid-feedback>
+            </b-form-group>
+
+            <!-- Remark -->
+            <b-form-group id="group-remark" label-for="input-remark">
+              <template v-slot:label>
+                Remark
+                <span class="text-danger">*</span>
+              </template>
+
+              <b-form-textarea
+                id="input-remark"
+                v-model="form.remark"
+                type="text"
+                placeholder="Performed in..."
+                rows="3"
+                max-rows="6"
+                :state="$v.form.remark.$dirty ? !$v.form.remark.$error : null"
+              ></b-form-textarea>
+
+              <b-form-text
+                id="input-remark-help"
+              >Text description of employee's performance</b-form-text>
+
+              <b-form-invalid-feedback id="input-remark-invalid">
+                  Please enter valid remark.
+                </b-form-invalid-feedback>
+            </b-form-group>
+
+            <template v-if="errorMessages">
+              <b-row class="mb-2">
+                <b-col class="text-danger message-col">{{ errorMessages }}</b-col>
+              </b-row>
             </template>
-          </datetime>
 
-          <b-form-text id="input-confirmed-at-help">
-            Confirmed at field indicates the user has been confirmed. If empty, then user cannot log in to the system as
-            the account is not confirmed. The value must be valid format - Y/M/D H:M. i.e. 2017-01-01 12:00
-          </b-form-text>
-
-          <div
-            class="invalid-feedback"
-            id="input-confirmed-at-invalid"
-            v-if="$v.form.confirmedAt.$dirty ? $v.form.confirmedAt.$error : false"
-            >Please select valid date/time.</div
-          >
-        </b-form-group>
-
-        <!-- <b-form-group id="group-blocked-at" label-for="input-blocked-at">
-          <template v-slot:label
-            >Blocked At (Y-M-D H:M)</template
-          >
-
-          <datetime
-            type="datetime"
-            v-model="form.blockedAt"
-            input-id="input-blocked-at"
-            :input-class="{
-              'form-control': true,
-              'is-invalid': $v.form.blockedAt.$dirty ? $v.form.blockedAt.$error : null,
-              'is-valid': $v.form.blockedAt.$dirty ? !$v.form.blockedAt.$error : null
-            }"
-            class="input-group"
-            placeholder="Select blocked date/time"
-            :format="dateTimeFormat"
-            :phrases="{ ok: 'OK', cancel: 'Cancel' }"
-            :hour-step="1"
-            :minute-step="1"
-            :week-start="7"
-            :use12-hour="false"
-            auto
-          >
-            <template slot="after">
-              <div class="input-group-append">
-                <b-button size="sm" variant="secondary" @click="form.blockedAt = ''">Clear</b-button>
-              </div>
-            </template>
-          </datetime>
-
-          <b-form-text id="input-blocked-at-help">
-            Blocked at field indicates the user has been blocked. If not empty, then user cannot log in to the system as
-            the account is blocked. The value must be valid format - Y/M/D H:M. i.e. 2017-01-01 12:00
-          </b-form-text>
-
-          <div
-            class="invalid-feedback"
-            id="input-blocked-at-invalid"
-            v-if="$v.form.blockedAt.$dirty ? $v.form.blockedAt.$error : false"
-            >Please select valid date/time.</div
-          >
-        </b-form-group> -->
-
-        <b-form-group id="group-role" label-for="input-role" v-if="userType === 'staff'">
-          <template v-slot:label>
-            Role
-            <span class="text-danger">*</span>
-          </template>
-
-          <b-form-select
-            id="input-role"
-            v-model="form.role"
-            :options="staffRoles"
-            :state="$v.form.role.$dirty ? !$v.form.role.$error : null"
-          ></b-form-select>
-
-          <b-form-text id="input-role-help"
-            >Role field is configuring whether the user is administrator or staff.</b-form-text
-          >
-
-          <b-form-invalid-feedback id="input-role-invalid">Please select valid role.</b-form-invalid-feedback>
-        </b-form-group>
-
-        <b-form-group id="group-permission" label-for="select-permission" v-if="showPermissions">
-          <template v-slot:label>
-            Permissions
-            <span class="text-danger">*</span>
-          </template>
-
-          <div>
-            <b-form-checkbox
-              :id="`checkbox-permission-${permission.id}`"
-              :name="`checkbox-permission-${permission.id}`"
-              v-for="(permission, index) in permissions"
-              v-bind:key="permission.id"
-              v-model="form.permissions[index]"
-              value="true"
-              >{{ permission.description }}</b-form-checkbox
-            >
-          </div>
-
-          <b-form-text id="input-permission-help"
-            >Permission field is configuring whether the user is selected permission.</b-form-text
-          >
-
-          <b-form-invalid-feedback id="input-permission-invalid"
-            >Please select valid permission.</b-form-invalid-feedback
-          >
-        </b-form-group>
-
-        <b-form-group id="group-enabled" label-for="input-enabled">
-          <template v-slot:label>
-            Status
-            <span class="text-danger">*</span>
-          </template>
-
-          <b-form-select
-            id="input-enabled"
-            v-model="form.enabled"
-            :options="userEnabled"
-            :state="$v.form.enabled.$dirty ? !$v.form.enabled.$error : null"
-          ></b-form-select>
-
-          <b-form-text id="input-enabled-help"
-            >Status field is configuring whether the user is active or deleted.</b-form-text
-          >
-
-          <b-form-invalid-feedback id="input-enabled-invalid">Please select valid status.</b-form-invalid-feedback>
-        </b-form-group>
-
-        <template v-if="errorMessages">
-          <b-row class="mb-2">
-            <b-col class="text-danger message-col">{{ errorMessages }}</b-col>
-          </b-row>
-        </template>
-
-        <b-row>
-          <b-col>
-            <b-button type="submit" size="sm" variant="success" :disabled="loading">
-              <span class="spinner spinner-white" v-if="loading"></span>
-              <font-awesome-icon :icon="['fas', 'save']" class="mr-1" />Save
-            </b-button>
-          </b-col>
-          <b-col class="text-right">
-            <b-button size="sm" variant="warning" :to="{ path: `${listUrl}` }">
-              <font-awesome-icon :icon="['fas', 'long-arrow-alt-left']" class="mr-1" />Back to list
-            </b-button>
-          </b-col>
-        </b-row>
-      </b-form>
+            <b-row>
+              <b-col>
+                <b-button type="submit" size="sm" variant="success" :disabled="loading">
+                  <span class="spinner spinner-white" v-if="loading"></span>
+                  <font-awesome-icon :icon="['fas', 'save']" class="mr-1" />Save
+                </b-button>
+              </b-col>
+              <b-col class="text-right">
+                <b-button size="sm" variant="warning" :to="{ path: `${listUrl}` }">
+                  <font-awesome-icon :icon="['fas', 'long-arrow-alt-left']" class="mr-1" />Back to list
+                </b-button>
+              </b-col>
+            </b-row>
+          </b-form>
+        </b-card>
+      </b-card-group>
     </div>
-  </div>
+  </b-container>
 </template>
 
 <script>
-import { email, required, minLength, maxLength } from 'vuelidate/lib/validators';
-import { mapGetters, mapState } from 'vuex';
-import _ from 'lodash';
-import moment from 'moment';
-import User from "@/services/permissionService";
-import {validateDateTime} from '@/utils/helpers';
-import configService from '@/services/configService';
+import {
+  required,
+  minLength,
+  maxLength,
+  between
+} from "vuelidate/lib/validators";
+import { mapGetters, mapState } from "vuex";
+import {
+    reduce,
+    capitalize,
+} from "lodash";
+// import moment from "moment";
+import { validateDateTime } from "@/utils/helpers";
+import configService from "@/services/configService";
+import {months} from '@/utils/constants'
 
 export default {
-  name: 'UserFormBox',
+  name: "PerformanceReviewBox",
   props: {
     listUrl: String,
-    userType: String,
     formType: String,
     userId: {
-      type: Number,
+      type: [String, Number],
       required: false
     },
     permissions: {
@@ -264,9 +207,10 @@ export default {
   },
   metaInfo() {
     return {
+      title: "Employees",
       meta: [
         {
-          name: 'description',
+          name: "description",
           content: this.metaDescription
         }
       ]
@@ -274,99 +218,56 @@ export default {
   },
   data() {
     return {
-      title: '',
+      title: "",
       formLoaded: false,
       form: {
-        username: null,
-        email: null,
-        firstName: null,
-        lastName: null,
-        password: null,
-        confirmedAt: null,
-        blockedAt: null,
-        permissions: [],
-        role: null,
-        enabled: null
+        employee: null,
+        period: null,
+        evaluation: null,
+        remark: '',
+        employeeName: null
       },
-      dateTimeFormat: configService.get('format').pickerDateTime,
-      staffRoles: _.reduce(
-        _.pick(User.userRoles, ['superadmin', 'admin', 'staff']),
-        (result, value, key) => {
-          result.push({ value, text: _.capitalize(key) });
-          return result;
-        },
-        []
-      ),
-      userEnabled: _.reduce(
-        User.userEnabled,
-        (result, value, key) => {
-          result.push({ value, text: _.capitalize(key) });
-          return result;
-        },
-        []
-      )
+      dateTimeFormat: configService.get("format").pickerYearMonth,
+      employees: []
     };
   },
   validations() {
     const formValidation = {
-      email: {
+      employee: {
         required,
-        email
+        minLength: minLength(5),
+        isUnique: (value) => {
+          return value !== null
+        }
       },
-      firstName: {
-        required
+      period: {
+          validateDateTime: validateDateTime
       },
-      lastName: {
-        required
-      },
-      username: {
+      evaluation: {
         required,
-        minLength: minLength(3),
-        maxLength: maxLength(15),
-        validateUsername: username => {
-          if (username === null) {
-            return false;
-          }
-          return username.match(/^[0-9a-zA-Z_]+$/) !== null;
-        }
+        between: between(40, 100),
       },
-      password: {
-        minLength: minLength(6)
+      remark: {
+        minLength: minLength(10),
+        maxLength: maxLength(300)
       },
-      confirmedAt: {
-        validateDateTime: validateDateTime
-      },
-      blockedAt: {
-        validateDateTime: validateDateTime
-      },
-      permissions: {},
-      role: {
-        validateRole: value => {
-          if (this.userType === 'user') {
-            return true;
-          }
-          return _.some(User.userRoles, role => value === role);
-        }
-      },
-      enabled: {
-        validateStatus: value => {
-          return _.some(User.userEnabled, enabled => value === enabled);
-        }
-      }
     };
-    if (this.formType === 'new') {
-      formValidation.password.required = required;
-    }
     return { form: formValidation };
   },
   mounted() {
     this.$nextTick(async () => {
       // Code that will run only after the entire view has been re-rendered
-      if (this.formType === 'new') {
-        if (this.userType === 'staff') {
-          this.form.role = User.userRoles.staff;
-        }
-        this.form.enabled = User.userEnabled.active;
+      this.employees = reduce(this.users, (result, value) => {
+          result.push({ value: value.id, text: capitalize(value.name) });
+          return result
+      }, []);
+
+      this.employees.unshift({ value: null, text: 'Please select an employee' })
+      this.form.employee =  null;
+
+      if (this.formType === "new") {
+        this.form.evaluation = 40,
+        this.form.remark = '',
         this.formLoaded = true;
         this.$v.$touch(); // Set initial validation
         this.$v.$reset(); // Reset $dirty
@@ -375,88 +276,54 @@ export default {
   },
   computed: {
     metaDescription() {
-      return this.formType === 'new' ? 'Add new user' : 'Update user';
+      return this.formType === "new" ? "Add performance review" : "Update performance review";
     },
-    ...mapGetters('alert', ['errorMessages']),
-    ...mapState('user', ['loading', 'user']),
-    showPermissions() {
-      return this.userType === 'staff' && this.form.role === User.userRoles.staff;
-    }
+    ...mapGetters("alert", ["errorMessages"]),
+    ...mapState("user", ["loading", "user", "users"]),
+    ...mapState("performance_review", ["performance_review"])
   },
   methods: {
     onSubmit() {
       this.$v.$touch();
-      if (this.$v.$invalid) {
+      if (this.formType === 'new' && this.$v.$invalid) {
         return false;
       }
-      const user = {
-        email: this.form.email,
-        name: this.form.firstName,
-        password: this.form.password,
-        confirmed_at: moment(this.form.confirmedAt).isValid()
-          ? moment(this.form.confirmedAt).format(configService.get('format').dateTime)
-          : null,
-        blocked_at: moment(this.form.blockedAt).isValid()
-          ? moment(this.form.blockedAt).format(configService.get('format').dateTime)
-          : null,
-        role: this.form.role ? this.form.role : User.userRole.user,
-        permissions: _.reduce(
-          this.form.permissions,
-          (acc, permissionStatus, key) => {
-            if (permissionStatus) {
-              acc.push(this.permissions[key].id);
-            }
-            return acc;
-          },
-          []
-        ),
-        enabled: this.form.enabled
+      const period = this.form.period.split('-');
+
+      // eslint-disable-next-line
+      const performance_review = {
+        employeeId: this.formType === 'new'
+          ? this.form.employee
+          : this.performance_review.id,
+        month: this.formType === 'new'? months[period[1]]: period[0],
+        year: this.formType === 'new'? period[0]: period[1],
+        evaluation: this.form.evaluation,
+        remark: this.form.remark
       };
-      if (this.formType === 'new') {
-        this.$emit('add', { user });
+      if (this.formType === "new") {
+        this.$emit("add", { performance_review });
       } else {
-        this.$emit('edit', { user });
+        this.$emit("edit", { performance_review });
       }
       return false;
-    },
-    setFormPermissions() {
-      if (this.formLoaded) {
-        if (this.formType === 'new') {
-          _.forEach(this.permissions, (permission, index) => {
-            this.form.permissions[index] = true;
-          });
-        } else {
-          _.forEach(this.permissions, (permission, index) => {
-            this.form.permissions[index] =
-              _.isEmpty(_.find(this.user.permissions, userPermission => userPermission.id === permission.id)) === false;
-          });
-        }
-      }
     }
   },
   watch: {
-    user(_newValue, _oldValue) {
-      if (!this.user.id) {
+    performance_review(newValue) {
+      if (!newValue.id) {
         return;
       }
       // Loaded user, assign to form
-      this.form.username = this.user.username;
-      this.form.email = this.user.email;
-      this.form.firstName = this.user.firstName;
-      this.form.lastName = this.user.lastName;
-      this.form.confirmedAt = moment(this.user.confirmedAt).isValid()
-        ? moment(this.user.confirmedAt).toISOString()
-        : null;
-      this.form.blockedAt = moment(this.user.blockedAt).isValid() ? moment(this.user.blockedAt).toISOString() : null;
-      this.form.role = this.user.role;
-      this.form.enabled = this.user.enabled;
+      this.form.employee = newValue.employeeId;
+      this.form.period = [newValue.month, newValue.year].join('-');
+      this.form.remark = newValue.remark;
+      this.form.evaluation = newValue.evaluation;
+      this.form.employeeName = newValue.name
+      // newValue.year + '-' + Object.entries(months)
+      //   .find(el => el[1] === newValue.month)[0]
       this.formLoaded = true;
-      this.setFormPermissions();
       this.$v.$touch(); // Set initial validation
       this.$v.$reset(); // Reset $dirty
-    },
-    permissions(_newValue, _oldValue) {
-      this.setFormPermissions();
     }
   }
 };

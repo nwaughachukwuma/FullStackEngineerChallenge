@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 const packageJson = require('../../package.json');
 import {check} from 'express-validator';
+import {months} from '../utils/constants'
 
 import {
   CreatePerformanceReview,
@@ -75,7 +76,7 @@ router.delete('/employees/:id', DeleteEmployee)
  */
 router.post('/create-perf-review', [
   check('employeeId').exists().isUUID('4').withMessage('Provide Employee Id'),
-  check('month').exists().withMessage('Provide Performance review month'),
+  check('month').isIn(months).withMessage('Provide Performance review month'),
   check('year').exists().withMessage('Provide performance review year'),
   check('evaluation').isInt().toInt().withMessage('Provide performance review evaluation'),
   check('remark').exists().withMessage('Provide performance review remark'),

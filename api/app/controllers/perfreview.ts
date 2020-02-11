@@ -174,7 +174,11 @@ export const UpdatePerformanceReview = (req: Request, res: Response) => {
 
     const id = req.params.id;
 
-    PerformanceReview.update(req.body, {
+    const updateData = {...req.body};
+    delete updateData.id;
+    delete updateData.employeeId
+
+    PerformanceReview.update(updateData, {
         where: { id: id }
     })
         .then(async (num: number) => {

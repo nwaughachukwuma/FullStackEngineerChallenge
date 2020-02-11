@@ -2,6 +2,7 @@ import User from './employee'
 import {makeId} from '../utils/helpers'
 import { DataTypes} from 'sequelize'
 import {SequelizeType} from '../utils/types'
+import {months} from '../utils/constants'
 
 
 /**
@@ -27,6 +28,9 @@ export const PerformanceReview = (sequelize: any, Sequelize: SequelizeType) => {
         month: {
             type: DataTypes.STRING, // performance_review month
             unique: 'compositeIndex', // use a composite index
+            validate: {
+                isIn: [months]
+            }
         },
         year: {
             type: DataTypes.STRING, // performance_review year

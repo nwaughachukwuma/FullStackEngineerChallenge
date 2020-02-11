@@ -7,7 +7,7 @@
       <b-card-group deck class="mt-3 mx-5">
         <b-card class="px-5">
           <h1>{{formType === "new"? 'Create Employee': 'Update Employee'}}</h1>
-          <p class="text-muted">Add a new staff</p>
+          <p class="text-muted">Staff management</p>
 
            <!-- Employee Name -->
           <b-form @submit.stop.prevent="onSubmit">
@@ -249,17 +249,6 @@ export default {
         required,
         minLength: minLength(5),
       },
-    //   username: {
-    //     required,
-    //     minLength: minLength(3),
-    //     maxLength: maxLength(15),
-    //     validateUsername: username => {
-    //       if (username === null) {
-    //         return false;
-    //       }
-    //       return username.match(/^[0-9a-zA-Z_]+$/) !== null;
-    //     }
-    //   },
       permissions: {},
       role: {
         validateRole: value => {

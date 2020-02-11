@@ -73,7 +73,7 @@ const routes = [
   {
     path: '/employee/:id',
     name: 'employee-edit',
-    component: () => import(/* webpackChunkName: "user" */ '../views/Admin/UserForm.vue'),
+    component: () => import(/* webpackChunkName: "employees" */ '../views/Admin/UserForm.vue'),
     meta: {
       layout: 'backend-layout',
       requiresAuth: true
@@ -92,16 +92,16 @@ const routes = [
   {
     path: '/performance-review/new',
     name: 'performance-review-new',
-    component: () => import(/* webpackChunkName: "employees-new" */ '../views/Admin/PerformanceReviewForm.vue'),
+    component: () => import(/* webpackChunkName: "performance-review-new" */ '../views/Admin/PerformanceReviewForm.vue'),
     meta: {
       layout: 'backend-layout',
       requiresAuth: true
     }
   },
   {
-    path: '/performance-reviews/:id',
+    path: '/performance-review/:id',
     name: 'performance-review-edit',
-    component: () => import(/* webpackChunkName: "user" */ '../views/Admin/PerformanceReviewForm.vue'),
+    component: () => import(/* webpackChunkName: "performance-review-new" */ '../views/Admin/PerformanceReviewForm.vue'),
     meta: {
       layout: 'backend-layout',
       requiresAuth: true
