@@ -3,8 +3,8 @@
 ### Description
 This is the client implementation for the performance review web application, as a solution to the `full stack dev challenge` by PayPay.
 
-![DarkMode](https://s2.aconvert.com/convert/p3r68-cdx67/tb7ph-pcar4.png?=250x250)
-![DarkMode](https://s2.aconvert.com/convert/p3r68-cdx67/t6yhi-9rhbd.png?=250x250)
+![DarkMode](https://dl.dropbox.com/s/jtsjhtneaa6enjb/pp1.png?dl=0=250x250)
+![DarkMode](https://dl.dropbox.com/s/accvak9kt5a3qeq/pp2.png?dl=0=250x250)
 
 ### Done Features 
 The following features has been implemented:
