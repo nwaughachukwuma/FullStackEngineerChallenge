@@ -33,6 +33,7 @@ The following feature(s) has not been implemented
 1. start a terminal at the client director root_dir/client
 2. yarn install
 3. yarn serve (development)
+4. Login as superadmin with email: super@admin.com; password: supersecret
 ```
 
 
