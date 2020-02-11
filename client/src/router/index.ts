@@ -117,9 +117,18 @@ const routes = [
     }
   },
   {
+    path: '/performance-review/feedback/assigned',
+    name: 'performance-review-feedback-assigned',
+    component: () => import(/* webpackChunkName: "performance-review-feedback-pending" */ '../views/Employee/AssignedReviewList.vue'),
+    meta: {
+      layout: 'backend-layout',
+      requiresAuth: true
+    }
+  },
+  {
     path: '/performance-review/feedback/pending',
     name: 'performance-review-feedback-pending',
-    component: () => import(/* webpackChunkName: "performance-review-feedback-pending" */ '../views/Employee/PerformanceReviewList.vue'),
+    component: () => import(/* webpackChunkName: "performance-review-feedback-pending" */ '../views/Employee/PendingReviewList.vue'),
     meta: {
       layout: 'backend-layout',
       requiresAuth: true

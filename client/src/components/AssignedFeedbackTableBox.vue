@@ -41,15 +41,6 @@
             <template v-slot:cell(period)="data">
                 <label>{{ data.item.performance_review.month }}, {{ data.item.performance_review.year }}</label>
             </template>
-
-            <template v-slot:cell(actions)="row">
-                <b-button-group size="sm">
-                    <b-button size="sm" variant="secondary" @click="clickEdit(row)">
-                        <font-awesome-icon :icon="['fas', 'edit']" class="mr-1" />
-                        Give Feedback
-                    </b-button>
-                </b-button-group>
-            </template>
             
         </b-table>
         <b-row class="mt-2 mx-2">
@@ -63,6 +54,17 @@
             </div>
         </b-row>
         <b-row class="table-bottom-wrapper mt-2 mx-0">
+            <b-col :cols="6" class="px-0">
+                <b-link 
+                    class="btn btn-warning" 
+                    size="sm" 
+                    variant="warning" 
+                    :to="{ path: '/performance-review/feedback/pending' }"
+                >
+                  <font-awesome-icon :icon="['fas', 'long-arrow-alt-left']" class="mr-1" />
+                  Back to pending
+                </b-link>
+            </b-col>
             <b-col :cols="6" class="px-0" v-if="showAdd">
                 <b-button size="sm" variant="success" @click="clickAdd">
                     <font-awesome-icon :icon="['fas', 'plus']" class="mr-1" />
@@ -94,6 +96,7 @@ export default {
         emptyText: String,
         pagination: Object,
         showAdd: Boolean,
+        showAll: Boolean,
         addText: String,
         loading: Boolean,
         baseUrl: String

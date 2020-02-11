@@ -11,12 +11,21 @@
         <b-col xs="12" sm="6" md="4" lg="4" v-for="(reviewer, key) in reviewers" :key="key">
             <b-card 
                 :title="'Review - ' + (key+1)" 
-                :sub-title="reviewer.name">
-                <b-card-text>
+                :sub-title="reviewer.name"
+              >
+                <b-card-text v-if="reviewer.jobDefinition">
                     {{reviewer.jobDefinition || 'No Job Definition'}}
                 </b-card-text>
+                <b-card-text class="text-warning" v-else>
+                  No Job Definition
+                </b-card-text>
 
-                <b-card-text>{{reviewer.feedback || 'No feedback given'}}</b-card-text>
+                <b-card-text v-if="reviewer.feedback">
+                    {{reviewer.feedback}}
+                </b-card-text>
+                <b-card-text class="text-danger" v-else>
+                  No feedback given
+                </b-card-text>
 
                 <pre class="text-primary">{{reviewer.rank}} Staff</pre>
             </b-card>

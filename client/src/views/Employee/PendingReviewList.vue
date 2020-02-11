@@ -74,7 +74,7 @@
 <script>
 import Vue from "vue";
 import { mapState, mapActions, mapGetters } from "vuex";
-import TableBox from "@/components/FeedbackTableBox.vue";
+import TableBox from "@/components/PendingFeedbackTableBox.vue";
 import router from "@/router";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
 
