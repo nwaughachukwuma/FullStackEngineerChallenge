@@ -32,6 +32,23 @@ Below are the specified requirements and in parenthesis are the ones I have duel
 * Server side API (using a programming language and/or framework of your choice)
   * Implementation of at least 3 API calls
     [x] About 13 API calls implemented
+
+    BaseURL :3000/api
+    1. Admin Login: `[POST] /admin/login`
+    2. Employee login: `[POST] /emoloyee/login`
+    3. Create employee: `[POST] /admin/create-employee`
+    4. Fetch all employees: `[GET] /admin/employees`
+    5. Fetch one employee: `[GET] /admin/employees/:id`
+    6. Edit employee: `[PUT] /admin/employees/:id`
+    7. Delete employee: `[DELETE] /admin/employees/:id`
+    8. Create Performance review: `[POST] /admin/create-perf-review`
+    9. Fetch all performance reviews: `[GET] /admin/perf-reviews`
+    10. Fetch one performance review: `[GET] /admin/perf-reviews/:id`
+    11. Update one performance review `[PUT] /admin/perf-reviews/:id`
+    12. Create/Assign reviewer: `[POST] /admin/create-reviewer`
+    13. Get pending reviews: `[GET] /employee/pending-reviews`
+    14. Get all assigned reviews `[GET] /employee/assigned-reviews`
+    
   * Most full stack web developers at PayPay currently use Java, Ruby on Rails, or Node.js on the server(with MySQL for the database), but feel free to use other tech if you prefer
     [x] Implemented with Node.js and Express.js Framework with Sequelize ORM for database connection
 * Web app
@@ -48,6 +65,8 @@ Below are the specified requirements and in parenthesis are the ones I have duel
     4. No user email verification is required
     5. A Performance review can have more than 1 feedback
     6. An employee cannot be assigned 2x to the same performance review
+    7. Performance reviews are created/evaluated before being assigned
+    8. Assignees are only to provide feedback on the evaluated performance review
    ```
 ## Abstract Diagram
-
+![DarkMode](https://s2.aconvert.com/convert/p3r68-cdx67/tgo1j-6wjaq.png?dl=0=250x250)
