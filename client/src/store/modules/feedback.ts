@@ -95,7 +95,7 @@ const mutations = {
                 rowNum,
                 id: review.id,
                 performanceReviewId: review.performanceReviewId,
-                feedback: review.feeeback,
+                feedback: review.feedback!,
                 peerId: review.peerId,
                 performance_review: get(review, 'performance_review', []),
             };
@@ -114,7 +114,7 @@ const mutations = {
                 rowNum,
                 id: review.id,
                 performanceReviewId: review.performanceReviewId,
-                feedback: review.feeeback,
+                feedback: review.feedback!,
                 peerId: review.peerId,
                 performance_review: get(review, 'performance_review', []),
             };

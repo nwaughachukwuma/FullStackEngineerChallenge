@@ -56,10 +56,10 @@ export const GiveFeedback = async (req: Request, res: Response) => {
 
 // Retrieve all assigned review for feedbacks.
 export const FindAllAssignedReviews = (req: Request, res: Response) => {
-    const { performanceReviewId, peerId } = req.query;
+    const { performanceReviewId } = req.query;
     
     if (!isEmpty(req.query)) {
-        if (!performanceReviewId && !peerId) {
+        if (!performanceReviewId) {
             res.status(500).send({error: 
                 `Use the correct query paramater:
                 'peerId', 'performanceReviewId' or none`
@@ -67,6 +67,8 @@ export const FindAllAssignedReviews = (req: Request, res: Response) => {
             return;
         }
     }
+
+    const peerId = req.user?.id;
     
     let condition = Object.assign(
         {}, 

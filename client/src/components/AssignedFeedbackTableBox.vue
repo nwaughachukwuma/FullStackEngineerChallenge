@@ -27,7 +27,7 @@
             </template>
 
             <template v-slot:cell(feedback)="data">
-                <label>{{ data.value || "None" }}</label>
+                <label>{{ data.item.feedback || "None" }}</label>
             </template>
 
             <template v-slot:cell(remark)="data">
