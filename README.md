@@ -5,7 +5,16 @@
 This is my code implementation as a solution to this dev challenge. The App is split into to subfolders: api and client. 
 
 ### The API 
-This is a Node.js App using Express.js framework and Sequelize ORM to connect to a MYSQL database.
+This is a Node.js App using Express.js framework and Sequelize ORM to connect to a MYSQL database. Follow the steps below to run the server
+
+```
+1. cd api
+2. yarn install
+3. set your environment variables: sample is shown in .env.example
+   - Ensure your database is running at port 3306
+4. run:
+   - yarn dev-ts
+```
 
 ### The Frontend
 This is Vue.js application utilizing Vuex as store, Vue-router for navigation and Bootstrap-Vue for UI and reusable components.
@@ -75,3 +84,7 @@ Below are the specified requirements and in parenthesis are the ones I have duel
 
 ## Test Code
 Not done
+
+## Notes
+1. Project uses typescript.
+2. If you want to run on a different port, ensure to add the port address to CORSOption in ~api/app/server.ts
