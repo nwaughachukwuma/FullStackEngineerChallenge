@@ -19,7 +19,8 @@ export const GiveFeedback = async (req: Request, res: Response) => {
         return
     }
 
-    const id = req.params.prId;
+    // reviewer id
+    const id = req.params.rId;
 
     const {
         performanceReviewId,

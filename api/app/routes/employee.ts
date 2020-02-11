@@ -33,7 +33,7 @@ router.get('/', (_req: Request, res: Response) => {
 /**
  * employee routes for performance review feedback
  */
-router.put('/give-feedback/:prId', [
+router.put('/give-feedback/:rId', [
   check('performanceReviewId').exists({ checkNull: true }).isUUID('4')
     .withMessage('Provide performance review Id'),
   check('peerId').exists({ checkNull: true })

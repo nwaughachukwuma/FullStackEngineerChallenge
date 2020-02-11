@@ -49,6 +49,7 @@ Below are the specified requirements and in parenthesis are the ones I have duel
     12. Create/Assign reviewer: `[POST] /admin/create-reviewer`
     13. Get pending reviews: `[GET] /employee/pending-reviews`
     14. Get all assigned reviews `[GET] /employee/assigned-reviews`
+    15. Submit review feedback `[POST] /employee/give-feedback`
     
   * Most full stack web developers at PayPay currently use Java, Ruby on Rails, or Node.js on the server(with MySQL for the database), but feel free to use other tech if you prefer
     - [x] Implemented with Node.js and Express.js Framework with Sequelize ORM for database connection
