@@ -116,6 +116,15 @@ const routes = [
       requiresAuth: true
     }
   },
+  {
+    path: '/performance-review/feedback/pending',
+    name: 'performance-review-feedback-pending',
+    component: () => import(/* webpackChunkName: "performance-review-feedback-pending" */ '../views/Admin/PerformanceReviewList.vue'),
+    meta: {
+      layout: 'backend-layout',
+      requiresAuth: true
+    }
+  },
 
 ]
 

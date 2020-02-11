@@ -1,5 +1,6 @@
 {
   "apiUrl": "http://localhost:3000/api/admin",
+  "employeeUrl": "http://localhost:3000/api/employee",
   "format": {
     "timeZone": "Africa/Lagos",
     "dateTime": "YYYY-MM-DD HH:mm:ss",
