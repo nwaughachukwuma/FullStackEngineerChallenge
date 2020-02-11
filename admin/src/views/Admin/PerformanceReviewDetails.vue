@@ -9,11 +9,8 @@
     </b-table>
     <reviewer-box
       list-url="/performance-reviews"
-      :form-type="formType"
       :pr-id="prId"
-      :permissions="permissions"
       @add="onAdd"
-      @edit="onEdit"
     />
   </div>
 </template>
@@ -30,7 +27,6 @@ export default {
   },
   async mounted() {
     this.permissionList({ router });
-    this.formType = 'new';
     this.prId = this.$route.params.id;
     await this.getOne({
         type: 'perf-reviews',
@@ -40,7 +36,6 @@ export default {
   },
   data() {
     return {
-      formType: '',
       prId: null,
       prData: [],
       employeeData: {},
@@ -60,25 +55,16 @@ export default {
     ...mapState('permission', ['permissions'])
   },
   methods: {
-    ...mapActions('performance_review', ['getOne', 'postOne', 'patchOne']),
+    ...mapActions('performance_review', ['getOne', 'postOneReviewer']),
     ...mapActions('permission', {
       permissionList: 'list'
     }),
-    onAdd({ performance_review }) {
-      this.postOne({
-        type: 'create-perf-review',
-        performance_review,
+    onAdd({ reviewer }) {
+      this.postOneReviewer({
+        type: 'create-reviewer',
+        reviewer,
         router,
-        redirectUrl: '/performance-reviews'
-      });
-    },
-    onEdit({ performance_review }) {
-      this.patchOne({
-        type: 'perf-reviews',
-        prId: this.prId,
-        performance_review,
-        router,
-        redirectUrl: '/performance-reviews'
+        redirectUrl: ''
       });
     }
   },

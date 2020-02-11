@@ -24,7 +24,7 @@
                 :state="$v.form.employee.$dirty ? !$v.form.employee.$error : null"
               ></b-form-select>
 
-              <b-form-invalid-feedback id="input-employee-invalid">Please enter your first name.</b-form-invalid-feedback>
+              <b-form-invalid-feedback id="input-employee-invalid">Please enter employee full name.</b-form-invalid-feedback>
             </b-form-group>
 
             <b-form-group id="group-employee" label-for="input-employee" v-else>

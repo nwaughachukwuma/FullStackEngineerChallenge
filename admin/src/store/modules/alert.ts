@@ -28,7 +28,7 @@ const actions = {
 const getters = {
   errorMessages: state => {
     if (state.type === 'error' && state.text !== '') {
-      return state.text;
+      return state.text.replace('[object Object]', '').trim();
     }
     return '';
   },

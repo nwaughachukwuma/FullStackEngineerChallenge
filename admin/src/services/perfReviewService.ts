@@ -63,5 +63,16 @@ export default {
       .catch(e => {
         throw e;
       });
-  }
+  },
+
+  async postOneReviewer({ type = 'create-reviewer', reviewer = {} } = {}) {
+    return axios
+      .post(`${configService.get('apiUrl')}/${type}`, reviewer)
+      .then(response => {
+        return response.data;
+      })
+      .catch(e => {
+        throw e;
+      });
+  },
 };

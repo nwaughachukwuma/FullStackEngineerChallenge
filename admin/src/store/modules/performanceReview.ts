@@ -123,7 +123,35 @@ const actions = {
         commit('requestFailed');
         dispatch('common/handleServiceException', { e, router }, { root: true });
       });
-  }
+  },
+  postOneReviewer({ dispatch, commit }, { type = 'create-reviewer', reviewer, router, redirectUrl = '' }) {
+    dispatch('alert/clear', {}, { root: true });
+    commit('startRequest');
+
+    perfReviewService
+      .postOneReviewer({ type, reviewer })
+      .then(() => {
+        // response
+        dispatch(
+          'alert/success',
+          {
+            showType: 'toast',
+            position: 'bottom-end',
+            title: '',
+            text: 'New Reviewer has been added.'
+          },
+          { root: true }
+        );
+
+        if (redirectUrl !== '') {
+          router.push(redirectUrl);
+        }
+      })
+      .catch(e => {
+        commit('requestFailed');
+        dispatch('common/handleServiceException', { e, router }, { root: true });
+      });
+  },
 };
 
 const getters = {};

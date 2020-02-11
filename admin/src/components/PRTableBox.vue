@@ -8,11 +8,8 @@
         </div>
         <b-table :items="items" :fields="fields" striped responsive="sm">
             <template v-slot:cell(name)="data">
-                <b style="marginRight: 10px">{{ data.value.toUpperCase() }}</b>
-                <!-- <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">
-                    <font-awesome-icon :icon="['fas', 'external-link-alt']" class="mr-1" />
-                </a> -->
                 <b-link :to="{ path: `/performance-review/details/${data.item.id}` }">
+                    <b style="marginRight: 10px">{{ data.value.toUpperCase() }}</b>
                     <font-awesome-icon :icon="['fas', 'external-link-alt']" class="mr-1" />
                 </b-link>
             </template>

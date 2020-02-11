@@ -25,7 +25,7 @@
                 placeholder="Employee name"
               ></b-form-input>
 
-              <b-form-invalid-feedback id="input-name-invalid">Please enter your first name.</b-form-invalid-feedback>
+              <b-form-invalid-feedback id="input-name-invalid">Please enter employee full name.</b-form-invalid-feedback>
             </b-form-group>
 
             <!-- Employee Email -->
