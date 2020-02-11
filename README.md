@@ -72,7 +72,6 @@ Below are the specified requirements and in parenthesis are the ones I have duel
    ```
 ## Abstract Diagram
 ![SchemaDiagram1](https://dl.dropbox.com/s/wrl93ywncb42g8x/Paypay-2.png?dl=0=250x250)
-![SchemaDiagram2](https://dl.dropbox.com/s/wg77eo4rsmh7kb6/paypay-schema.png?dl=0=250x250)
 
 ## Test Code
 Not done
