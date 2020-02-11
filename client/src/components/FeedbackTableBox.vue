@@ -99,6 +99,11 @@ export default {
         baseUrl: String
     },
     name: 'TableBox',
+    data() {
+        return{
+            employeeName: ''
+        }
+    },
     computed: {
         ...mapState("user", ['users']),
         totalNumberOfPage() {
@@ -108,7 +113,7 @@ export default {
             return 1;
         },
         totalCount() {
-            return this.pagination.total_rows;
+            return this.items.length;
         }
     },
     methods: {
@@ -116,13 +121,14 @@ export default {
             return { path: this.baseUrl, query: { page: pageNum } };
         },
         getStaffName(employeeId) {
-            return this.users.find(el => el.id === employeeId).name
+            const employeeName =  this.users.find(el => el.id === employeeId).name
+            return employeeName
         },
         clickAdd() {
             this.$emit('add', {});
         },
         clickEdit(row) {
-            this.$emit('feedback', { row });
+            this.$emit('feedback', { row  });
         },
         clickDelete(row) {
             this.$emit('delete', { row });

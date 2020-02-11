@@ -19,14 +19,18 @@
     <b-modal id="bv-modal-example" hide-footer>
       <template v-slot:modal-title>
         <span class="d-block text-center">
-          <label class="title align-self-center">Give feedback</label>
+          <label class="title align-self-center">Performance review feedback</label>
         </span>
       </template>
       <div class="d-block text-center">
-        <b-form @submit.stop.prevent="onSubmitFeedback">
+        <b-form @submit.stop.prevent="onSubmit">
           <b-form-group id="group-feedback" label-for="input-feedback">
             <template v-slot:label>
-              Feedback message
+              {{getStaffName(rowItem.performance_review.employeeId)}}: 
+              (
+                {{rowItem.performance_review.month}} - 
+                {{rowItem.performance_review.year}} 
+              )
               <span class="text-danger">*</span>
             </template>
 
@@ -40,12 +44,24 @@
             <b-form-invalid-feedback id="input-feedback-invalid">Please enter your feedback</b-form-invalid-feedback>
           </b-form-group>
 
+          <template v-if="errorMessages">
+            <b-row class="mb-2">
+              <b-col class="text-danger message-col">{{ errorMessages }}</b-col>
+            </b-row>
+          </template>
+
           <b-row>
             <b-col>
-              <b-button type="submit" size="sm" variant="primary" class="mt-3" block :disabled="loading">
+              <b-button
+                type="submit"
+                size="sm"
+                variant="primary"
+                class="mt-3"
+                block
+                :disabled="loading"
+              >
                 <span class="spinner spinner-white" v-if="loading"></span>
-                <font-awesome-icon :icon="['fas', 'paper-plane']" class="mr-1" />
-                Submit
+                <font-awesome-icon :icon="['fas', 'paper-plane']" class="mr-1" />Submit
               </b-button>
             </b-col>
           </b-row>
@@ -57,7 +73,7 @@
 
 <script>
 import Vue from "vue";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import TableBox from "@/components/FeedbackTableBox.vue";
 import router from "@/router";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
@@ -93,7 +109,6 @@ export default {
       fields: [
         { key: "rowNum", label: "#" },
         { key: "name", label: "Staff name" },
-        // { key: "email", label: "Staff email" },
         "period",
         { key: "evaluation", label: "Evaluation" },
         "remark",
@@ -102,7 +117,8 @@ export default {
       ],
       form: {
         feedback: null
-      }
+      },
+      rowItem: {}
     };
   },
   validations() {
@@ -112,52 +128,76 @@ export default {
         minLength: minLength(10),
         maxLength: maxLength(150),
         validateFeedback: value => {
-          return value !== null
+          return value !== null;
         }
       }
     };
     return { form: formValidation };
   },
   computed: {
-    ...mapState("performance_review", [
-      "pagination"
-    ]),
+    ...mapGetters("alert", ["errorMessages"]),
+    ...mapState("performance_review", ["pagination"]),
     ...mapState("pr_feedback", ["pending_reviews", "baseUrl", "loading"]),
-    ...mapState("auth", ["user"])
+    ...mapState("auth", ["user"]),
+    ...mapState("user", ["users"])
   },
   methods: {
-    ...mapActions("performance_review", ["list", "deleteOne"]),
+    ...mapActions("performance_review", ["list"]),
     ...mapActions("user", { userList: "list" }),
-    ...mapActions("pr_feedback", { pendingList: "getPending" }),
+    ...mapActions("pr_feedback", {
+      pendingList: "getPending",
+      postFeedback: "postOne"
+    }),
     onAdd() {
       router.push("/performance-review/new");
     },
     onFeedback({ row }) {
       console.log("row data is", row.item);
+      this.rowItem = row.item;
       this.$bvModal.show("bv-modal-example");
-      // this.$swal({
-      //     toast: true,
-      //     title: 'Show feedback modal',
-      //     position: 'bottom-left',
-      //     background: '#000',
-      //     timer: 3000,
-      //       timerProgressBar: true,
-      // });
-      //router.push(`/performance-review/${row.item.id}`);
     },
-    onSubmitFeedback(evt) {
+    onSubmit() {
       this.$v.$touch();
       if (this.$v.$invalid) {
         return false;
       }
-      console.log("submit feedback", evt);
+      const feedback_data = {
+        performanceReviewId: this.rowItem.performanceReviewId,
+        peerId: this.rowItem.peerId,
+        feedback: this.form.feedback
+      };
+
+      this.postFeedback({
+        type: "give-feedback",
+        feedback: feedback_data,
+        reviewId: this.rowItem.id,
+        router
+      });
+
+      this.form.feedback = "";
       this.$bvModal.hide("bv-modal-example");
-      this.form.feedback = ''
+    },
+    getStaffName(employeeId) {
+      const employeeName = this.users.find(el => el.id === employeeId).name;
+      return employeeName;
     }
   },
   watch: {
-    pending_reviews(newVal) {
-      console.log("pending feedback", newVal);
+    // pending_reviews(newVal) {
+    //   console.log("pending feedback", newVal);
+    // },
+    errorMessages(newVal) {
+      if (newVal) {
+        this.$swal({
+          type: "error",
+          // toast: true,
+          title: newVal,
+          // position: 'bottom-right',
+          // background: '#000',
+          timer: 3000,
+          timerProgressBar: true
+        });
+      }
     }
   }
 };

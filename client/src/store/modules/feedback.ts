@@ -45,22 +45,40 @@ const actions = {
                 dispatch('common/handleServiceException', { e, router }, { root: true });
             });
     },
+    postOne({ dispatch, commit }, { type = 'give-feedback', feedback = {}, reviewId, router, redirectUrl = '' }) {
+        dispatch('alert/clear', {}, { root: true });
+        commit('startRequest');
+
+        feedbackService
+            .postOne({ type, feedback, reviewId })
+            .then(() => {
+                // response
+                dispatch(
+                'alert/success',
+                {
+                    showType: 'toast',
+                    position: 'bottom-left',
+                    title: '',
+                    text: 'Feedback submitted successfully'
+                },
+                { root: true }
+                );
+
+                if (redirectUrl !== '') {
+                    router.push(redirectUrl);
+                } else {
+                    window.location.reload();
+                }
+            })
+            .catch(e => {
+                commit('requestFailed');
+                dispatch('common/handleServiceException', { e, router }, { root: true });
+            });
+    }
 };
 
 const getters = {
-    reviewers: (state, getters, rootState) => {
-        if (!state.performance_review) return [];
-        const enrichedReviewers = state.performance_review.reviewers
-            .map(reviewer => {
-                if (rootState.user.users) {
-                    const reviewerAsUser = rootState.user.users
-                        .find(user => user.id === reviewer.peerId)
-                    return Object.assign({}, reviewer, reviewerAsUser)
-                }
-                return reviewer;
-            })
-        return enrichedReviewers;
-    },
+
 };
 
 const mutations = {

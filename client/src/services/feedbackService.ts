@@ -43,9 +43,9 @@ export default {
       });
   },
 
-  async postOne({ type = 'give-feedback', feedback = {} } = {}) {
+  async postOne({ type = 'give-feedback', feedback = {}, reviewId } = {}) {
     return axios
-      .post(`${configService.get('employeeUrl')}/${type}`, feedback)
+      .put(`${configService.get('employeeUrl')}/${type}/${reviewId}`, feedback)
       .then(response => {
         return response.data;
       })
