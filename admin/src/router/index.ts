@@ -107,6 +107,15 @@ const routes = [
       requiresAuth: true
     }
   },
+  {
+    path: '/performance-review/details/:id',
+    name: 'performance-review-details',
+    component: () => import(/* webpackChunkName: "performance-review-new" */ '../views/Admin/PerformanceReviewDetails.vue'),
+    meta: {
+      layout: 'backend-layout',
+      requiresAuth: true
+    }
+  },
 
 ]
 

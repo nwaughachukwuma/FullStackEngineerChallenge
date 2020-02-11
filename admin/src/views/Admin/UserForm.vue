@@ -1,5 +1,5 @@
 <template>
-  <div class="page-class page-staff-form">
+  <div class="page-class page-staff-form my-5">
     <h1 class="page-title">{{ title }}</h1>
     <user-form-box
       list-url="/employees"
@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     title() {
-      return this.formType === 'new' ? 'Add new staff' : 'Update staff';
+      return 'User management';
     },
     ...mapState('user', ['loading']),
     ...mapState('permission', ['permissions'])

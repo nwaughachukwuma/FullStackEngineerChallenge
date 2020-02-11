@@ -9,9 +9,12 @@
         <b-table :items="items" :fields="fields" striped responsive="sm">
             <template v-slot:cell(name)="data">
                 <b style="marginRight: 10px">{{ data.value.toUpperCase() }}</b>
-                <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">
+                <!-- <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">
                     <font-awesome-icon :icon="['fas', 'external-link-alt']" class="mr-1" />
-                </a>
+                </a> -->
+                <b-link :to="{ path: `/performance-review/details/${data.item.id}` }">
+                    <font-awesome-icon :icon="['fas', 'external-link-alt']" class="mr-1" />
+                </b-link>
             </template>
             
             <template v-slot:cell(email)="data">
@@ -31,9 +34,9 @@
                     <b-button size="sm" variant="secondary" @click="clickEdit(row)">
                         <font-awesome-icon :icon="['fas', 'edit']" class="mr-1" />Edit
                     </b-button>
-                    <b-button size="sm" variant="warning" @click="clickDelete(row)">
+                    <!-- <b-button size="sm" variant="warning" @click="clickDelete(row)">
                         <font-awesome-icon :icon="['fas', 'trash-alt']" class="mr-1" />Delete
-                    </b-button>
+                    </b-button> -->
                 </b-button-group>
             </template>
             

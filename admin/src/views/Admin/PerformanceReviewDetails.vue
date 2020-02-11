@@ -1,7 +1,13 @@
 <template>
   <div class="page-class page-staff-form my-5">
     <h1 class="page-title">{{ title }}</h1>
-    <performance-review-box
+    <h1 class="page-subtitle">{{ employeeData.name }} ({{employeeData.email}})</h1>
+    <b-table striped hover :items="prData" :fields="fields" >
+        <template v-slot:cell(period)="data">
+            <label>{{ data.item.month }}, {{ data.item.year }}</label>
+        </template>
+    </b-table>
+    <reviewer-box
       list-url="/performance-reviews"
       :form-type="formType"
       :pr-id="prId"
@@ -14,40 +20,43 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import PerformanceReviewBox from '@/components/PerformanceReviewBox.vue';
+import ReviewerBox from '@/components/ReviewerBox.vue';
 import router from '@/router';
 
 export default {
-  name: 'PerformanceReviewForm',
+  name: 'PerformanceReviewDetails',
   components: {
-    PerformanceReviewBox
+    ReviewerBox
   },
   async mounted() {
     this.permissionList({ router });
-    if (this.$route.name === 'performance-review-new') {
-      this.formType = 'new';
-      this.prId = null;
-    } else {
-      this.formType = 'update';
-      this.prId = this.$route.params.id;
-      await this.getOne({
+    this.formType = 'new';
+    this.prId = this.$route.params.id;
+    await this.getOne({
         type: 'perf-reviews',
         prId: this.prId,
         router
-      });
-    }
+    });
   },
   data() {
     return {
       formType: '',
-      prId: null
+      prId: null,
+      prData: [],
+      employeeData: {},
+      fields: [
+          'remark',
+          'evaluation',
+          'period',
+          'isReviewed'
+      ]
     };
   },
   computed: {
     title() {
-      return 'Performance review management';
+      return 'Performance review details';
     },
-    ...mapState('performance_review', ['loading']),
+    ...mapState('performance_review', ['loading', 'performance_review']),
     ...mapState('permission', ['permissions'])
   },
   methods: {
@@ -72,6 +81,19 @@ export default {
         redirectUrl: '/performance-reviews'
       });
     }
+  },
+  watch: {
+      performance_review: {
+          handler(newVal) {
+              if (newVal) {
+                this.prData.pop()
+                this.prData.push(newVal);
+
+                this.employeeData = newVal
+              }
+          },
+          immediate: false
+      }
   }
 };
 </script>

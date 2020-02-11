@@ -58,6 +58,11 @@ body {
   font-weight: bold;
 }
 
+.page-subtitle {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
 .message-col {
   white-space: pre;
 }
